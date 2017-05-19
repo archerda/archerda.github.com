@@ -1,0 +1,709 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="2015年高考转瞬即逝，转眼间我也快大四了，不由感慨。学业未成，仍需努力。 写这个脚本的原因 我们学校有一个高中的校友会，大家互相帮助，受益良多。每年的这个时候，校友会的同学都需要去一个个找看哪位师弟师妹录到我校了，然后就会主动去联系他们，让他们加入校友会这个大家庭。然而大家一个个问高中的师弟师妹不太科学，而高中的龙虎榜又需要开学才张贴，所以校友会的同学们的工作进展的不是很顺利。这个时候这个脚本的">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="抓取高考录取数据">
+<meta property="og:url" content="http://yoursite.com/2015/08/14/抓取高考录取数据/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="2015年高考转瞬即逝，转眼间我也快大四了，不由感慨。学业未成，仍需努力。 写这个脚本的原因 我们学校有一个高中的校友会，大家互相帮助，受益良多。每年的这个时候，校友会的同学都需要去一个个找看哪位师弟师妹录到我校了，然后就会主动去联系他们，让他们加入校友会这个大家庭。然而大家一个个问高中的师弟师妹不太科学，而高中的龙虎榜又需要开学才张贴，所以校友会的同学们的工作进展的不是很顺利。这个时候这个脚本的">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="抓取高考录取数据">
+<meta name="twitter:description" content="2015年高考转瞬即逝，转眼间我也快大四了，不由感慨。学业未成，仍需努力。 写这个脚本的原因 我们学校有一个高中的校友会，大家互相帮助，受益良多。每年的这个时候，校友会的同学都需要去一个个找看哪位师弟师妹录到我校了，然后就会主动去联系他们，让他们加入校友会这个大家庭。然而大家一个个问高中的师弟师妹不太科学，而高中的龙虎榜又需要开学才张贴，所以校友会的同学们的工作进展的不是很顺利。这个时候这个脚本的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/08/14/抓取高考录取数据/"/>
+
+
+
+
+
+  <title>抓取高考录取数据 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">A programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/14/抓取高考录取数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">抓取高考录取数据</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-14T20:04:39+08:00">
+                2015-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>2015年高考转瞬即逝，转眼间我也快大四了，不由感慨。学业未成，仍需努力。</p>
+<h2 id="写这个脚本的原因"><a href="#写这个脚本的原因" class="headerlink" title="写这个脚本的原因"></a>写这个脚本的原因</h2><ul>
+<li>我们学校有一个高中的校友会，大家互相帮助，受益良多。每年的这个时候，校友会的同学都需要去一个个找看哪位师弟师妹录到我校了，然后就会主动去联系他们，让他们加入校友会这个大家庭。然而大家一个个问高中的师弟师妹不太科学，而高中的龙虎榜又需要开学才张贴，所以校友会的同学们的工作进展的不是很顺利。这个时候这个脚本的出来了。</li>
+<li>脚本的大部分是星尘大师兄去年写的，但当初比较赶，写的比较乱，而且数据没有持久化。这样不利于校友会后续的同学们继续使用。而今年星尘大师兄毕业工作了，所以完善工作就落在我身上了。</li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>先说下大概思路吧。<code>www.5184.com/gk</code>里面提供了高考录取的查询接口,我们可以用<code>Fiddler</code>抓包，看HTTP请求的相关参数有什么。</li>
+<li>其实高中学子每个地区每个学校的考号段都是固定的，比如我们学校的就是前4位是1802，后6位也有分布规律。</li>
+<li>综上，使用Python来遍历某个考号段，获取返回的数据，判断是否是所需数据，是的话保存，不是的话丢弃。</li>
+</ul>
+<a id="more"></a>
+<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p>1.首先看核心代码 <code>HttpRequestTool.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># number:the number of a student</span></div><div class="line"><span class="comment"># birthday: the student's birthday, like 9301</span></div><div class="line"><span class="comment"># try_time: the request reconnect times when it broken.</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_admit_result_by_number_and_birthday</span><span class="params">(number, birthday, try_times=<span class="number">3</span>)</span>:</span></div><div class="line">    <span class="keyword">if</span> try_times == <span class="number">0</span>:</div><div class="line">        file = open(<span class="string">'error.txt'</span>, <span class="string">'a'</span>)</div><div class="line">        file.write(str(number + <span class="string">"-"</span> + birthday))</div><div class="line">        <span class="keyword">return</span></div><div class="line">    <span class="comment"># make the request header.</span></div><div class="line">    <span class="comment"># all the header are copied from a normal HTTP request.</span></div><div class="line">    <span class="comment"># maybe some header is not necessary.</span></div><div class="line">    cookie = <span class="string">"Hm_lvt_2be31ff7176cef646e9351788dc99055=1437448597;Hm_lpvt_2be31ff7176cef646e9351788dc99055=1437450310;PHPSESSID=fblmt7m54ehe2m0q65otdfbbg5"</span></div><div class="line">    url = <span class="string">"http://www.5184.com/gk/common/get_lq_edg.php"</span></div><div class="line">    post_data = urllib.parse.urlencode(&#123;<span class="string">'csny'</span>: birthday, <span class="string">'zkzh'</span>: number, <span class="string">'yzm'</span>: <span class="string">''</span>&#125;)</div><div class="line">    post_data = post_data.encode(<span class="string">'utf-8'</span>)</div><div class="line">    request = urllib.request.Request(url)</div><div class="line">    request.add_header(<span class="string">"Host"</span>, <span class="string">"www.5184.com"</span>)</div><div class="line">    request.add_header(<span class="string">"Connection"</span>, <span class="string">"keep-alive"</span>)</div><div class="line">    request.add_header(<span class="string">"Content-Length"</span>, <span class="string">"31"</span>)</div><div class="line">    request.add_header(<span class="string">"Accept"</span>, <span class="string">"application/json, text/javascript, */*; q=0.01"</span>)</div><div class="line">    request.add_header(<span class="string">"Origin"</span>, <span class="string">"http://www.5184.com"</span>)</div><div class="line">    request.add_header(<span class="string">"X-Requested-With"</span>, <span class="string">"XMLHttpRequest"</span>)</div><div class="line">    request.add_header(<span class="string">"User-Agent"</span>, <span class="string">"Mozilla/5.0 (Windows NT 6.3; WOW64) "</span></div><div class="line">                     <span class="string">"AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"</span>)</div><div class="line">    request.add_header(<span class="string">"Content-Type"</span>, <span class="string">"application/x-www-form-urlencoded"</span>)</div><div class="line">    request.add_header(<span class="string">"Referer"</span>, <span class="string">"http://www.5184.com/gk/check_lq.html"</span>)  <span class="comment"># important. without referer, the request will return error.</span></div><div class="line">    request.add_header(<span class="string">"Accept-Encoding"</span>, <span class="string">"gzip,deflate,sdch"</span>)</div><div class="line">    request.add_header(<span class="string">"Accept-Language"</span>, <span class="string">"zh-CN,zh;q=0.8"</span>)</div><div class="line">    request.add_header(<span class="string">"Cookie"</span>, cookie)</div><div class="line"></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        f = urllib.request.urlopen(request, post_data)</div><div class="line">        r_data = f.read().decode(<span class="string">'utf-8'</span>)</div><div class="line">    <span class="keyword">except</span>:</div><div class="line">        get_admit_result_by_number_and_birthday(number, birthday, try_times - <span class="number">1</span>)</div><div class="line">    </div><div class="line">    result_json = json.loads(r_data)</div><div class="line">    <span class="keyword">if</span> result_json[<span class="string">'flag'</span>] == <span class="number">1</span>:</div><div class="line">        result = result_json[<span class="string">'result'</span>]</div><div class="line">        <span class="keyword">if</span> result[<span class="string">'zymc'</span>] == Data.SCHOOL:</div><div class="line">            file = open(<span class="string">'admit.txt'</span>, <span class="string">'a'</span>)</div><div class="line">            file.write(str(result[<span class="string">'zkzh'</span>] + <span class="string">' '</span> + birthday + <span class="string">' '</span> + result[<span class="string">'zymc'</span>] + <span class="string">' '</span> + result[<span class="string">'xm'</span>] + <span class="string">'\n'</span>))</div></pre></td></tr></table></figure></p>
+<p><code>get_admit_result_by_number_and_birthday()</code>这个方法接受3个参数，<code>number</code>为考号，10位的数字。<code>birthday</code>为出生年月，用于5184的接口验证，相当于密码。<code>try_time</code>是失败重新请求次数。这里有个注意的地方，构造请求头部的时候，一定要加上<code>Referer</code>这个参数，否则5184将过滤掉这次请求。顺口吐槽下，5184的验证码其实是假的，请求的时候<code>yzm</code>这个参数置空就可以了，真弱鸡啊。<br>这个方法会去请求5184接口，返回的数据如果是我们想要的(<em>代码第40行进行判断</em> )，则按照一定格式写入到文件<code>admit.txt</code>中。</p>
+<p>2.多线程文件 <code>ThreadPoolTool.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> threading</div><div class="line"><span class="keyword">from</span> Admit <span class="keyword">import</span> Data, HttpRequestTool</div><div class="line">    </div><div class="line"><span class="comment"># make one thread class to one task which get one student's result.</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreadTask</span><span class="params">(threading.Thread)</span>:</span></div><div class="line">    number = <span class="string">"0"</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        threading.Thread.__init__(self)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">        birthday_length = len(Data.BIRTHDAY_PREFIX)</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, birthday_length - <span class="number">1</span>):</div><div class="line">            HttpRequestTool.get_admit_result_by_number_and_birthday(self.number,Data.BIRTHDAY_PREFIX[i])</div></pre></td></tr></table></figure></p>
+<p>在这里，大约需要进行<strong>180w</strong>次请求，如果单线程跑的话，速度太慢了。而且这还没计算上失败重连的次数，所以必须让多线程来跑。这个线程类<code>ThreadTask</code>负责对每个考号进行暴力请求，循环定义好的出生年月范围进行请求。</p>
+<p>3.入口文件 <code>Main.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"><span class="keyword">from</span> Admit <span class="keyword">import</span> Data, ThreadPoolTool</div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    sys.stderr = <span class="keyword">None</span></div><div class="line">    j = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> number_prefix <span class="keyword">in</span> Data.NUMBER_PREFIX:</div><div class="line">        <span class="keyword">for</span> number_suffix <span class="keyword">in</span> range(<span class="number">0</span>, Data.NUMBER_RANGE):</div><div class="line">            <span class="keyword">if</span> number_suffix &lt; <span class="number">10</span>:</div><div class="line">                number_suffix = <span class="string">'000'</span> + str(number_suffix)</div><div class="line">            <span class="keyword">elif</span> number_suffix &lt; <span class="number">100</span>:</div><div class="line">                number_suffix = <span class="string">'00'</span> + str(number_suffix)</div><div class="line">            <span class="keyword">elif</span> number_suffix &lt; <span class="number">1000</span>:</div><div class="line">                number_suffix = <span class="string">'0'</span> + str(number_suffix)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                number_suffix = str(number_suffix)</div><div class="line"></div><div class="line">            thread = ThreadPoolTool.ThreadTask()</div><div class="line">            thread.number = str(number_prefix + number_suffix)</div><div class="line">            thread.start()</div><div class="line"></div><div class="line">            j += <span class="number">1</span></div><div class="line">            <span class="keyword">if</span> j % <span class="number">50</span> == <span class="number">0</span>:</div><div class="line">                time.sleep(<span class="number">10</span>)</div><div class="line">                j = <span class="number">0</span></div><div class="line">    </div><div class="line"><span class="comment"># the entrance</span></div><div class="line">main()</div></pre></td></tr></table></figure></p>
+<p>入口方法<code>main()</code>主要做的就是构造考号，然后把每个考号分配给一个线程去执行。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>到这里程序就分析完了。目前抓到了63个师弟师妹，校友会的同学就可以有方向去拉人了哈。你们快到碗里来。。。<br>程序不复杂。但可以借助程序，做一点小事，也是非常开心的哈。最后希望校友会越来越好，大家一起加油！</p>
+<p>完。</p>
+<hr>
+<p>##附录<br><a href="https://github.com/archerda/gkcx" target="_blank" rel="external">源码地址在Github</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/14/搭建一个Django工程/" rel="next" title="搭建一个Django工程">
+                <i class="fa fa-chevron-left"></i> 搭建一个Django工程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/14/利用Flickr做图床/" rel="prev" title="利用Flickr做图床">
+                利用Flickr做图床 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写这个脚本的原因"><span class="nav-number">1.</span> <span class="nav-text">写这个脚本的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体代码"><span class="nav-number">3.</span> <span class="nav-text">具体代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在最后"><span class="nav-number">4.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

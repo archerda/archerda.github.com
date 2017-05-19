@@ -1,0 +1,724 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Open Source," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="日常工程开发过程中, 熟悉高效地利用开源库和工具, 能大大提升我们的工作效率, 所以本文主要列举了Java中常用的一些开源库和开源工具, 并进行了简单介绍, 希望能让大家有一个更全面的了解.">
+<meta name="keywords" content="Open Source">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常用开源库和工具">
+<meta property="og:url" content="http://yoursite.com/2016/09/24/Java常用开源库和工具/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="日常工程开发过程中, 熟悉高效地利用开源库和工具, 能大大提升我们的工作效率, 所以本文主要列举了Java中常用的一些开源库和开源工具, 并进行了简单介绍, 希望能让大家有一个更全面的了解.">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java常用开源库和工具">
+<meta name="twitter:description" content="日常工程开发过程中, 熟悉高效地利用开源库和工具, 能大大提升我们的工作效率, 所以本文主要列举了Java中常用的一些开源库和开源工具, 并进行了简单介绍, 希望能让大家有一个更全面的了解.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/24/Java常用开源库和工具/"/>
+
+
+
+
+
+  <title>Java常用开源库和工具 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">A programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/24/Java常用开源库和工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java常用开源库和工具</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-24T01:02:47+08:00">
+                2016-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>日常工程开发过程中, 熟悉高效地利用开源库和工具, 能大大提升我们的工作效率, 所以本文主要列举了Java中常用的一些开源库和开源工具, 并进行了简单介绍, 希望能让大家有一个更全面的了解.</p>
+<a id="more"></a>
+<h2 id="Apache系列"><a href="#Apache系列" class="headerlink" title="Apache系列"></a>Apache系列</h2><h3 id="commons-lang"><a href="#commons-lang" class="headerlink" title="commons lang"></a>commons lang</h3><p>commons-lang是一个很有用的开源包，它弥补了Java API在提供的基本处理方法上的不足。从它的命名上就可以看出它主要是一些公共的工具集合，比如对字符、数组、随机数的操作等等。它封装了很多Java具体的操作，也就是如果要实现某功能需要你自己写的代码，它都替你封装好，你只需调用它的方法就行了。</p>
+<h3 id="commons-lang3"><a href="#commons-lang3" class="headerlink" title="commons lang3"></a>commons lang3</h3><p>Apache Commons lang的升级版本, 基于JDK1.5. 废除了一些JDK1.5已经提供的操作, 比如枚举类包、JVM随机数包等. 新增了一些包, 比如concurrent并发包/reflect反射包等. </p>
+<p><strong>推荐使用!</strong></p>
+<h3 id="commons-pool"><a href="#commons-pool" class="headerlink" title="commons pool"></a>commons pool</h3><p>在实际中工作，我们经常遇到需要连接池的地方，特别是数据库连接池。<br>我们为什么需要池呢？因为这些资源的创建，都很消耗资源。因此，我们使用一个对象池，里面预先创建了一些资源对象。当我们需要时，从池中取出对象，而不需要时，把对象返回池中。这样就可以提高代码运行的效率。</p>
+<p>commons pool为我们提供了很方便的接口来实现对象池。我们唯一需要实现的就是如何产生对象，而不用去考虑一堆多线程问题。</p>
+<h3 id="commons-pool2"><a href="#commons-pool2" class="headerlink" title="commons pool2"></a>commons pool2</h3><p>2013年，Apache Commons Pool 2.0 发布，这是一个完全重写的对象池的实现，显著的提升了性能和可伸缩性，特别是在高并发加载的情况下。2.0 版本包含可靠的实例跟踪和池监控，要求 JDK 1.6 或者更新版本。这个版本完全不兼容1.x版本；</p>
+<h3 id="commons-chain"><a href="#commons-chain" class="headerlink" title="commons-chain"></a>commons-chain</h3><p>apache commons chain 提供了对CoR模式的基础支持。CoR模式(<strong>责任链模式</strong>)，是Chain of Responsebility的缩写。CommonsChain实现了Chain of Responsebility和Command模式(<strong>命令模式</strong>)，其中的Catalog + 配置文件的方式使得调用方和Command的实现方的耦合度大大的降低，提高了灵活性。</p>
+<h3 id="commons-math"><a href="#commons-math" class="headerlink" title="commons-math"></a>commons-math</h3><p>apache commons Math是一组偏向科学计算为主的函数，主要是针对线性代数，数学分析，概率和统计等方面。</p>
+<h3 id="httpclient"><a href="#httpclient" class="headerlink" title="httpclient"></a>httpclient</h3><p>HTTP 协议可能是现在 Internet 上使用得最多、最重要的协议了，越来越多的 Java 应用程序需要直接通过 HTTP 协议来访问网络资源。虽然在 JDK 的 java.net 包中已经提供了访问 HTTP 协议的基本功能，但是对于大部分应用程序来说，JDK 库本身提供的功能还不够丰富和灵活。HttpClient 是 Apache Jakarta Common 下的子项目，用来提供高效的、最新的、功能丰富的支持 HTTP 协议的客户端编程工具包，并且它支持 HTTP 协议最新的版本和建议。HttpClient 已经应用在很多的项目中，比如 Apache Jakarta 上很著名的另外两个开源项目 Cactus 和 HTMLUnit 都使用了 HttpClient.</p>
+<h3 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h3><p>Kafka是由LinkedIn开发的一个分布式的消息系统，基于发布/订阅的消息系统。使用Scala编写，它以可水平扩展和高吞吐率而被广泛使用。目前越来越多的开源分布式处理系统如Cloudera、Apache Storm、Spark都支持与Kafka集成。</p>
+<h3 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h3><p>Zookeeper 分布式服务框架是 Apache Hadoop 的一个子项目，它主要是用来解决分布式应用中经常遇到的一些数据管理问题，如：统一命名服务、状态同步服务、集群管理、分布式应用配置项的管理等。</p>
+<h3 id="curator"><a href="#curator" class="headerlink" title="curator"></a>curator</h3><p>Curator提供了一套Java类库， 可以更容易的使用ZooKeeper。 ZooKeeper本身提供了Java Client的访问类，但是API太底层，不宜使用， 容易出错。 Curator提供了三个组件。 Curator client用来替代ZooKeeper提供的类， 它封装了底层的管理并提供了一些有用的工具。Curator framework提供了高级的API来简化ZooKeeper的使用。它增加了很多基于ZooKeeper的特性，帮助管理ZooKeeper的连接以及重试操作。Curator Recipes提供了使用ZooKeeper的一些通用的技巧（方法）。 除此之外， Curator Test提供了基于ZooKeeper的单元测试工具。</p>
+<h3 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h3><p>Maven是一个强大的Java项目构建工具。当然，你也可以使用其它工具来构建项目，但由于Maven是用Java开发的，因此Maven被更多的用于Java项目中。</p>
+<h3 id="log4j"><a href="#log4j" class="headerlink" title="log4j"></a>log4j</h3><p>Log4j是Apache的一个开放源代码项目，通过使用Log4j，我们可以控制日志信息输送的目的地是控制台、文件、GUI组件、甚至是套接口服务器、NT的事件记录器、UNIX Syslog守护进程等；我们也可以控制每一条日志的输出格式；通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。最令人感兴趣的就是，这些可以通过一个配置文件来灵活地进行配置，而不需要修改应用的代码。</p>
+<h2 id="Google系列"><a href="#Google系列" class="headerlink" title="Google系列"></a>Google系列</h2><h3 id="guava"><a href="#guava" class="headerlink" title="guava"></a>guava</h3><p>Guava是一个Google开发的基于java的扩展项目，提供了很多有用的工具类，可以让java代码更加优雅，更加简洁。</p>
+<p>Guava包括诸多工具类，比如Collections，cache，concurrent，hash，reflect，annotations，eventbus等。</p>
+<h3 id="gson"><a href="#gson" class="headerlink" title="gson"></a>gson</h3><p>Gson（又称Google Gson）是Google公司发布的一个开源的Java库，主要用途为序列化Java对象为JSON字串，或反序列化JSON字串成Java对象。</p>
+<p>gson和其他现有java json类库最大的不同时gson需要序列化得实体类不需要使用annotation来标识需要序列化得字段，同时gson又可以通过使用annotation来灵活配置需要序列化的字段。</p>
+<h2 id="Alibaba系列"><a href="#Alibaba系列" class="headerlink" title="Alibaba系列"></a>Alibaba系列</h2><h3 id="dubbo"><a href="#dubbo" class="headerlink" title="dubbo"></a>dubbo</h3><p>DUBBO是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，是阿里巴巴SOA服务化治理方案的核心框架，每天为2,000+个服务提供3,000,000,000+次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。</p>
+<h3 id="rocketmq"><a href="#rocketmq" class="headerlink" title="rocketmq"></a>rocketmq</h3><p>RocketMQ是一个纯Java、分布式、队列模型的开源消息中间件，前身是Metaq，当 Metaq 3.0发布时，产品名称改为 RocketMQ。</p>
+<h3 id="druid"><a href="#druid" class="headerlink" title="druid"></a>druid</h3><p>Druid 是一个JDBC组件，它包括三部分：<br>DruidDriver 代理Driver，能够提供基于Filter－Chain模式的插件体系。<br>DruidDataSource 高效可管理的数据库连接池。<br>SQLParser</p>
+<h3 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h3><p>fastjson 是一个性能很好的 Java 语言实现的 JSON 解析器和生成器，来自阿里巴巴的工程师开发。</p>
+<p>主要特点：<br>快速FAST (比其它任何基于Java的解析器和生成器更快，包括jackson), fastjson采用独创的算法，将parse的速度提升到极致，超过所有json库，包括曾经号称最快的jackson。并且还超越了google的二进制协议protocol buf。</p>
+<p>强大（支持普通JDK类包括任意Java Bean Class、Collection、Map、Date或enum）</p>
+<p>零依赖（没有依赖其它任何类库除了JDK）</p>
+<h3 id="fastdfs"><a href="#fastdfs" class="headerlink" title="fastdfs"></a>fastdfs</h3><p>FastDFS是一个开源的分布式文件系统，她对文件进行管理，功能包括：文件存储、文件同步、文件访问（文件上传、文件下载）等，解决了大容量存储和负载均衡的问题。特别适合以文件为载体的在线服务，如相册网站、视频网站等等。</p>
+<h2 id="Spring系列"><a href="#Spring系列" class="headerlink" title="Spring系列"></a>Spring系列</h2><h3 id="spring-core"><a href="#spring-core" class="headerlink" title="spring core"></a>spring core</h3><p>核心容器：核心容器提供 Spring 框架的基本功能。核心容器的主要组件是 BeanFactory，它是工厂模式的实现。BeanFactory 使用控制反转 （IOC） 模式将应用程序的配置和依赖性规范与实际的应用程序代码分开。</p>
+<h3 id="spring-context"><a href="#spring-context" class="headerlink" title="spring context"></a>spring context</h3><p>Spring 上下文：Spring 上下文是一个配置文件，向 Spring 框架提供上下文信息。Spring 上下文包括企业服务，例如 JNDI、EJB、电子邮件、国际化、校验和调度功能。</p>
+<h3 id="spring-aop"><a href="#spring-aop" class="headerlink" title="spring aop"></a>spring aop</h3><p>Spring AOP：通过配置管理特性，Spring AOP 模块直接将面向方面的编程功能集成到了 Spring 框架中。所以，可以很容易地使 Spring 框架管理的任何对象支持 AOP。Spring AOP 模块为基于 Spring 的应用程序中的对象提供了事务管理服务。通过使用 Spring AOP，不用依赖 EJB 组件，就可以将声明性事务管理集成到应用程序中。</p>
+<h3 id="spring-dao"><a href="#spring-dao" class="headerlink" title="spring dao"></a>spring dao</h3><p>Spring DAO：JDBC DAO 抽象层提供了有意义的异常层次结构，可用该结构来管理异常处理和不同数据库供应商抛出的错误消息。异常层次结构简化了错误处理，并且极大地降低了需要编写的异常代码数量（例如打开和关闭连接）。Spring DAO 的面向 JDBC 的异常遵从通用的 DAO 异常层次结构。</p>
+<h3 id="spring-orm"><a href="#spring-orm" class="headerlink" title="spring orm"></a>spring orm</h3><p>Spring ORM：Spring 框架插入了若干个 ORM 框架，从而提供了 ORM 的对象关系工具，其中包括 JDO、Hibernate 和 iBatis SQL Map。所有这些都遵从 Spring 的通用事务和 DAO 异常层次结构。</p>
+<h3 id="spring-web"><a href="#spring-web" class="headerlink" title="spring web"></a>spring web</h3><p>Spring Web 模块：Web 上下文模块建立在应用程序上下文模块之上，为基于 Web 的应用程序提供了上下文。所以，Spring 框架支持与 Jakarta Struts 的集成。Web 模块还简化了处理多部分请求以及将请求参数绑定到域对象的工作。</p>
+<h3 id="spring-mvc"><a href="#spring-mvc" class="headerlink" title="spring mvc"></a>spring mvc</h3><p>Spring MVC 框架：MVC 框架是一个全功能的构建 Web 应用程序的 MVC 实现。通过策略接口，MVC 框架变成为高度可配置的，MVC 容纳了大量视图技术，其中包括 JSP、Velocity、Tiles、iText 和 POI。</p>
+<h2 id="日志相关"><a href="#日志相关" class="headerlink" title="日志相关"></a>日志相关</h2><h3 id="logback"><a href="#logback" class="headerlink" title="logback"></a>logback</h3><p>当前流行的log4j项目的继任者。Logback是由log4j创始人设计的又一个开源日志组件。logback当前分成三个模块：logback-core,logback- classic和logback-access。logback-core是其它两个模块的基础模块。logback-classic是log4j的一个 改良版本。此外logback-classic完整实现SLF4J API使你可以很方便地更换成其它日志系统如log4j或JDK14 Logging。logback-access访问模块与Servlet容器集成提供通过Http来访问日志的功能。</p>
+<h3 id="slf4j"><a href="#slf4j" class="headerlink" title="slf4j"></a>slf4j</h3><p>The Simple Logging Facade for Java, 各种日志框架的一个简单的外观或抽象（如java.util.logging 、logback、log4j等），允许用户在部署时加入需要的日志框架。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/07/Java中数组的拷贝方式/" rel="next" title="Java中数组的拷贝方式">
+                <i class="fa fa-chevron-left"></i> Java中数组的拷贝方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/30/IDEA常用插件/" rel="prev" title="IDEA常用插件">
+                IDEA常用插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache系列"><span class="nav-number">1.</span> <span class="nav-text">Apache系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#commons-lang"><span class="nav-number">1.1.</span> <span class="nav-text">commons lang</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commons-lang3"><span class="nav-number">1.2.</span> <span class="nav-text">commons lang3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commons-pool"><span class="nav-number">1.3.</span> <span class="nav-text">commons pool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commons-pool2"><span class="nav-number">1.4.</span> <span class="nav-text">commons pool2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commons-chain"><span class="nav-number">1.5.</span> <span class="nav-text">commons-chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commons-math"><span class="nav-number">1.6.</span> <span class="nav-text">commons-math</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#httpclient"><span class="nav-number">1.7.</span> <span class="nav-text">httpclient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka"><span class="nav-number">1.8.</span> <span class="nav-text">kafka</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper"><span class="nav-number">1.9.</span> <span class="nav-text">zookeeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#curator"><span class="nav-number">1.10.</span> <span class="nav-text">curator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven"><span class="nav-number">1.11.</span> <span class="nav-text">maven</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#log4j"><span class="nav-number">1.12.</span> <span class="nav-text">log4j</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google系列"><span class="nav-number">2.</span> <span class="nav-text">Google系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#guava"><span class="nav-number">2.1.</span> <span class="nav-text">guava</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gson"><span class="nav-number">2.2.</span> <span class="nav-text">gson</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Alibaba系列"><span class="nav-number">3.</span> <span class="nav-text">Alibaba系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo"><span class="nav-number">3.1.</span> <span class="nav-text">dubbo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rocketmq"><span class="nav-number">3.2.</span> <span class="nav-text">rocketmq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#druid"><span class="nav-number">3.3.</span> <span class="nav-text">druid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fastjson"><span class="nav-number">3.4.</span> <span class="nav-text">fastjson</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fastdfs"><span class="nav-number">3.5.</span> <span class="nav-text">fastdfs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring系列"><span class="nav-number">4.</span> <span class="nav-text">Spring系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-core"><span class="nav-number">4.1.</span> <span class="nav-text">spring core</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-context"><span class="nav-number">4.2.</span> <span class="nav-text">spring context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-aop"><span class="nav-number">4.3.</span> <span class="nav-text">spring aop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-dao"><span class="nav-number">4.4.</span> <span class="nav-text">spring dao</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-orm"><span class="nav-number">4.5.</span> <span class="nav-text">spring orm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-web"><span class="nav-number">4.6.</span> <span class="nav-text">spring web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-mvc"><span class="nav-number">4.7.</span> <span class="nav-text">spring mvc</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志相关"><span class="nav-number">5.</span> <span class="nav-text">日志相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#logback"><span class="nav-number">5.1.</span> <span class="nav-text">logback</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slf4j"><span class="nav-number">5.2.</span> <span class="nav-text">slf4j</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

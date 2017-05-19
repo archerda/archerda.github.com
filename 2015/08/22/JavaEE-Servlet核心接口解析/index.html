@@ -1,0 +1,729 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaEE," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="简介在Java中，每一个Servlet程序都必须直接或间接实现javax.servlet.Servlet这个接口。当编写一个Servlet类时，直接实现它，当扩展一个实现这个接口的类时(如GenericServlet)，则间接实现它。它独立于协议，控制着每个Servlet的生命周期。 Servlet接口是Servlet与Servlet容器(如Tomcat)之间的一个约定。这个约定总结起来就是说：S">
+<meta name="keywords" content="JavaEE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaEE Servlet核心接口解析">
+<meta property="og:url" content="http://yoursite.com/2015/08/22/JavaEE-Servlet核心接口解析/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="简介在Java中，每一个Servlet程序都必须直接或间接实现javax.servlet.Servlet这个接口。当编写一个Servlet类时，直接实现它，当扩展一个实现这个接口的类时(如GenericServlet)，则间接实现它。它独立于协议，控制着每个Servlet的生命周期。 Servlet接口是Servlet与Servlet容器(如Tomcat)之间的一个约定。这个约定总结起来就是说：S">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaEE Servlet核心接口解析">
+<meta name="twitter:description" content="简介在Java中，每一个Servlet程序都必须直接或间接实现javax.servlet.Servlet这个接口。当编写一个Servlet类时，直接实现它，当扩展一个实现这个接口的类时(如GenericServlet)，则间接实现它。它独立于协议，控制着每个Servlet的生命周期。 Servlet接口是Servlet与Servlet容器(如Tomcat)之间的一个约定。这个约定总结起来就是说：S">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/08/22/JavaEE-Servlet核心接口解析/"/>
+
+
+
+
+
+  <title>JavaEE Servlet核心接口解析 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">A programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/22/JavaEE-Servlet核心接口解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaEE Servlet核心接口解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-22T00:12:02+08:00">
+                2015-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在Java中，每一个Servlet程序都必须直接或间接实现<code>javax.servlet.Servlet</code>这个接口。当编写一个Servlet类时，直接实现它，当扩展一个实现这个接口的类时(如GenericServlet)，则间接实现它。它独立于协议，控制着每个Servlet的生命周期。</p>
+<p>Servlet接口是Servlet与Servlet容器(如Tomcat)之间的一个约定。这个约定总结起来就是说：Servlet容器会把Servlet类加载到内存中，并在Servlet实例中调用<strong>特定的方法</strong>。而且在一个应用中，<strong>每个Servlet类型只能有一个实例</strong>。</p>
+<hr>
+<h2 id="核心属性"><a href="#核心属性" class="headerlink" title="核心属性"></a>核心属性</h2><h4 id="ServletConfig"><a href="#ServletConfig" class="headerlink" title="ServletConfig"></a>ServletConfig</h4><p>封装Servlet的配置信息。Servlet容器初始化一个Servlet对象时，会为这个Servlet对象创建一个ServletConfig对象,包含了Servlet的初始化参数信息。此外，ServletConfig对象还与ServletContext对象关联。ServletContext对象有以下方法：</p>
+<blockquote>
+<ul>
+<li><code>public String getServletName()</code>;   返回servlet的名字，即web.xml中的servlet-name的子元素的值。如果没有配置这个子元素，则返回servlet类的名字。</li>
+<li><code>public ServletContext getServletContext()</code>;<br>返回一个servletContext()对象.</li>
+<li><code>public String getInitParameter(String name)</code>;<br>根据给定的初始化参数，返回匹配的初始化参数值。</li>
+<li><code>public Enumeration&lt;String&gt; getInitParameterNames()</code>;<br>返回一个Enumeration对象，里面包含了所有的初始化参数。</li>
+</ul>
+</blockquote>
+<h4 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h4><p>ServletContext是Servlet和Servlet容器之间直接通信的接口。Servlet容器在启动一个Web应用时，会为这个应用创建一个ServletContext对象。每一个Web应用有且只有一个ServletContext对象。同一个Web应用中的各个Servlet对象共享一个ServletContext对象。Servlet对象可以通过ServletContext来共享各种资源。</p>
+<p>Web应用范围具有2层含义:</p>
+<blockquote>
+<ul>
+<li>表示由Web应用的生命周期构成的时间段；</li>
+<li>表示在Web应用生命周期内所有Web组件的集合；</li>
+</ul>
+</blockquote>
+<p>ServletContext对象的3种获取方式：</p>
+<blockquote>
+<ol>
+<li>Javax.servlet.http.HttpSession.getServletContext();</li>
+<li>Javax.servlet.jsp.PageContext.getServletContext(); PageContext是JSP的隐式对象，所以可以在JSP页面直接获取ServletContext对象。</li>
+<li>Javax.servlet.ServletConfig.getServletContext();<br>这就是ServletConfig和ServletContext关联的地方。</li>
+</ol>
+</blockquote>
+<h4 id="ServletRequest"><a href="#ServletRequest" class="headerlink" title="ServletRequest"></a>ServletRequest</h4><p>封装当前的请求的配置和数据，以便Servlet开发者不必解析和操作原始的请求数据。</p>
+<h4 id="ServletResponse"><a href="#ServletResponse" class="headerlink" title="ServletResponse"></a>ServletResponse</h4><p>当前请求的响应，它的作用是使得将响应传回用户更容易。</p>
+<hr>
+<h2 id="核心方法"><a href="#核心方法" class="headerlink" title="核心方法"></a>核心方法</h2><p>init()、service()、destroy()是Servlet生命周期方法。Servlet容器将会按照以下原则调用这3个方法。</p>
+<h4 id="init"><a href="#init" class="headerlink" title="init()"></a>init()</h4><p><code>public void init(ServletConfig config) throws ServletException</code><br>如果Servlet的配置参数<code>load-on-startup=1</code>，那么Servlet容器启动时就会调用这个方法。如果<code>load-on-startup=0</code>，那么第一次请求Servlet时，Servlet容器才会调用这个方法。在后续的请求中，<strong>将不会再调用这个方法</strong>。</p>
+<p>可以利用这个方法来编写一些应用程序初始化相关的代码。在调用这个方法时，Servlet容器会传递一个ServletConfig参数。一般来说，会将ServletConfig参数赋值给一个类级变量，以便Servlet类中其他方法也可以使用这个对象。</p>
+<h4 id="service"><a href="#service" class="headerlink" title="service()"></a>service()</h4><p><code>public void service(ServletRequest req, ServletResponse res)throws ServletException, IOException</code>；<br>每次请求Servlet时，容器都会调用这个方法。必须在这里编写要Servlet完成的响应的代码。<strong>第一次请求Servlet时，容器会调用init方法和service方法；对于后续的请求，容器只调用service方法</strong>。</p>
+<h4 id="destroy"><a href="#destroy" class="headerlink" title="destroy()"></a>destroy()</h4><p><code>public void destroy();</code><br>要销毁Servlet时，容器就会调用这个方法。它通常发生在卸载应用程序，或者关闭Servlet容器的时候。一般来说，可以在这个方法中编写一些资源清理相关的代码。</p>
+<h4 id="getServletConfig"><a href="#getServletConfig" class="headerlink" title="getServletConfig()"></a>getServletConfig()</h4><p><code>public ServletConfig getServletConfig();</code><br>返回由Servlet容器传给init方法的ServletConfig。但是为了让getServletConfig()返回非null值，<strong>你肯定已经为传给init方法的ServletConfig赋给了一个类级变量</strong>。</p>
+<h4 id="getServletInfo"><a href="#getServletInfo" class="headerlink" title="getServletInfo()"></a>getServletInfo()</h4><p><code>public String getServletInfo();</code><br>返回Servlet的描述。可以返回可能有用的任意字符串，甚至可能是null。</p>
+<hr>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>必须要注意的一点是线程安全性。因为一个Web应用中所有的用户将公用一个Servlet实例，所以不建议使用类级变量，以免引起资源争夺导致混乱。除非它们是只读的，比如JUC. atomic包中的成员。</p>
+<p>以上。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaEE/" rel="tag"># JavaEE</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/21/Java-自带工具常用命令/" rel="next" title="Java 自带工具常用命令">
+                <i class="fa fa-chevron-left"></i> Java 自带工具常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/22/JVM-参数设置及分析/" rel="prev" title="JVM 参数设置及分析">
+                JVM 参数设置及分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心属性"><span class="nav-number">2.</span> <span class="nav-text">核心属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletConfig"><span class="nav-number">2.0.1.</span> <span class="nav-text">ServletConfig</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletContext"><span class="nav-number">2.0.2.</span> <span class="nav-text">ServletContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletRequest"><span class="nav-number">2.0.3.</span> <span class="nav-text">ServletRequest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletResponse"><span class="nav-number">2.0.4.</span> <span class="nav-text">ServletResponse</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心方法"><span class="nav-number">3.</span> <span class="nav-text">核心方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#init"><span class="nav-number">3.0.1.</span> <span class="nav-text">init()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#service"><span class="nav-number">3.0.2.</span> <span class="nav-text">service()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#destroy"><span class="nav-number">3.0.3.</span> <span class="nav-text">destroy()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getServletConfig"><span class="nav-number">3.0.4.</span> <span class="nav-text">getServletConfig()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getServletInfo"><span class="nav-number">3.0.5.</span> <span class="nav-text">getServletInfo()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

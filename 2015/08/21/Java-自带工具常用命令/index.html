@@ -1,0 +1,783 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,JDK工具," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Javapjavap是JDK自带的反汇编器，可以查看java编译器为我们生成的字节码。通过它，我们可以对照源代码和字节码，从而了解很多编译器内部的工作.  查看帮助信息：javap -help 查看版本：javap -version 输出行和局部变量表：javap -l 仅显示public类和成员：javap -public 显示protected/public类和成员：javap -protec">
+<meta name="keywords" content="Java,JDK工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 自带工具常用命令">
+<meta property="og:url" content="http://yoursite.com/2015/08/21/Java-自带工具常用命令/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="Javapjavap是JDK自带的反汇编器，可以查看java编译器为我们生成的字节码。通过它，我们可以对照源代码和字节码，从而了解很多编译器内部的工作.  查看帮助信息：javap -help 查看版本：javap -version 输出行和局部变量表：javap -l 仅显示public类和成员：javap -public 显示protected/public类和成员：javap -protec">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 自带工具常用命令">
+<meta name="twitter:description" content="Javapjavap是JDK自带的反汇编器，可以查看java编译器为我们生成的字节码。通过它，我们可以对照源代码和字节码，从而了解很多编译器内部的工作.  查看帮助信息：javap -help 查看版本：javap -version 输出行和局部变量表：javap -l 仅显示public类和成员：javap -public 显示protected/public类和成员：javap -protec">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/08/21/Java-自带工具常用命令/"/>
+
+
+
+
+
+  <title>Java 自带工具常用命令 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">A programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/21/Java-自带工具常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java 自带工具常用命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-21T15:52:47+08:00">
+                2015-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Javap"><a href="#Javap" class="headerlink" title="Javap"></a>Javap</h2><p>javap是JDK自带的反汇编器，可以查看java编译器为我们生成的字节码。通过它，我们可以对照源代码和字节码，从而了解很多编译器内部的工作.</p>
+<ul>
+<li>查看帮助信息：<code>javap -help</code></li>
+<li>查看版本：<code>javap -version</code></li>
+<li>输出行和局部变量表：<code>javap -l</code></li>
+<li>仅显示public类和成员：<code>javap -public</code></li>
+<li>显示protected/public类和成员：<code>javap -protected</code></li>
+<li>显示package/protected/public类和成员 (默认)：<code>javap -package</code></li>
+<li>显示所有类和成员：<code>javap -p</code> <code>javap -private</code></li>
+<li>输出内部类型签名：<code>javap -s</code></li>
+<li>对代码进行反汇编：<code>javap -c</code></li>
+<li>输出堆栈大小、各方法的 locals 及 args 数,以及class文件的编译版本：<code>javap -v</code> <code>javap -verbose</code></li>
+<li>显示正在处理的类的系统信息 (路径, 大小, 日期, MD5散列)：<code>javap -sysinfo</code></li>
+<li>显示静态最终常量：<code>javap -constants</code></li>
+</ul>
+<hr>
+<h2 id="JPs"><a href="#JPs" class="headerlink" title="JPs"></a>JPs</h2><p>jps（Java Process Status），虚拟机进程状态工具。可以列出正在运行的虚拟机进程，并显示虚拟机执行主类（Main Class，main()方法所在的类）名称以及这些进程的本地虚拟机唯一ID（Local Virtual Machine Identifier，LVMID）。</p>
+<blockquote>
+<p>jps [options][hostid]</p>
+</blockquote>
+<ul>
+<li>只输出LVMID，不输出主类名字：<code>jps -q</code></li>
+<li>输出虚拟机进程启动时传递给主类main函数的参数：<code>jps -m</code></li>
+<li>输出主类的全名，如果是jar包则输出jar包路径：<code>jps -l</code></li>
+<li>输出虚拟机进程启动时JVM参数：<code>jps -v</code></li>
+</ul>
+<hr>
+<h2 id="JStat"><a href="#JStat" class="headerlink" title="JStat"></a>JStat</h2><p>jstat（Java Statistics Monitoring Tool），虚拟机统计信息监视工具。用于监视虚拟机各种运行状态信息的命令行工具，它可以显示本地或者远程虚拟机进程中的类装载、内存、垃圾回收、JIT编译等运行数据。在没有GUI情况下，这是运行期定位虚拟机性能问题的首选工具。</p>
+<blockquote>
+<p>jstat [option vmid [interval[s|ms] [count]]]</p>
+</blockquote>
+<p>命令格式中的VMID和LVMID需要说明下，如果是本地虚拟机进程，那么VMID和LVMID是一致的，如果是远程虚拟机进程，那VMID格式是</p>
+<blockquote>
+<p>[protocol:][//]lvmid [@hostname[:port] / servername]</p>
+</blockquote>
+<p>参数interval和count代表查询间隔和次数，如果省略这两个参数，那么只查询一次。option代表用户希望查询的虚拟机信息，主要包括3类：类装载、垃圾回收、运行期变异状况。具体如下。</p>
+<ul>
+<li>监视类装载、卸载数量、总空间以及类装载所耗费时间：<code>jstat -class</code></li>
+<li>监视Java堆状况，包括Eden区、两个Survivor区、老年代、永久代等的容量、已用空间、GC时间合计等：<code>jstat -gc</code></li>
+<li>输出Java堆各个区域使用到的最大、最小空间：<code>jstat -gccapacity</code></li>
+<li>输出已使用空间占总空间的百分比：<code>jstat -gcutil</code></li>
+<li>输出上一次GC的原因：<code>jstat -gccause</code></li>
+<li>监视新生代GC状况：<code>jstat -gcnew</code></li>
+<li>监视新生代GC状况，关注使用到的最大、最小空间：<code>jstat -gcnewcapacity</code></li>
+<li>监视老年代GC状况：<code>jstat -gcold</code></li>
+<li>监视老年代GC状况，关注使用到的最大、最小空间：<code>jstat -gcoldcapacity</code></li>
+<li>输出永久代的最大、最小空间：<code>jstat -gcpermcapacity</code></li>
+<li>输出JIT编译器编译过的方法、耗时等信息：<code>jstat -compiler</code></li>
+<li>输出已经被JIT编译的方法：<code>jstat -printcompilation</code></li>
+</ul>
+<hr>
+<h2 id="JInfo"><a href="#JInfo" class="headerlink" title="JInfo"></a>JInfo</h2><p>jinfo（Configuration Info for Java），Java配置信息工具。作用是可以实时地查看和调整虚拟机各项参数。</p>
+<blockquote>
+<p>jinfo [ option ] &lt; pid &gt;</p>
+</blockquote>
+<ul>
+<li>查看所有参数：<code>jinfo -flags &lt;pid&gt;</code></li>
+<li>查看未被显示指定的参数的系统默认值：<code>jinfo -flag [name] &lt;pid&gt;</code></li>
+<li>查看未被显示指定的参数的系统默认值(JDK1.6-)：<code>java -XX:+PrintFlagsFinal</code></li>
+<li>修改运行期虚拟机参数：<code>jinfo -flag [+/-] name</code> <code>jinfo -flag &lt;name&gt;=&lt;value&gt;</code></li>
+<li>输出虚拟机进程的System.getProperties()的内容：<code>jinfo -sysprops &lt;pid&gt;</code></li>
+</ul>
+<hr>
+<h2 id="JMap"><a href="#JMap" class="headerlink" title="JMap"></a>JMap</h2><p>jmap（Memory Map for Java），Java内存映像工具，用于生成堆转储快照（一般称为heapdump文件或dump文件）。jmap的作用不仅仅是获取dump文件，它还可以查询finalize执行队列、Java堆和永久代的详细，如空间使用率、当前用的是哪种回收器等。</p>
+<blockquote>
+<p>jmap [ option ] vmid</p>
+</blockquote>
+<ul>
+<li>生成Java堆转储快照：<code>jmap -dump [live, ] format=b, file=&lt;filename&gt;</code></li>
+<li>当虚拟机对-hump 选项没有响应时，强制生成dump快照，只在Linux/Solaris平台有效：<code>jmap -F</code></li>
+<li>显示在F-Queue中等待Finalizer线程执行finalize方法的对象。只在Linux/Solaris平台有效：<code>jmap -finalizerinfo</code></li>
+<li>显示Java堆详细信息，如使用哪种回收器、参数配置、分代状况等。只在Linux/Solaris平台有效：<code>jmap -heap</code></li>
+<li>显示堆中对象统计信息，包括类、实例对象、合计容量：<code>jmap -histo</code></li>
+<li>以ClassLoader为统计口径显示永久代内存状态，只在Linux/Solaris平台有效：<code>jmap permstat</code></li>
+</ul>
+<hr>
+<h2 id="JHat"><a href="#JHat" class="headerlink" title="JHat"></a>JHat</h2><p>jhatzhuanch （JVM Heap Analyisi Tool），虚拟机堆转储快照分析工具。</p>
+<hr>
+<h2 id="JStack"><a href="#JStack" class="headerlink" title="JStack"></a>JStack</h2><p>jstack（Stack Trace for Java），Java堆栈工具，用于生成虚拟机当前时刻的线程快照（一般称为threaddump或者javacore文件）。线程快照就是当前虚拟机内为每一条线程正在执行的方法堆栈的集合，生成线程快照的主要目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间等待等都是导致线程长时间停顿的常见原因。</p>
+<p>线程出现停顿的时候通过jstack来查看各个线程的调用堆栈，就可以知道没有响应的线程到底在后台做些什么事情，或者在等待什么资源。</p>
+<blockquote>
+<p>jstack [ option ] &lt; vmid &gt;</p>
+</blockquote>
+<ul>
+<li>当正常输出的请求不被响应是，强制输出线程堆栈：<code>jstack -F</code></li>
+<li>除堆栈外，显示显示关于锁的附加信息：<code>jstack -l</code></li>
+<li>如果调用本地方法，显示C/C++的堆栈：<code>jstack -m</code></li>
+</ul>
+<p>在JDK1.5中，java.lang.Thread新增了一个getAllStackTraces()方法用于获取虚拟机中所有线程的StackTraceElement对象。使用这个方法可以通过简单的几行代码就完成了jstack的大部分功能，在实际项目中可以调用这个方法做个管理员页面，可以随时使用浏览器来查看线程堆栈。</p>
+<hr>
+<h2 id="JConsole"><a href="#JConsole" class="headerlink" title="JConsole"></a>JConsole</h2><p>JConsole（Java Monitoring and Management Console），是一种基于JMX的可视化监视、管理工具。它管理部分的功能是针对JMX MBean进行管理，由于MBean可以使用代码、中间件服务器的管理控制台或者所有符合JMX规范的软件进行访问，所以重点是使用JConsole的监视功能。</p>
+<hr>
+<h2 id="JVisualVM"><a href="#JVisualVM" class="headerlink" title="JVisualVM"></a>JVisualVM</h2><p>JVisualVM（All-in-One Java Troubleshooting Tool），Java多合一故障处理工具。是目前为止随JDK发布的功能最强大的运行监视和故障处理程序，并且可以预见在未来一段时间内都是官方主力发展的虚拟机故障处理工具。而且还有很多高效的插件可以使用。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JDK工具/" rel="tag"># JDK工具</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/18/Git-常用命令/" rel="next" title="Git 常用命令">
+                <i class="fa fa-chevron-left"></i> Git 常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/22/JavaEE-Servlet核心接口解析/" rel="prev" title="JavaEE Servlet核心接口解析">
+                JavaEE Servlet核心接口解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/daojian2.jpg"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Javap"><span class="nav-number">1.</span> <span class="nav-text">Javap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPs"><span class="nav-number">2.</span> <span class="nav-text">JPs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JStat"><span class="nav-number">3.</span> <span class="nav-text">JStat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JInfo"><span class="nav-number">4.</span> <span class="nav-text">JInfo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMap"><span class="nav-number">5.</span> <span class="nav-text">JMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JHat"><span class="nav-number">6.</span> <span class="nav-text">JHat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JStack"><span class="nav-number">7.</span> <span class="nav-text">JStack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JConsole"><span class="nav-number">8.</span> <span class="nav-text">JConsole</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVisualVM"><span class="nav-number">9.</span> <span class="nav-text">JVisualVM</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
