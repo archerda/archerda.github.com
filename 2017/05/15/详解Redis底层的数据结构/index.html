@@ -102,7 +102,9 @@
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-17-165118.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-17-170309.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-17-172344.jpg">
-<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-153705.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-155448.jpg">
+<meta property="og:updated_time" content="2017-05-22T16:29:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解Redis底层的数据结构">
 <meta name="twitter:description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
@@ -434,6 +436,68 @@
 <p>ht属性是一个包含两个项的数组，数组的每个项都是一个dictht哈希表。一般情况，字典只使用ht[0]哈希表，ht[1]只会在ht[0]进行rehash的时候使用。</p>
 <p>除了ht[1]外，另一个和rehash相关的属性就是rehashidx了，它记录了目前rehash的进度，如果目前没有rehash，那么它的值为-1.</p>
 <p>下图展示了一个普通状态下（没有进行rehash）的字典：<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-17-172344.jpg" alt=""></p>
+<h2 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h2><h3 id="作用-3"><a href="#作用-3" class="headerlink" title="作用"></a>作用</h3><p>跳跃表（skiplist）是一种有序数据结构，它通过在每个节点维持多个指向其他节点的指针，从而达到快速访问节点的目的。跳跃表支持平均<code>O(logN)</code>、最坏<code>O(N)</code>复杂度的节点查找，还可以通过顺序性来批量处理节点。在大部分情况下，跳跃表的效率可以和平衡树相媲美，并且实现比平衡树简单，所以有不少程序都使用跳跃表来代替平衡树。</p>
+<p>跳跃表是Redis有序集合键的底层实现之一。举个例子，fruit-price是一个有序集合，这个有序集合以水果名作为成员，水果价作为分值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">redis&gt; ZRANCE fruit-price <span class="number">0</span> <span class="number">2</span> WITHSCORES</div><div class="line"><span class="number">1</span>) <span class="string">"banana"</span></div><div class="line"><span class="number">2</span>) <span class="string">"5"</span></div><div class="line"><span class="number">3</span>) <span class="string">"cherry"</span></div><div class="line"><span class="number">4</span>) <span class="string">"6.5"</span></div><div class="line"><span class="number">5</span>) <span class="string">"apple"</span></div><div class="line"><span class="number">6</span>) <span class="string">"8"</span></div><div class="line"></div><div class="line">redis&gt; ZCARD fruit-price</div><div class="line">(integer) <span class="number">130</span></div></pre></td></tr></table></figure></p>
+<p>fruit-price有序集合的所有数据都被保存在一个跳跃表里面，其中每个跳跃表节点都保存了一种水果的价格，所有水果按照价格从低到高在跳跃表里排序：</p>
+<ul>
+<li>跳跃表的第一个元素的成员为”banana”，它的分值是5；</li>
+<li>跳跃表的第二个元素的成员为”cherry”，它的分值是6.5；</li>
+<li>跳跃表的第三个元素的成员为”apple”，它的分值是8；</li>
+</ul>
+<p>和链表、字典等数据结构被广泛应用在Redis内部不同，<strong>Redis只在2个地方用到了跳跃表，一个是实现有序集合键，另一个是在集群节点中用作内部结构</strong>，除此之外，跳跃表在Redis内部没有其他用途。</p>
+<h3 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h3><p>我们先看下面一个跳跃表：<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-153705.jpg" alt=""></p>
+<h4 id="跳跃表节点"><a href="#跳跃表节点" class="headerlink" title="跳跃表节点"></a>跳跃表节点</h4><p>跳跃表节点的实现由redis.h/zskiplistNode结构定义，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* ZSETs use a specialized version of Skiplists */</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 跳跃表节点</div><div class="line"> */</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="comment">// 成员对象</span></div><div class="line">    robj *obj;</div><div class="line"></div><div class="line">    <span class="comment">// 分值</span></div><div class="line">    <span class="keyword">double</span> score;</div><div class="line"></div><div class="line">    <span class="comment">// 后退指针</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span></div><div class="line"></div><div class="line">    <span class="comment">// 层</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></div><div class="line"></div><div class="line">        <span class="comment">// 前进指针</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span></div><div class="line"></div><div class="line">        <span class="comment">// 跨度</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;</div><div class="line"></div><div class="line">    &#125; level[];</div><div class="line"></div><div class="line">&#125; zskiplistNode;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>层</p>
+<blockquote>
+<p>跳跃表节点的level数组可以包含多个元素，每个元素都包含了一个指向其他节点的指针，程序可以通过这些层来加快访问其他节点的速度，一般来说，层的数量越多，访问其他节点的速度就越快；<br>每次创建一个新跳跃表节点的时候，程序都根据幂次定律（power law，越大的数出现的概率越低）<strong>随机生成一个介于1~32之间的值作为level数组的大小，这个大小就是层的”高度”</strong>。<br>下图分别展示了2个高度为1层和3层的节点。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-155448.jpg" alt=""></p>
+</blockquote>
+</li>
+<li><p>前进指针</p>
+<blockquote>
+<p>每个层都有一个指向表尾方向的前进指针（level[i].forward属性），用于表头向表尾方向访问节点。</p>
+</blockquote>
+</li>
+<li><p>跨度</p>
+<blockquote>
+<p>层的跨度（level[i].span属性）用于记录两个节点之间的距离；<br>1.两个节点之间的跨度越大，他们相距得就越远；<br>2.指向NULL的所有前进指针的跨度都为0，因为他们没有连向任何节点。<br>看上去，很容易以为跨度和遍历操作有关，但实际上并不是遍历操作只使用前进指针就可以完成，跨度其实是用来计算排位（rank）的：<strong>在查找某个节点的过程中，将沿途访问过的所有层的跨度累计起来，得到的结果就是目标节点在跳跃表中的排位</strong>。</p>
+</blockquote>
+</li>
+<li><p>后退指针</p>
+<blockquote>
+<p>节点的后退指针（backward属性）用于从表尾向表头方向访问节点：跟可以一次跳过多个节点的前进指针不同，因为每个节点都只有一个后退指针，所以每次只能后退到前一个节点。</p>
+</blockquote>
+</li>
+<li><p>分值和成员</p>
+<blockquote>
+<p>节点的分值（score属性）是一个double类型的浮点数，跳跃表的所有节点都按照分值从小到大排序。<br>节点的成员对象（obj属性）是一个指针，它指向一个字符串对象，而字符串对象里面存着一个SDS值。<br>在同一个跳跃表中，各个节点保存的成员对象必须是唯一的，但是多个节点的分值却是可以相同的：分值相同的节点将按照对象在字典序中的大小来排序。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="跳跃表-1"><a href="#跳跃表-1" class="headerlink" title="跳跃表"></a>跳跃表</h4><p>跳跃表由redis.h/zskiplist结构定义，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">*</div><div class="line"> * 跳跃表</div><div class="line"> */</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="comment">// 表头节点和表尾节点</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span></div><div class="line"></div><div class="line">    <span class="comment">// 表中节点的数量</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> length;</div><div class="line"></div><div class="line">    <span class="comment">// 表中层数最大的节点的层数</span></div><div class="line">    <span class="keyword">int</span> level;</div><div class="line"></div><div class="line">&#125; zskiplist;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>header</p>
+<blockquote>
+<p>指向跳跃表的表头节点。</p>
+</blockquote>
+</li>
+<li><p>tail</p>
+<blockquote>
+<p>指向跳跃表的表尾节点。</p>
+</blockquote>
+</li>
+<li><p>level</p>
+<blockquote>
+<p>记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不算在内）。</p>
+</blockquote>
+</li>
+<li><p>lenght</p>
+<blockquote>
+<p>记录跳跃表的长度，也就是，跳跃表目前包含的节点的数量（表头节点的层数不算在内）。</p>
+</blockquote>
+</li>
+</ul>
+<p>通过使用lenght属相来记录节点的数量，程序可以在O(1)复杂度内返回跳跃表的长度。注意表头节点和其他节点的构造是一样的：表头节点也有后退指针、分值和成员对象，不过表头节点的这些属性不会被用到，所以图中略去了，只显示了表头节点的各个层。</p>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
 <li><a href="">Redis设计与实现（第二版）</a></li>
 </ul>
@@ -618,7 +682,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单动态字符串"><span class="nav-number">2.</span> <span class="nav-text">简单动态字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用"><span class="nav-number">2.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SDS与C字符串的区别"><span class="nav-number">2.3.</span> <span class="nav-text">SDS与C字符串的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链表"><span class="nav-number">3.</span> <span class="nav-text">链表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用-1"><span class="nav-number">3.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-1"><span class="nav-number">3.2.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典"><span class="nav-number">4.</span> <span class="nav-text">字典</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用-2"><span class="nav-number">4.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-2"><span class="nav-number">4.2.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哈希表"><span class="nav-number">4.2.1.</span> <span class="nav-text">哈希表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#哈希表节点"><span class="nav-number">4.2.2.</span> <span class="nav-text">哈希表节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字典-1"><span class="nav-number">4.2.3.</span> <span class="nav-text">字典</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单动态字符串"><span class="nav-number">2.</span> <span class="nav-text">简单动态字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用"><span class="nav-number">2.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">2.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SDS与C字符串的区别"><span class="nav-number">2.3.</span> <span class="nav-text">SDS与C字符串的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链表"><span class="nav-number">3.</span> <span class="nav-text">链表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用-1"><span class="nav-number">3.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-1"><span class="nav-number">3.2.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字典"><span class="nav-number">4.</span> <span class="nav-text">字典</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用-2"><span class="nav-number">4.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-2"><span class="nav-number">4.2.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哈希表"><span class="nav-number">4.2.1.</span> <span class="nav-text">哈希表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#哈希表节点"><span class="nav-number">4.2.2.</span> <span class="nav-text">哈希表节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字典-1"><span class="nav-number">4.2.3.</span> <span class="nav-text">字典</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳跃表"><span class="nav-number">5.</span> <span class="nav-text">跳跃表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用-3"><span class="nav-number">5.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-3"><span class="nav-number">5.2.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳跃表节点"><span class="nav-number">5.2.1.</span> <span class="nav-text">跳跃表节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳跃表-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">跳跃表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
 
           </div>
