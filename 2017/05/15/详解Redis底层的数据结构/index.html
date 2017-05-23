@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-17-172344.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-153705.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-155448.jpg">
-<meta property="og:updated_time" content="2017-05-22T16:29:29.000Z">
+<meta property="og:updated_time" content="2017-05-23T02:17:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解Redis底层的数据结构">
 <meta name="twitter:description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
@@ -448,54 +448,19 @@
 <h3 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h3><p>我们先看下面一个跳跃表：<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-153705.jpg" alt=""></p>
 <h4 id="跳跃表节点"><a href="#跳跃表节点" class="headerlink" title="跳跃表节点"></a>跳跃表节点</h4><p>跳跃表节点的实现由redis.h/zskiplistNode结构定义，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* ZSETs use a specialized version of Skiplists */</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 跳跃表节点</div><div class="line"> */</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="comment">// 成员对象</span></div><div class="line">    robj *obj;</div><div class="line"></div><div class="line">    <span class="comment">// 分值</span></div><div class="line">    <span class="keyword">double</span> score;</div><div class="line"></div><div class="line">    <span class="comment">// 后退指针</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span></div><div class="line"></div><div class="line">    <span class="comment">// 层</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></div><div class="line"></div><div class="line">        <span class="comment">// 前进指针</span></div><div class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span></div><div class="line"></div><div class="line">        <span class="comment">// 跨度</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;</div><div class="line"></div><div class="line">    &#125; level[];</div><div class="line"></div><div class="line">&#125; zskiplistNode;</div></pre></td></tr></table></figure></p>
 <ul>
-<li><p>层</p>
-<blockquote>
-<p>跳跃表节点的level数组可以包含多个元素，每个元素都包含了一个指向其他节点的指针，程序可以通过这些层来加快访问其他节点的速度，一般来说，层的数量越多，访问其他节点的速度就越快；<br>每次创建一个新跳跃表节点的时候，程序都根据幂次定律（power law，越大的数出现的概率越低）<strong>随机生成一个介于1~32之间的值作为level数组的大小，这个大小就是层的”高度”</strong>。<br>下图分别展示了2个高度为1层和3层的节点。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-155448.jpg" alt=""></p>
-</blockquote>
-</li>
-<li><p>前进指针</p>
-<blockquote>
-<p>每个层都有一个指向表尾方向的前进指针（level[i].forward属性），用于表头向表尾方向访问节点。</p>
-</blockquote>
-</li>
-<li><p>跨度</p>
-<blockquote>
-<p>层的跨度（level[i].span属性）用于记录两个节点之间的距离；<br>1.两个节点之间的跨度越大，他们相距得就越远；<br>2.指向NULL的所有前进指针的跨度都为0，因为他们没有连向任何节点。<br>看上去，很容易以为跨度和遍历操作有关，但实际上并不是遍历操作只使用前进指针就可以完成，跨度其实是用来计算排位（rank）的：<strong>在查找某个节点的过程中，将沿途访问过的所有层的跨度累计起来，得到的结果就是目标节点在跳跃表中的排位</strong>。</p>
-</blockquote>
-</li>
-<li><p>后退指针</p>
-<blockquote>
-<p>节点的后退指针（backward属性）用于从表尾向表头方向访问节点：跟可以一次跳过多个节点的前进指针不同，因为每个节点都只有一个后退指针，所以每次只能后退到前一个节点。</p>
-</blockquote>
-</li>
-<li><p>分值和成员</p>
-<blockquote>
-<p>节点的分值（score属性）是一个double类型的浮点数，跳跃表的所有节点都按照分值从小到大排序。<br>节点的成员对象（obj属性）是一个指针，它指向一个字符串对象，而字符串对象里面存着一个SDS值。<br>在同一个跳跃表中，各个节点保存的成员对象必须是唯一的，但是多个节点的分值却是可以相同的：分值相同的节点将按照对象在字典序中的大小来排序。</p>
-</blockquote>
-</li>
+<li>层<br>跳跃表节点的level数组可以包含多个元素，每个元素都包含了一个指向其他节点的指针，程序可以通过这些层来加快访问其他节点的速度，一般来说，层的数量越多，访问其他节点的速度就越快；<br>每次创建一个新跳跃表节点的时候，程序都根据幂次定律（power law，越大的数出现的概率越低）<strong>随机生成一个介于1~32之间的值作为level数组的大小，这个大小就是层的”高度”</strong>。<br>下图分别展示了2个高度为1层和3层的节点。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-22-155448.jpg" alt=""></li>
+<li>前进指针<br>每个层都有一个指向表尾方向的前进指针（level[i].forward属性），用于表头向表尾方向访问节点。</li>
+<li>跨度<br>层的跨度（level[i].span属性）用于记录两个节点之间的距离；<br>1.两个节点之间的跨度越大，他们相距得就越远；<br>2.指向NULL的所有前进指针的跨度都为0，因为他们没有连向任何节点。<br>看上去，很容易以为跨度和遍历操作有关，但实际上并不是遍历操作只使用前进指针就可以完成，跨度其实是用来计算排位（rank）的：<strong>在查找某个节点的过程中，将沿途访问过的所有层的跨度累计起来，得到的结果就是目标节点在跳跃表中的排位</strong>。</li>
+<li>后退指针<br>节点的后退指针（backward属性）用于从表尾向表头方向访问节点：跟可以一次跳过多个节点的前进指针不同，因为每个节点都只有一个后退指针，所以每次只能后退到前一个节点。</li>
+<li>分值和成员<br>节点的分值（score属性）是一个double类型的浮点数，跳跃表的所有节点都按照分值从小到大排序。<br>节点的成员对象（obj属性）是一个指针，它指向一个字符串对象，而字符串对象里面存着一个SDS值。<br>在同一个跳跃表中，各个节点保存的成员对象必须是唯一的，但是多个节点的分值却是可以相同的：分值相同的节点将按照对象在字典序中的大小来排序。</li>
 </ul>
-<h4 id="跳跃表-1"><a href="#跳跃表-1" class="headerlink" title="跳跃表"></a>跳跃表</h4><p>跳跃表由redis.h/zskiplist结构定义，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">*</div><div class="line"> * 跳跃表</div><div class="line"> */</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="comment">// 表头节点和表尾节点</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span></div><div class="line"></div><div class="line">    <span class="comment">// 表中节点的数量</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> length;</div><div class="line"></div><div class="line">    <span class="comment">// 表中层数最大的节点的层数</span></div><div class="line">    <span class="keyword">int</span> level;</div><div class="line"></div><div class="line">&#125; zskiplist;</div></pre></td></tr></table></figure></p>
+<h4 id="跳跃表-1"><a href="#跳跃表-1" class="headerlink" title="跳跃表"></a>跳跃表</h4><p>跳跃表由redis.h/zskiplist结构定义，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">*</div><div class="line"> * 跳跃表</div><div class="line"> */</div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="comment">// 表头节点和表尾节点</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span></div><div class="line"></div><div class="line">    <span class="comment">// 表中节点的数量</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> length;</div><div class="line"></div><div class="line">    <span class="comment">// 表中层数最大的节点的层数</span></div><div class="line">    <span class="keyword">int</span> level;</div><div class="line"></div><div class="line">&#125; zskiplist;</div></pre></td></tr></table></figure>
 <ul>
-<li><p>header</p>
-<blockquote>
-<p>指向跳跃表的表头节点。</p>
-</blockquote>
-</li>
-<li><p>tail</p>
-<blockquote>
-<p>指向跳跃表的表尾节点。</p>
-</blockquote>
-</li>
-<li><p>level</p>
-<blockquote>
-<p>记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不算在内）。</p>
-</blockquote>
-</li>
-<li><p>lenght</p>
-<blockquote>
-<p>记录跳跃表的长度，也就是，跳跃表目前包含的节点的数量（表头节点的层数不算在内）。</p>
-</blockquote>
-</li>
+<li>header<br>指向跳跃表的表头节点。</li>
+<li>tail<br>指向跳跃表的表尾节点。</li>
+<li>level<br>记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不算在内）。</li>
+<li>lenght<br>记录跳跃表的长度，也就是，跳跃表目前包含的节点的数量（表头节点的层数不算在内）。</li>
 </ul>
 <p>通过使用lenght属相来记录节点的数量，程序可以在O(1)复杂度内返回跳跃表的长度。注意表头节点和其他节点的构造是一样的：表头节点也有后退指针、分值和成员对象，不过表头节点的这些属性不会被用到，所以图中略去了，只显示了表头节点的各个层。</p>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
@@ -655,6 +620,15 @@
                     <i class="fa fa-fw fa-github"></i>
                   
                   GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
                 </a>
               </span>
             
