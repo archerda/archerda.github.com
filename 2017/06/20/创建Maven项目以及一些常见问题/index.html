@@ -90,20 +90,26 @@
 
 
 
-<meta name="description" content="记录一些使用Maven过程中遇到的问题。">
+<meta name="description" content="最近和朋友弄一个项目，顺便把创建Maven项目的一些流程和一些使用Maven过程中遇到的问题记录一下，方便自己的同时，也可以提供给别人作为一个参考。">
 <meta name="keywords" content="Maven">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Maven遇到的一些常见问题">
-<meta property="og:url" content="http://yoursite.com/2017/06/20/使用Maven遇到的一些常见问题/index.html">
+<meta property="og:title" content="创建Maven项目以及一些常见问题">
+<meta property="og:url" content="http://yoursite.com/2017/06/20/创建Maven项目以及一些常见问题/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="记录一些使用Maven过程中遇到的问题。">
-<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-015003.jpg">
+<meta property="og:description" content="最近和朋友弄一个项目，顺便把创建Maven项目的一些流程和一些使用Maven过程中遇到的问题记录一下，方便自己的同时，也可以提供给别人作为一个参考。">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-141544.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-143718.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-144722.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-144952.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-150010.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-152405.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-145637.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-19-052605.jpg">
-<meta property="og:updated_time" content="2017-06-20T01:56:14.000Z">
+<meta property="og:updated_time" content="2017-06-20T15:28:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Maven遇到的一些常见问题">
-<meta name="twitter:description" content="记录一些使用Maven过程中遇到的问题。">
-<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-015003.jpg">
+<meta name="twitter:title" content="创建Maven项目以及一些常见问题">
+<meta name="twitter:description" content="最近和朋友弄一个项目，顺便把创建Maven项目的一些流程和一些使用Maven过程中遇到的问题记录一下，方便自己的同时，也可以提供给别人作为一个参考。">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-141544.jpg">
 
 
 
@@ -131,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/20/使用Maven遇到的一些常见问题/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/20/创建Maven项目以及一些常见问题/"/>
 
 
 
 
 
-  <title>使用Maven遇到的一些常见问题 | Archerda's Blog</title>
+  <title>创建Maven项目以及一些常见问题 | Archerda's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -257,7 +263,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/20/使用Maven遇到的一些常见问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/20/创建Maven项目以及一些常见问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="archerda">
@@ -274,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用Maven遇到的一些常见问题</h1>
+          <h1 class="post-title" itemprop="name headline">创建Maven项目以及一些常见问题</h1>
         
 
         <div class="post-meta">
@@ -321,11 +327,40 @@
       
 
       
-        <p>记录一些使用Maven过程中遇到的问题。</p>
+        <p>最近和朋友弄一个项目，顺便把创建Maven项目的一些流程和一些使用Maven过程中遇到的问题记录一下，方便自己的同时，也可以提供给别人作为一个参考。</p>
 <a id="more"></a>
-<h2 id="创建Web项目生成的时候很慢"><a href="#创建Web项目生成的时候很慢" class="headerlink" title="创建Web项目生成的时候很慢"></a>创建Web项目生成的时候很慢</h2><p>解决办法：添加archetypeCatalog=internal；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-015003.jpg" alt=""></p>
-<h2 id="Maven-Build的时候，卡死在Downloading-metadata"><a href="#Maven-Build的时候，卡死在Downloading-metadata" class="headerlink" title="Maven Build的时候，卡死在Downloading metadata"></a>Maven Build的时候，卡死在Downloading metadata</h2><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-19-052605.jpg" alt=""><br>解决办法：这种情况一般是maven仓库中需要下载的文件被锁了，可以根据downloading后面的路径，找到仓库中相应目录的.lock文件，删除即可。</p>
-<h2 id="从中央仓库下载依赖很慢"><a href="#从中央仓库下载依赖很慢" class="headerlink" title="从中央仓库下载依赖很慢"></a>从中央仓库下载依赖很慢</h2><p>解决办法：添加阿里云的Maven镜像；<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">settings</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/SETTINGS/1.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>/Users/**/Maven/repository<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">repositories</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">repository</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">id</span>&gt;</span>central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Maven Repository Switchboard<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo1.maven.org/maven2<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">pluginRepositories</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">pluginRepository</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">id</span>&gt;</span>central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Maven Plugin Repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo1.maven.org/maven2<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">releases</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>never<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">releases</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">pluginRepository</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">pluginRepositories</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activeProfiles</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">activeProfiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>ali-maven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>这里用到的工具分别是：</p>
+<ol>
+<li>IntelliJ IDEA ULTIMATE 2017.1.4</li>
+<li>Maven 3</li>
+</ol>
+<h2 id="创建Maven-Web项目"><a href="#创建Maven-Web项目" class="headerlink" title="创建Maven Web项目"></a>创建Maven Web项目</h2><ol>
+<li><p>打开IDEA，点击”Create New Project”或者”新建项目”；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-141544.jpg" alt=""></p>
+</li>
+<li><p>依次选择 “Maven” -&gt; 选择JDK -&gt; 勾选 “Create from archetype” -&gt; 选择 “maven-archetype-webapp”；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-143718.jpg" alt=""></p>
+</li>
+<li><p>输入Maven项目的 GroupId、ArtifactId、Version；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-144722.jpg" alt=""></p>
+</li>
+<li><p>选择Maven的所在目录，因为IDEA内嵌了，所以选择 “Bundled(Maven 3)”； “User settings file”指定了Maven的配置文件所在的路径，一般在用户目录下的.m2文件夹下，文章最后附录有我的模板; “Local repository”指的是本地仓库，Maven会把每次下载下来的jar包放到这里面去，后续就直接从本地仓库拿；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-144952.jpg" alt=""></p>
+</li>
+<li><p>修改 “Project name”，和设定工程存放的路径”Project location”；点击 “Finish”或者”完成”;<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-150010.jpg" alt=""></p>
+</li>
+<li><p>创建完成后，Maven会调用插件来生成一个Maven Web项目框架。到这里项目就创建完成了，如果你没有看到入下图的项目结构，可以下面 “遇到的一些问题”来解决问题。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-152405.jpg" alt=""></p>
+</li>
+</ol>
+<h2 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h2><ol>
+<li>创建Web项目生成的时候很慢<br>解决办法：添加archetypeCatalog=internal；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-145637.jpg" alt=""></li>
+</ol>
+<ol>
+<li><p>Maven Build的时候，卡死在Downloading metadata<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-19-052605.jpg" alt=""><br>解决办法：这种情况一般是maven仓库中需要下载的文件被锁了，可以根据downloading后面的路径，找到仓库中相应目录的.lock文件，删除即可。</p>
+</li>
+<li><p>从中央仓库下载依赖很慢<br>解决办法：添加阿里云的Maven镜像；</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>ali-maven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ol>
+<li><a href="http://obmtcynvx.bkt.clouddn.com/maven_settings_template.xml" target="_blank" rel="external">Settings.xml模板</a></li>
+</ol>
 
       
     </div>
@@ -516,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Web项目生成的时候很慢"><span class="nav-number">1.</span> <span class="nav-text">创建Web项目生成的时候很慢</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven-Build的时候，卡死在Downloading-metadata"><span class="nav-number">2.</span> <span class="nav-text">Maven Build的时候，卡死在Downloading metadata</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从中央仓库下载依赖很慢"><span class="nav-number">3.</span> <span class="nav-text">从中央仓库下载依赖很慢</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Maven-Web项目"><span class="nav-number">2.</span> <span class="nav-text">创建Maven Web项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的一些问题"><span class="nav-number">3.</span> <span class="nav-text">遇到的一些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a></li></ol></div>
             
 
           </div>
