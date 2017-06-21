@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-152405.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-145637.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-19-052605.jpg">
-<meta property="og:updated_time" content="2017-06-20T15:28:51.000Z">
+<meta property="og:updated_time" content="2017-06-21T04:58:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="创建Maven项目以及一些常见问题">
 <meta name="twitter:description" content="最近和朋友弄一个项目，顺便把创建Maven项目的一些流程和一些使用Maven过程中遇到的问题记录一下，方便自己的同时，也可以提供给别人作为一个参考。">
@@ -345,11 +345,11 @@
 </li>
 <li><p>修改 “Project name”，和设定工程存放的路径”Project location”；点击 “Finish”或者”完成”;<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-150010.jpg" alt=""></p>
 </li>
-<li><p>创建完成后，Maven会调用插件来生成一个Maven Web项目框架。到这里项目就创建完成了，如果你没有看到入下图的项目结构，可以下面 “遇到的一些问题”来解决问题。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-152405.jpg" alt=""></p>
+<li><p>创建完成后，Maven会调用插件来生成一个Maven Web项目框架。到这里项目就创建完成了，如果你没有看到如下图的项目结构，可以通过下面 “遇到的一些问题”来解决问题。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-152405.jpg" alt=""></p>
 </li>
 </ol>
 <h2 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h2><ol>
-<li>创建Web项目生成的时候很慢<br>解决办法：添加archetypeCatalog=internal；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-145637.jpg" alt=""></li>
+<li>创建Web项目生成的时候很慢<br>解决办法：添加 archetypeCatalog=internal；<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-20-145637.jpg" alt=""></li>
 </ol>
 <ol>
 <li><p>Maven Build的时候，卡死在Downloading metadata<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-19-052605.jpg" alt=""><br>解决办法：这种情况一般是maven仓库中需要下载的文件被锁了，可以根据downloading后面的路径，找到仓库中相应目录的.lock文件，删除即可。</p>
@@ -359,7 +359,7 @@
 </li>
 </ol>
 <h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ol>
-<li><a href="http://obmtcynvx.bkt.clouddn.com/maven_settings_template.xml" target="_blank" rel="external">Settings.xml模板</a></li>
+<li><a href="http://obmtcynvx.bkt.clouddn.com/maven_settings_template.xml" target="_blank" rel="external">我的settings.xml模板</a></li>
 </ol>
 
       
