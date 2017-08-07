@@ -90,17 +90,17 @@
 
 
 
-<meta name="description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt;  查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt;  以二进制的方式读取档案内容：">
+<meta name="description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linxu&amp;Mac 常用命令">
 <meta property="og:url" content="http://yoursite.com/2015/08/25/Linux&Mac常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt;  查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt;  以二进制的方式读取档案内容：">
-<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta property="og:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
+<meta property="og:updated_time" content="2017-08-07T06:35:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linxu&amp;Mac 常用命令">
-<meta name="twitter:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt;  查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt;  以二进制的方式读取档案内容：">
+<meta name="twitter:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
 
 
 
@@ -320,9 +320,9 @@
       
         <h2 id="文件-文件夹-磁盘管理"><a href="#文件-文件夹-磁盘管理" class="headerlink" title="文件/文件夹/磁盘管理"></a>文件/文件夹/磁盘管理</h2><ul>
 <li>由第一行开始显示档案内容(n为显示行号)：<code>cat [-n] &lt;file-name&gt;</code></li>
-<li>从最后一行开始显示(Mac无)：<code>tac &lt;file-name&gt;</code> </li>
+<li>从最后一行开始显示(Mac无)：<code>tac &lt;file-name&gt;</code></li>
 <li>查看头几行：<code>head [-lineNumber] &lt;file-name&gt;</code></li>
-<li>查看尾几行：<code>tail [-lineNumber] &lt;file-name&gt;</code> </li>
+<li>查看尾几行：<code>tail [-lineNumber] &lt;file-name&gt;</code></li>
 <li>以二进制的方式读取档案内容：<code>od &lt;file-name&gt;</code></li>
 <li>分页显示文件(space下一页，b上一页)：<code>more &lt;file-name&gt;</code></li>
 <li>分页显示文件(支持PageDown和PageUp)：<code>less &lt;file-name&gt;</code></li>
@@ -382,11 +382,13 @@
 <li>显示系统内核版本：<code>uname</code></li>
 <li>显示系统所有信息：<code>uname -a</code></li>
 <li>显示发行版信息： <code>cat /etc/issue</code></li>
+<li>查看文件系统块大小：<code>blockdev --getbsz &lt;partion&gt;</code> 比如<code>blockdev --getbsz /dev/sda1</code></li>
+<li>查看内存页大小：<code>getconf PAGESIZE</code></li>
 </ul>
 <hr>
 <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><ul>
 <li>查看系统资源使用情况并排序：<code>top</code></li>
-<li>可视化查看系统资源使用情况：<code>sudo htop</code> </li>
+<li>可视化查看系统资源使用情况：<code>sudo htop</code></li>
 <li>使用homebrew安装htop：<code>brew intall htop</code></li>
 <li>列出活跃进程：<code>ps</code></li>
 <li>列出所有系统运行命令并分页：<code>ps -A | less</code></li>
@@ -430,7 +432,7 @@
 </ul>
 <hr>
 <h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><ul>
-<li>显示内存信息：<code>free -m</code> </li>
+<li>显示内存信息：<code>free -m</code></li>
 <li>显示内存信息：<code>cat /proc/meminfo</code></li>
 <li>显示内存消耗最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k4|head -10</code></li>
 <li>显示虚拟内存使用最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k5|head -10</code></li>
