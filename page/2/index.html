@@ -251,6 +251,127 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/07/Java中数组的拷贝方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/07/Java中数组的拷贝方式/" itemprop="url">Java中数组的拷贝方式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T23:26:01+08:00">
+                2016-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>之前学习了List架构, 在List集合框架下大量使用了<strong>Arrays.copyOf</strong>和<strong>System.arraycopy()</strong>来做数组拷贝. 今天就来学习下Java中数组拷贝的3中方式:<strong>循环拷贝,克隆方法拷贝,System.arraycopy拷贝</strong>. 文章主要分为下面几个部分:</p>
+<ol>
+<li>3种拷贝方式的介绍</li>
+<li>3种拷贝方式的效率比较</li>
+<li>System.arraycopy和Arrays.copyOf()的区别</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/09/07/Java中数组的拷贝方式/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/07/Java集合系列-7-List总结-使用场景和性能分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1320,148 +1441,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/02/28/多线程带来的风险/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/02/28/多线程带来的风险/" itemprop="url">多线程带来的风险</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-28T16:45:22+08:00">
-                2016-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java对线程的支持其实是一把双刃剑。如果使用得当，线程可以有效的降低程序的开发和维护成本，同时提升复杂应用的性能。优点如下：</p>
-<ol>
-<li>发挥多处理器的能力，提高系统吞吐率</li>
-<li>简化建模（例如Servlet和RMI远程方法调用）：<br>复杂工作简化为一组简单的并且同步的工作流，每个工作流在单独的线程中运行，并在特定的地方进行交互。</li>
-<li>简化异步事件处理</li>
-<li>更灵敏的用户响应界面</li>
-</ol>
-<p>然而，线程也带来了一些额外的问题。</p>
-<hr>
-<h2 id="安全性问题"><a href="#安全性问题" class="headerlink" title="安全性问题"></a>安全性问题</h2><p>安全性的含义是“<strong>永远不发生糟糕的事情</strong>”。</p>
-<p>看下面的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 非线程安全的数值序列生成器</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnsafeSequence</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> value;</div><div class="line">    </div><div class="line">    <span class="comment">// 返回一个唯一的数值</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getNext</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> value++;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在单线程的环境中，这个类可以正常工作，产生正确的结果，但是在多线程的则不能。</p>
-<p>UnsafeSequence的问题在于，如果执行的时间不对，那么两个线程在调用getNext方法时会得到相同的值。看下图：<br><img src="https://c2.staticflickr.com/2/1569/25332170365_376ceec88c.jpg" alt=""><br>这种错误出现的情况是：虽然 <strong>value++</strong> 看上去是一个原子操作，但事实上它包含了3个操作：读取value、将value的值+1、将结果写入value。由于运行的时候多个线程存在交替执行的情况，因此这两个线程可能同时执行读操作，从而使它们得到相同的值。结果也就是不同的线程的调用返回了相同的值，而这不是我们想要的结果。</p>
-<p>这是一个并发安全问题，称为 <strong>竞态条件(Race Condition)</strong> 。在多线程环境下，getNext是否会返回唯一的数值，要取决于运行时对线程中操作的交替执行方式，这显然不正确。</p>
-<p>由于多个线程要共享相同的内存地址空间，并且是并发操作，因此它们可能会访问或修改其他线程正在使用的变量。当然，这是一种极大的便利，因为这种方式比其他线程间通讯机制更容易实现数据共享。但是它同样带来了巨大的风险：线程由于无法预料数据变化而发生错误，当多个线程同时访问或修改相同的变量时，将会在串行编程模型中引入非串行因素，而非串行性是很难分析的。<strong>要使多线程程序的行为进行预测，必须对共享变量的访问操作进行协同</strong>，这样才不会在线程之间发生干扰。幸运的是，Java提供了各种同步机制来协同这种访问。</p>
-<p>看下面代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 线程安全的数值序列生成器</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeSequence</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> value;</div><div class="line">    </div><div class="line">    <span class="comment">// 返回一个唯一的数值</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">getNext</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> value++;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>我们将getNext修改为一个同步的方法，修复竟态条件问题。</p>
-<p>在开发并发代码时，一定要注意 <strong>线程安全性是不可破坏的</strong>。</p>
-<hr>
-<h2 id="活跃性问题"><a href="#活跃性问题" class="headerlink" title="活跃性问题"></a>活跃性问题</h2><p>活跃性的含义是“<strong>某件正确的事情一定会发生</strong>”。</p>
-<p>当某个操作无法继续执行下去的时候，就会发生活跃性问题。在串行程序中，活跃性问题就是无意中造成的无限循环，从而使得循环之后的代码无法得到执行。线程将带来其他一些活跃性问题。</p>
-<p>比如，线程A在等待线程B释放所持用的资源，而线程B永远都不释放持有的资源，那么A就会永久地等下去。就是一种 <strong>饥饿</strong>现象，除此之外还有死锁以及活锁。</p>
-<p>与大多数并发性错误一样，导致活跃性问题的错误同样是难以分析的，因为它们依赖于不同线程时间发生的时序。</p>
-<hr>
-<h2 id="性能问题"><a href="#性能问题" class="headerlink" title="性能问题"></a>性能问题</h2><p>性能问题的含义是“<strong>正确的事情能尽快发生</strong>”。</p>
-<p>活跃性意味着某件正确的事情最终一定会发生，但却不够好，因为我们同城希望正确的事情尽快发生。性能问题包括多个方面，例如服务时间过长、响应不灵敏、吞吐率过低、资源消耗过高、可伸缩性较低等。</p>
-<p>在设计良好的并发应用程序中，线程能提升程序的性能。但无论如何，线程总会带来某种程度的运行时开销。在多线程程序中，但线程调度器临时挂起并转而运行另一个线程时，就会频繁地出现 <strong>上下文切换（Context Switch）</strong>，这种操作将带来极大的开销。当线程共享数据时，必须使用同步机制，而这些同步机制往往会压抑某些编译器优化，使内存缓冲区中的数据无效，以及增加共享内存总线的同步流量。所有这些操作都将带来额外开销。</p>
-<hr>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li>《Java并发编程实战》Brain Goetz等著 机械工业出版社</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1511,7 +1490,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">59</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

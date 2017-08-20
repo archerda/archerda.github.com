@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/25/Linux&Mac常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
-<meta property="og:updated_time" content="2017-08-07T06:35:28.000Z">
+<meta property="og:updated_time" content="2017-08-07T06:43:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linxu&amp;Mac 常用命令">
 <meta name="twitter:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
@@ -384,6 +384,7 @@
 <li>显示发行版信息： <code>cat /etc/issue</code></li>
 <li>查看文件系统块大小：<code>blockdev --getbsz &lt;partion&gt;</code> 比如<code>blockdev --getbsz /dev/sda1</code></li>
 <li>查看内存页大小：<code>getconf PAGESIZE</code></li>
+<li>查看swap的使用情况：<code>cat /proc/swaps</code></li>
 </ul>
 <hr>
 <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><ul>
@@ -609,7 +610,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">59</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
