@@ -90,20 +90,20 @@
 
 
 
-<meta name="description" content="什么是观察者模式 观察者模式是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。  摘自维基百科   简单来说，观察者模式定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作主题(Subject)，而”">
+<meta name="description" content="什么是观察者模式：让你的对象知悉现状 观察者模式是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。  摘自维基百科   简单来说，观察者模式定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作主题(S">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式系列二之观察者模式(Observer)">
 <meta property="og:url" content="http://yoursite.com/2017/08/20/设计模式系列二之观察者模式-Observer/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="什么是观察者模式 观察者模式是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。  摘自维基百科   简单来说，观察者模式定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作主题(Subject)，而”">
+<meta property="og:description" content="什么是观察者模式：让你的对象知悉现状 观察者模式是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。  摘自维基百科   简单来说，观察者模式定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作主题(S">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-08-20-072340.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-08-20-080429.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-08-20-spring-event.png">
-<meta property="og:updated_time" content="2017-08-20T12:52:22.000Z">
+<meta property="og:updated_time" content="2017-09-05T09:24:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式系列二之观察者模式(Observer)">
-<meta name="twitter:description" content="什么是观察者模式 观察者模式是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。  摘自维基百科   简单来说，观察者模式定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作主题(Subject)，而”">
+<meta name="twitter:description" content="什么是观察者模式：让你的对象知悉现状 观察者模式是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。  摘自维基百科   简单来说，观察者模式定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作主题(S">
 <meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-08-20-072340.jpg">
 
 
@@ -322,7 +322,7 @@
       
 
       
-        <h2 id="什么是观察者模式"><a href="#什么是观察者模式" class="headerlink" title="什么是观察者模式"></a>什么是观察者模式</h2><blockquote>
+        <h2 id="什么是观察者模式：让你的对象知悉现状"><a href="#什么是观察者模式：让你的对象知悉现状" class="headerlink" title="什么是观察者模式：让你的对象知悉现状"></a>什么是观察者模式：让你的对象知悉现状</h2><blockquote>
 <p><strong>观察者模式</strong>是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。</p>
 <ul>
 <li>摘自维基百科</li>
@@ -558,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是观察者模式"><span class="nav-number">1.</span> <span class="nav-text">什么是观察者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者的类图"><span class="nav-number">2.</span> <span class="nav-text">观察者的类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式的优点：松耦合"><span class="nav-number">3.</span> <span class="nav-text">观察者模式的优点：松耦合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式的使用"><span class="nav-number">4.</span> <span class="nav-text">观察者模式的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK内置的观察者模式"><span class="nav-number">5.</span> <span class="nav-text">JDK内置的观察者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-util-Observable的不足"><span class="nav-number">5.1.</span> <span class="nav-text">java.util.Observable的不足</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式在Spring中的应用-Spring事件驱动模型"><span class="nav-number">6.</span> <span class="nav-text">观察者模式在Spring中的应用-Spring事件驱动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事件：ApplicationEvent"><span class="nav-number">6.1.</span> <span class="nav-text">事件：ApplicationEvent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件监听器：ApplicationListener"><span class="nav-number">6.2.</span> <span class="nav-text">事件监听器：ApplicationListener</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件源：ApplicationContext"><span class="nav-number">6.3.</span> <span class="nav-text">事件源：ApplicationContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApplicationEventMulticaster"><span class="nav-number">6.4.</span> <span class="nav-text">ApplicationEventMulticaster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring事件模型总结"><span class="nav-number">6.5.</span> <span class="nav-text">Spring事件模型总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档："><span class="nav-number">7.</span> <span class="nav-text">参考文档：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是观察者模式：让你的对象知悉现状"><span class="nav-number">1.</span> <span class="nav-text">什么是观察者模式：让你的对象知悉现状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者的类图"><span class="nav-number">2.</span> <span class="nav-text">观察者的类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式的优点：松耦合"><span class="nav-number">3.</span> <span class="nav-text">观察者模式的优点：松耦合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式的使用"><span class="nav-number">4.</span> <span class="nav-text">观察者模式的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK内置的观察者模式"><span class="nav-number">5.</span> <span class="nav-text">JDK内置的观察者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-util-Observable的不足"><span class="nav-number">5.1.</span> <span class="nav-text">java.util.Observable的不足</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式在Spring中的应用-Spring事件驱动模型"><span class="nav-number">6.</span> <span class="nav-text">观察者模式在Spring中的应用-Spring事件驱动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事件：ApplicationEvent"><span class="nav-number">6.1.</span> <span class="nav-text">事件：ApplicationEvent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件监听器：ApplicationListener"><span class="nav-number">6.2.</span> <span class="nav-text">事件监听器：ApplicationListener</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件源：ApplicationContext"><span class="nav-number">6.3.</span> <span class="nav-text">事件源：ApplicationContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ApplicationEventMulticaster"><span class="nav-number">6.4.</span> <span class="nav-text">ApplicationEventMulticaster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring事件模型总结"><span class="nav-number">6.5.</span> <span class="nav-text">Spring事件模型总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档："><span class="nav-number">7.</span> <span class="nav-text">参考文档：</span></a></li></ol></div>
             
 
           </div>
