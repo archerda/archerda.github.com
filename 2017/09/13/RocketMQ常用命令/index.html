@@ -90,17 +90,17 @@
 
 
 
-<meta name="description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h  查询消息是否发送成功 查看Topic状态：mqadmin topicStatus -t &amp;lt;topicName&amp;gt; -n localhost:9876 根据offset获取消息：sh mqadmin queryMsgByOffset -b &amp;lt;broker-name&amp;gt;">
+<meta name="description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
 <meta name="keywords" content="RocketMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ常用命令">
 <meta property="og:url" content="http://yoursite.com/2017/09/13/RocketMQ常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h  查询消息是否发送成功 查看Topic状态：mqadmin topicStatus -t &amp;lt;topicName&amp;gt; -n localhost:9876 根据offset获取消息：sh mqadmin queryMsgByOffset -b &amp;lt;broker-name&amp;gt;">
-<meta property="og:updated_time" content="2017-09-14T08:54:30.000Z">
+<meta property="og:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
+<meta property="og:updated_time" content="2017-09-14T09:11:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ常用命令">
-<meta name="twitter:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h  查询消息是否发送成功 查看Topic状态：mqadmin topicStatus -t &amp;lt;topicName&amp;gt; -n localhost:9876 根据offset获取消息：sh mqadmin queryMsgByOffset -b &amp;lt;broker-name&amp;gt;">
+<meta name="twitter:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
 
 
 
@@ -318,11 +318,14 @@
       
 
       
-        <a id="more"></a>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+        <h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
 <li>获取所有可用命令：<code>mqadmin</code></li>
 <li>查看帮助：<code>mqadmin &lt;command&gt; -h</code></li>
+<li>查询Producer的网络连接情况：<code>sh mqadmin producerConnection -n localhost:9876 -g &lt;producer-group&gt; -t &lt;producer-topic&gt;</code></li>
+<li>查询Consumer的网络连接情况：<code>sh mqadmin consumerConnection -n localhost:9876 -g &lt;consumer-group&gt;</code></li>
+<li>查询Consumer的消费状态：<code>sh mqadmin consumerProgress -n localhost:9876 -g &lt;consumer-group&gt;</code></li>
 </ul>
+<a id="more"></a>
 <h2 id="查询消息是否发送成功"><a href="#查询消息是否发送成功" class="headerlink" title="查询消息是否发送成功"></a>查询消息是否发送成功</h2><ul>
 <li>查看Topic状态：<code>mqadmin topicStatus -t &lt;topicName&gt; -n localhost:9876</code></li>
 <li>根据offset获取消息：<code>sh mqadmin queryMsgByOffset -b &lt;broker-name&gt; -i &lt;queueId&gt; -o &lt;offset&gt; -t &lt;topicName&gt; -n localhost:9876</code></li>
