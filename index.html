@@ -251,6 +251,130 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/13/RocketMQ常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/13/RocketMQ常用命令/" itemprop="url">RocketMQ常用命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T17:40:16+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+<li>获取所有可用命令：<code>mqadmin</code></li>
+<li>查看帮助：<code>mqadmin &lt;command&gt; -h</code></li>
+</ul>
+<h2 id="查询消息是否发送成功"><a href="#查询消息是否发送成功" class="headerlink" title="查询消息是否发送成功"></a>查询消息是否发送成功</h2><ul>
+<li>查看Topic状态：<code>mqadmin topicStatus -t &lt;topicName&gt; -n localhost:9876</code></li>
+<li>根据offset获取消息：<code>sh mqadmin queryMsgByOffset -b &lt;broker-name&gt; -i &lt;queueId&gt; -o &lt;offset&gt; -t &lt;topicName&gt; -n localhost:9876</code></li>
+<li>根据offsetMsgId查询消息：<code>sh mqadmin queryMsgById -n localhost:9876 -i &lt;offsetMsgId&gt;</code></li>
+</ul>
+<h2 id="查询消息是否被消费到"><a href="#查询消息是否被消费到" class="headerlink" title="查询消息是否被消费到"></a>查询消息是否被消费到</h2><h2 id="查看Consumer-Group订阅了哪些TOPIC"><a href="#查看Consumer-Group订阅了哪些TOPIC" class="headerlink" title="查看Consumer Group订阅了哪些TOPIC"></a>查看Consumer Group订阅了哪些TOPIC</h2><h2 id="查询TOPIC被哪些Consumer-Group订阅了"><a href="#查询TOPIC被哪些Consumer-Group订阅了" class="headerlink" title="查询TOPIC被哪些Consumer Group订阅了"></a>查询TOPIC被哪些Consumer Group订阅了</h2><h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://rocketmq.incubator.apache.org/docs/cli-admin-tool/" target="_blank" rel="external">CLI Admin Tool</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/设计模式系列二之观察者模式-Observer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1333,122 +1457,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/24/Java常用开源库和工具/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/24/Java常用开源库和工具/" itemprop="url">Java常用开源库和工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-24T01:02:47+08:00">
-                2016-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>日常工程开发过程中, 熟悉高效地利用开源库和工具, 能大大提升我们的工作效率, 所以本文主要列举了Java中常用的一些开源库和开源工具, 并进行了简单介绍, 希望能让大家有一个更全面的了解.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/09/24/Java常用开源库和工具/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1498,7 +1506,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1511,7 +1519,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
