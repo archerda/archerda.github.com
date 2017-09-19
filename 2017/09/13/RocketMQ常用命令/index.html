@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/09/13/RocketMQ常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
-<meta property="og:updated_time" content="2017-09-14T09:11:49.000Z">
+<meta property="og:updated_time" content="2017-09-18T10:00:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ常用命令">
 <meta name="twitter:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
@@ -327,11 +327,21 @@
 </ul>
 <a id="more"></a>
 <h2 id="查询消息是否发送成功"><a href="#查询消息是否发送成功" class="headerlink" title="查询消息是否发送成功"></a>查询消息是否发送成功</h2><ul>
-<li>查看Topic状态：<code>mqadmin topicStatus -t &lt;topicName&gt; -n localhost:9876</code></li>
-<li>根据offset获取消息：<code>sh mqadmin queryMsgByOffset -b &lt;broker-name&gt; -i &lt;queueId&gt; -o &lt;offset&gt; -t &lt;topicName&gt; -n localhost:9876</code></li>
+<li>获取指定Topic：<code>mqadmin topicList -n localhost:9876 | grep &lt;topicName&gt;</code></li>
+<li>查看Topic状态：<code>mqadmin topicStatus -n localhost:9876 -t &lt;topicName&gt;</code></li>
+<li>根据offset获取消息：<code>sh mqadmin queryMsgByOffset -n localhost:9876 -b &lt;broker-name&gt; -i &lt;queueId&gt; -o &lt;offset&gt; -t &lt;topicName&gt;</code></li>
 <li>根据offsetMsgId查询消息：<code>sh mqadmin queryMsgById -n localhost:9876 -i &lt;offsetMsgId&gt;</code></li>
 </ul>
-<h2 id="查询消息是否被消费到"><a href="#查询消息是否被消费到" class="headerlink" title="查询消息是否被消费到"></a>查询消息是否被消费到</h2><h2 id="查看Consumer-Group订阅了哪些TOPIC"><a href="#查看Consumer-Group订阅了哪些TOPIC" class="headerlink" title="查看Consumer Group订阅了哪些TOPIC"></a>查看Consumer Group订阅了哪些TOPIC</h2><h2 id="查询TOPIC被哪些Consumer-Group订阅了"><a href="#查询TOPIC被哪些Consumer-Group订阅了" class="headerlink" title="查询TOPIC被哪些Consumer Group订阅了"></a>查询TOPIC被哪些Consumer Group订阅了</h2><h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<h2 id="查询消息是否被消费成功"><a href="#查询消息是否被消费成功" class="headerlink" title="查询消息是否被消费成功"></a>查询消息是否被消费成功</h2><ul>
+<li>查询消息详情：<code>mqadmin queryMsgById -i {MsgId} -n {NameServerAddr}</code></li>
+</ul>
+<h2 id="查看Consumer-Group订阅了哪些TOPIC"><a href="#查看Consumer-Group订阅了哪些TOPIC" class="headerlink" title="查看Consumer Group订阅了哪些TOPIC"></a>查看Consumer Group订阅了哪些TOPIC</h2><ul>
+<li><code>mqadmin consumerProgress -g &lt;ConsumerGroup&gt; -n &lt;NameServerAddr&gt;</code></li>
+</ul>
+<h2 id="查询TOPIC被哪些Consumer-Group订阅了"><a href="#查询TOPIC被哪些Consumer-Group订阅了" class="headerlink" title="查询TOPIC被哪些Consumer Group订阅了"></a>查询TOPIC被哪些Consumer Group订阅了</h2><ul>
+<li>没有查询特定TOPIC订阅情况，只能查询所有后再过滤：<code>mqadmin statsAll -n &lt;NameServerAddr&gt; | grep &lt;TOPIC&gt;</code> 返回结果：#Topic #Consumer Group #InTPS #OutTPS #InMsg24Hour #OutMsg24Hour</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
 <li><a href="https://rocketmq.incubator.apache.org/docs/cli-admin-tool/" target="_blank" rel="external">CLI Admin Tool</a></li>
 </ul>
 
@@ -385,6 +395,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/19/服务端解决故障的处理思路/" rel="prev" title="服务端解决故障的处理思路">
+                服务端解决故障的处理思路 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -456,7 +470,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -524,7 +538,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询消息是否发送成功"><span class="nav-number">2.</span> <span class="nav-text">查询消息是否发送成功</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询消息是否被消费到"><span class="nav-number">3.</span> <span class="nav-text">查询消息是否被消费到</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看Consumer-Group订阅了哪些TOPIC"><span class="nav-number">4.</span> <span class="nav-text">查看Consumer Group订阅了哪些TOPIC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询TOPIC被哪些Consumer-Group订阅了"><span class="nav-number">5.</span> <span class="nav-text">查询TOPIC被哪些Consumer Group订阅了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询消息是否发送成功"><span class="nav-number">2.</span> <span class="nav-text">查询消息是否发送成功</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询消息是否被消费成功"><span class="nav-number">3.</span> <span class="nav-text">查询消息是否被消费成功</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看Consumer-Group订阅了哪些TOPIC"><span class="nav-number">4.</span> <span class="nav-text">查看Consumer Group订阅了哪些TOPIC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询TOPIC被哪些Consumer-Group订阅了"><span class="nav-number">5.</span> <span class="nav-text">查询TOPIC被哪些Consumer Group订阅了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
 
           </div>

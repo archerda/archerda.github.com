@@ -1,0 +1,823 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文： https://www.chen-hao.com.cn/posts/37696/  在有那么一瞬间，遇到服务器故障可能会手足无措，完全不知道自己应该干什么，该如何处理。这里就简单记录下解决服务器故障的思路，以便今后迅速定位问题。">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务端解决故障的处理思路">
+<meta property="og:url" content="http://yoursite.com/2017/09/19/服务端解决故障的处理思路/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="原文： https://www.chen-hao.com.cn/posts/37696/  在有那么一瞬间，遇到服务器故障可能会手足无措，完全不知道自己应该干什么，该如何处理。这里就简单记录下解决服务器故障的思路，以便今后迅速定位问题。">
+<meta property="og:updated_time" content="2017-09-19T08:29:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="服务端解决故障的处理思路">
+<meta name="twitter:description" content="原文： https://www.chen-hao.com.cn/posts/37696/  在有那么一瞬间，遇到服务器故障可能会手足无措，完全不知道自己应该干什么，该如何处理。这里就简单记录下解决服务器故障的思路，以便今后迅速定位问题。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/19/服务端解决故障的处理思路/"/>
+
+
+
+
+
+  <title>服务端解决故障的处理思路 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/19/服务端解决故障的处理思路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">服务端解决故障的处理思路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T16:28:17+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文： <a href="https://www.chen-hao.com.cn/posts/37696/" target="_blank" rel="external">https://www.chen-hao.com.cn/posts/37696/</a></p>
+<blockquote>
+<p>在有那么一瞬间，遇到服务器故障可能会手足无措，完全不知道自己应该干什么，该如何处理。这里就简单记录下解决服务器故障的思路，以便今后迅速定位问题。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="问题的前因后果"><a href="#问题的前因后果" class="headerlink" title="问题的前因后果"></a>问题的前因后果</h2><p>尽可能搞清楚问题的前因后果，不要一下子就扎在服务器前面，你需要先搞明白对这台服务器有多少已知的情况，还有故障的具体情况。不然你很可能就是在无的放矢。必须搞清楚的问题有：</p>
+<ul>
+<li>故障的表现是什么？无响应？报错？</li>
+<li>故障是什么时候发现的？</li>
+<li>故障是否可以重现？</li>
+<li>有没有出现的规律（比如每小时出现一次）？</li>
+<li>最后一次对整个平台进行更行的内容是什么（代码、服务器等）？</li>
+<li>故障影响的特定用户群是什么样的（已登录的、退出的、某个地域的）？</li>
+<li>基础架构（物理的、逻辑的）的文档是否能找到？</li>
+<li>是否有监控平台可用？</li>
+<li>是否有日志可以查看？</li>
+</ul>
+<h2 id="有谁在"><a href="#有谁在" class="headerlink" title="有谁在"></a>有谁在</h2><ul>
+<li>w（显示已经登陆系统的用户列表，并显示用户正在执行的指令）</li>
+<li>who（显示已经登陆系统的用户列表）</li>
+<li>who /var/log/wtmp（每个用户的登录次数和持续时间等信息）</li>
+</ul>
+<p>用这3个命令，可以看看都有谁在线，有哪些用户访问过。</p>
+<h2 id="之前发生了什么"><a href="#之前发生了什么" class="headerlink" title="之前发生了什么"></a>之前发生了什么</h2><ul>
+<li>history（显示当前用户的命令记录）</li>
+</ul>
+<p>查一下之前服务器上执行过的命令。看一下总是没错的，加上前面看的谁登陆过的信息，应该有点用。</p>
+<h2 id="现在在运行的进程是啥？"><a href="#现在在运行的进程是啥？" class="headerlink" title="现在在运行的进程是啥？"></a>现在在运行的进程是啥？</h2><ul>
+<li>pstree -a</li>
+<li>ps aux</li>
+</ul>
+<p>这都是查看现有进程的。ps aux的结果比较乱，pstree -a的结果比较简单明了，可以看到正在运行的进程以及相关用户。</p>
+<h2 id="监听的网络服务"><a href="#监听的网络服务" class="headerlink" title="监听的网络服务"></a>监听的网络服务</h2><ul>
+<li>netstat -auntlp</li>
+</ul>
+<p>找到正在运行的服务，检查他们是否应该运行。查看各个监听的端口。</p>
+<h2 id="CPU和内存"><a href="#CPU和内存" class="headerlink" title="CPU和内存"></a>CPU和内存</h2><ul>
+<li>free -m</li>
+<li>uptime</li>
+<li>top/htop</li>
+</ul>
+<p>注意以下问题：</p>
+<ul>
+<li>还有空余内存吗？服务器是否正在内存和硬盘之间进行swap？</li>
+<li>还有剩余的CPU吗？服务器是几核的？是否有某些CPU核负载过多了？</li>
+<li>服务器的最大负载来自什么地方？平均负载是多少？</li>
+</ul>
+<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><ul>
+<li>lspci（查看PCI装置）</li>
+<li>dmidecode（解码DMI表来查看硬件的详细信息）</li>
+<li>ethtool（查看网络驱动和硬件信息）</li>
+</ul>
+<p>具体关注以下问题：</p>
+<ul>
+<li>RAID卡（是否带BBU备用电池？）</li>
+<li>CPU、空余的内存插槽？</li>
+<li>网卡是否设置好？是否正在运行半双工状态？速度是10Mps？有没有TX/RX报错？</li>
+</ul>
+<h2 id="IO性能"><a href="#IO性能" class="headerlink" title="IO性能"></a>IO性能</h2><ul>
+<li>iostat -kx 2（输出CPU和磁盘输入输出、分区、网络文件系统NFS相关的统计信息，<a href="http://www.linuxidc.com/Linux/2015-03/114455.htm）" target="_blank" rel="external">http://www.linuxidc.com/Linux/2015-03/114455.htm）</a></li>
+<li>vmstat 2 10（<a href="http://www.linuxidc.com/Linux/2014-06/102884.htm）" target="_blank" rel="external">http://www.linuxidc.com/Linux/2014-06/102884.htm）</a></li>
+<li>mpstat 2 10（主要用于多CPU环境下，它显示各个可用CPU的状态）</li>
+<li>dstat –top-io –top-bio（dstat非常强大，<a href="https://linux.cn/article-3215-1.html）" target="_blank" rel="external">https://linux.cn/article-3215-1.html）</a></li>
+</ul>
+<p>具体关注以下问题：</p>
+<ul>
+<li>是否开启了swap交换模式(si/so)？</li>
+<li>CPU被谁占用：系统进程？用户进程？虚拟机？</li>
+<li>服务器磁盘是否已满？</li>
+</ul>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><ul>
+<li>mount</li>
+<li>cat /etc/fstab</li>
+<li>vgs/pvs/lvs</li>
+<li>df -h</li>
+<li>lsof</li>
+</ul>
+<p>具体关注以下问题：</p>
+<ul>
+<li>一共挂载了多少个文件系统？</li>
+<li>有没有某个服务专用的文件系统？</li>
+<li>文件系统的挂载选项是什么？noatime？default？有没有文件系统被重新挂载为只读模式？</li>
+<li>是否有大文件被删除但是没有清空？</li>
+<li>如果磁盘空间有问题，是否还有空间来扩展一个分区？</li>
+</ul>
+<h2 id="内核、终端和网络"><a href="#内核、终端和网络" class="headerlink" title="内核、终端和网络"></a>内核、终端和网络</h2><ul>
+<li>sysctl -a | grep …</li>
+<li>cat /proc/interrupts</li>
+<li>cat /proc/net/ip_conntrack /<em> may take some time on busy servers </em>/</li>
+<li>ss -s</li>
+</ul>
+<p>具体关注以下问题：</p>
+<ul>
+<li>内核是否做什么相关优化？</li>
+<li>你的终端请求是否均衡地分配给CPU处理，还是会有某个CPU的核因为大量的网络中断请求或者RAID请求而过载了？</li>
+<li>在不同状态下（TIME_WAIT，…）TCP连接时间的设置是怎样的？</li>
+</ul>
+<h2 id="系统日志"><a href="#系统日志" class="headerlink" title="系统日志"></a>系统日志</h2><ul>
+<li>dmesg</li>
+<li>less /var/log/message</li>
+<li>less /var/log/secure</li>
+<li>less /var/log/auth</li>
+</ul>
+<p>具体关注以下问题：</p>
+<ul>
+<li>查看错误和警告信息，比如看看是不是很多关于连接数过多导致？</li>
+<li>看看是否有硬件错误或文件系统错误？</li>
+</ul>
+<h2 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h2><ul>
+<li>ls /etc/cron*</li>
+<li>for user in <code>$</code>(cat /etc/passwd | cut -f1 -d:); do crontab -l -u $user; done</li>
+</ul>
+<p>具体关注以下问题：</p>
+<ul>
+<li>是否有某个定时任务运行过于频繁？</li>
+<li>是否有些用户提交了隐藏的定时任务？</li>
+<li>在出现故障的时候，是否正好有某个备份任务在执行？</li>
+</ul>
+<h2 id="应用系统日志"><a href="#应用系统日志" class="headerlink" title="应用系统日志"></a>应用系统日志</h2><p>这个要涉及的就比较多了，不过一般是应用故障我们查看相关应用日志即可。<br>例如：</p>
+<ul>
+<li>Apache&amp;Nginx：查看访问和错误日志，直接找5xx错误，再看看是否有limit_zone错误；</li>
+<li>MySQL：在mysql.log找错误消息，看看有没有结构损坏的表，是否有innodb修复进程在进行，是否有disk/index/query问题；</li>
+<li>PHP-FPM：如果设定了php-slow日志，直接找错误信息（php、mysql、memcache…），如果没设定，赶紧设定；</li>
+<li>HA-Proxy：后端的状况如何？健康状况检查是否成功？是前端还是后端的队列大小达到最大值了？</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>经过一系列的处理之后，应该对如下情况比较清楚了：</p>
+<ul>
+<li>在服务器上运行的都是些啥？</li>
+<li>这个故障看起来是和IO/硬件/网络或者系统配置（有问题的代码、系统内核调优…）相关？</li>
+<li>这个故障是否有你熟悉的一些特征？比如数据库索引使用不当，或者太多的apache后台进程？</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/13/RocketMQ常用命令/" rel="next" title="RocketMQ常用命令">
+                <i class="fa fa-chevron-left"></i> RocketMQ常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的前因后果"><span class="nav-number">1.</span> <span class="nav-text">问题的前因后果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有谁在"><span class="nav-number">2.</span> <span class="nav-text">有谁在</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#之前发生了什么"><span class="nav-number">3.</span> <span class="nav-text">之前发生了什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#现在在运行的进程是啥？"><span class="nav-number">4.</span> <span class="nav-text">现在在运行的进程是啥？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监听的网络服务"><span class="nav-number">5.</span> <span class="nav-text">监听的网络服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU和内存"><span class="nav-number">6.</span> <span class="nav-text">CPU和内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件"><span class="nav-number">7.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO性能"><span class="nav-number">8.</span> <span class="nav-text">IO性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统"><span class="nav-number">9.</span> <span class="nav-text">文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核、终端和网络"><span class="nav-number">10.</span> <span class="nav-text">内核、终端和网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统日志"><span class="nav-number">11.</span> <span class="nav-text">系统日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定时任务"><span class="nav-number">12.</span> <span class="nav-text">定时任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用系统日志"><span class="nav-number">13.</span> <span class="nav-text">应用系统日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">14.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
