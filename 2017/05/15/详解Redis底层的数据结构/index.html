@@ -90,13 +90,13 @@
 
 
 
-<meta name="description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
+<meta name="description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL内存数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解Redis底层的数据结构">
 <meta property="og:url" content="http://yoursite.com/2017/05/15/详解Redis底层的数据结构/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
+<meta property="og:description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL内存数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-03-Redis-SDS-Sample01.png">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-16-150458.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-17-165118.jpg">
@@ -112,10 +112,10 @@
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-23-155958.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-26-141618.jpg">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-26-143409.jpg">
-<meta property="og:updated_time" content="2017-05-26T14:57:05.000Z">
+<meta property="og:updated_time" content="2017-09-28T06:53:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解Redis底层的数据结构">
-<meta name="twitter:description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
+<meta name="twitter:description" content="前言工作中的业务系统大面积应用了Redis，一个NoSQL内存数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。">
 <meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-03-Redis-SDS-Sample01.png">
 
 
@@ -334,7 +334,7 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作中的业务系统大面积应用了Redis，一个NoSQL数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工作中的业务系统大面积应用了Redis，一个NoSQL内存数据库。Redis的高性能、易用性，让它成为目前互联网公司中一个必不可少的工具。这也引起了我的兴趣更进一步去了解它，但由于自己不是专业的DBA，所有很少去接触Redis的复制、Sentinel、Cluster等高级特性的实战，所以接下来的文章中，将更多地去介绍Redis的数据结构和一些原理，为以后Redis的进一步理解打下基础。</p>
 <a id="more"></a>
 <p>本文主要介绍Redis底层的6种数据结构，分别是：</p>
 <ul>
@@ -363,7 +363,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>在sds.h中，对SDS的定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * 保存字符串对象的结构</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></div><div class="line">    <span class="comment">// buf 中已占用空间的长度</span></div><div class="line">    <span class="keyword">int</span> len;</div><div class="line">    </div><div class="line">    <span class="comment">// buf 中剩余可用空间的长度</span></div><div class="line">    <span class="keyword">int</span> <span class="built_in">free</span>;</div><div class="line">    </div><div class="line">    <span class="comment">// 数据空间</span></div><div class="line">    <span class="keyword">char</span> buf[];</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>在sds.h中，对SDS的定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * 保存字符串对象的结构</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></div><div class="line">    <span class="comment">// buf 中已占用空间的长度</span></div><div class="line">    <span class="keyword">int</span> len;</div><div class="line"></div><div class="line">    <span class="comment">// buf 中剩余可用空间的长度</span></div><div class="line">    <span class="keyword">int</span> <span class="built_in">free</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 数据空间</span></div><div class="line">    <span class="keyword">char</span> buf[];</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <p>请看下面的实例解析：<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-03-Redis-SDS-Sample01.png" alt="2017-05-03-Redis-SDS-Sample01"></p>
 <p>上图展示了一个SDS实例：</p>
 <ul>
@@ -414,7 +414,33 @@
 <li>match函数用于对比链表节点所保存的值和另一个输入值是否相等；</li>
 </ul>
 <p>下图是1个list结构和3个listNode结构组成的链表。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-05-16-150458.jpg" alt=""></p>
-<p>Redis的链表实现的特性总结如下：<br>|特性|描述|<br>|:—|:—|<br>|双端|链表的节点带有prev和next指针，获取某个节点的前置节点和后置节点的复杂度都是O(1)|<br>|无环|表头节点的prev指针和表尾节点的next指针都指向NULL，对链表的访问以NULL为终点|<br>|带链表长度计数器|程序使用list结构的len属性来对list持有的链表节点进行计数，程序获取链表中节点数量的复杂度是O(1)|<br>|多态|链表节点使用void*指针来保存节点值，并且可以通过list结构的dup、free、match这3个属性为节点值设置类型特定函数，所以链表可以用于保存各种不同类型的值|</p>
+<p>Redis的链表实现的特性总结如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">双端</td>
+<td style="text-align:left">链表的节点带有prev和next指针，获取某个节点的前置节点和后置节点的复杂度都是O(1)</td>
+</tr>
+<tr>
+<td style="text-align:left">无环</td>
+<td style="text-align:left">表头节点的prev指针和表尾节点的next指针都指向NULL，对链表的访问以NULL为终点</td>
+</tr>
+<tr>
+<td style="text-align:left">带链表长度计数器</td>
+<td style="text-align:left">程序使用list结构的len属性来对list持有的链表节点进行计数，程序获取链表中节点数量的复杂度是O(1)</td>
+</tr>
+<tr>
+<td style="text-align:left">多态</td>
+<td style="text-align:left">链表节点使用void*指针来保存节点值，并且可以通过list结构的dup、free、match这3个属性为节点值设置类型特定函数，所以链表可以用于保存各种不同类型的值</td>
+</tr>
+</tbody>
+</table>
 <h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><h3 id="作用-2"><a href="#作用-2" class="headerlink" title="作用"></a>作用</h3><p>字典，是一种用于保存键值对（key-value pair）的抽象数据结构。字典中的每个键都是独一无二的，程序可以在字典中根据键查找到与之关联的值，或者通过键来更新值，又或者根据键来删除整个键值对等。</p>
 <p>字典在Redis中的应用非常广泛，比如Redis的数据库就是使用字典作为底层来实现的，对数据库的增删查改操作也是在对字典的操作之上的。比如，当我们执行命令：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">redis&gt; set msg <span class="string">"hello redis."</span></div><div class="line">OK</div></pre></td></tr></table></figure></p>
 <p>这个时候，Redis在数据库中创建了一个键为”msg”，值为”hello redis.”的键值对时，这个键值对就保存在数据库的字典里面。</p>
@@ -485,7 +511,7 @@
 <h3 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h3><p>每当我们要将一个新元素加到intset里面的时候，并且新元素的类型比intset现有所有元素的类型都要长，那么intset需要先进行升级（upgrade），然后才能将新元素加到intset里面。</p>
 <p>升级intset需要3步：</p>
 <ol>
-<li>根据新元素的类型，扩展intset底层contents数组的空间大小，并为新元素分配空间； </li>
+<li>根据新元素的类型，扩展intset底层contents数组的空间大小，并为新元素分配空间；</li>
 <li>将contents数组现有的所有元素都转换成与新元素相同的类型，并将转换后的元素放置到正确的位置，而且在放置元素的过程中，需要继续维持contents数组的有序性质不变；</li>
 <li>将新元素添加到contents数组里面。</li>
 </ol>

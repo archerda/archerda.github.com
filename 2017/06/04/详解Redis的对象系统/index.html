@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="前言上篇文章介绍了Redis底层的一些数据结构。但是Redis并没有直接使用这些数据结构来实现键值对数据库，而是在这些数据结构上构建了一个对象系统，这个系统包括字符串对象、列表对象、哈希对象、集合对象和有序集合对象这5种类型的对象，每种对象都至少用到了我们前面所讲的数据结构。">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-04-051544.jpg">
-<meta property="og:updated_time" content="2017-06-04T13:23:45.000Z">
+<meta property="og:updated_time" content="2017-09-28T11:41:33.343Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解Redis的对象系统">
 <meta name="twitter:description" content="前言上篇文章介绍了Redis底层的一些数据结构。但是Redis并没有直接使用这些数据结构来实现键值对数据库，而是在这些数据结构上构建了一个对象系统，这个系统包括字符串对象、列表对象、哈希对象、集合对象和有序集合对象这5种类型的对象，每种对象都至少用到了我们前面所讲的数据结构。">
@@ -667,7 +667,7 @@
 <blockquote>
 <p>注意！OBJECT IDLETIME命令的实现是特殊的，这个命令在访问键的值对象时，不会修改值对象的lru属性。</p>
 </blockquote>
-<p>此外，lru时间还有另外一项作用：如果服务器打开了maxmemory选项，并且服务器用于回收内存的算法为volatile-lur或者allkeys-lru，那么当服务器占用的内存超过了maxmemory选项设置的上限值的时候，空转时间较长的那部分键会优先被服务器释放，从而回收内存。</p>
+<p>此外，lru时间还有另外一项作用：如果服务器打开了maxmemory选项，并且服务器用于回收内存的算法为volatile-lru或者allkeys-lru，那么当服务器占用的内存超过了maxmemory选项设置的上限值的时候，空转时间较长的那部分键会优先被服务器释放，从而回收内存。</p>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
 <li><a href="">Redis设计与实现（第二版）</a></li>
 </ul>

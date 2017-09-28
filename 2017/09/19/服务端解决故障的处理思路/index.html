@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/09/19/服务端解决故障的处理思路/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="原文： https://www.chen-hao.com.cn/posts/37696/  在有那么一瞬间，遇到服务器故障可能会手足无措，完全不知道自己应该干什么，该如何处理。这里就简单记录下解决服务器故障的思路，以便今后迅速定位问题。">
-<meta property="og:updated_time" content="2017-09-19T08:29:15.000Z">
+<meta property="og:updated_time" content="2017-09-19T08:30:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务端解决故障的处理思路">
 <meta name="twitter:description" content="原文： https://www.chen-hao.com.cn/posts/37696/  在有那么一瞬间，遇到服务器故障可能会手足无措，完全不知道自己应该干什么，该如何处理。这里就简单记录下解决服务器故障的思路，以便今后迅速定位问题。">
@@ -428,7 +428,7 @@
 </ul>
 <h2 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h2><ul>
 <li>ls /etc/cron*</li>
-<li>for user in <code>$</code>(cat /etc/passwd | cut -f1 -d:); do crontab -l -u $user; done</li>
+<li>for user in $(cat /etc/passwd | cut -f1 -d:); do crontab -l -u $user; done</li>
 </ul>
 <p>具体关注以下问题：</p>
 <ul>
