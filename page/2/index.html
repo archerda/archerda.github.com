@@ -251,6 +251,128 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/27/MySQL常用操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/27/MySQL常用操作/" itemprop="url">MySQL常用操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-27T15:30:45+08:00">
+                2016-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="查询每次SQL语句的具体执行情况"><a href="#查询每次SQL语句的具体执行情况" class="headerlink" title="查询每次SQL语句的具体执行情况"></a>查询每次SQL语句的具体执行情况</h2><ul>
+<li>查看当前session的profiling情况: <code>select @@profiling;</code></li>
+<li>打开profiling: <code>set profiling = 1;</code></li>
+<li>执行一些sql</li>
+<li>查看所有已执行的profile: <code>show profiles;</code></li>
+<li>看看刚才某条sql执行的具体时间拆分: <code>show profile for query [queryID];</code></li>
+<li>看看刚才某条sql执行的具体时间拆分，并加上相应的cpu信息: <code>show profile cpu for query [queryID];</code></li>
+</ul>
+<h2 id="查看正在执行的SQL语句"><a href="#查看正在执行的SQL语句" class="headerlink" title="查看正在执行的SQL语句"></a>查看正在执行的SQL语句</h2><ul>
+<li><code>show processlist;</code></li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/30/IDEA常用插件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1328,125 +1450,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/17/Java集合系列-1-Collection框架/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/08/17/Java集合系列-1-Collection框架/" itemprop="url">Java集合系列[1]-Collection框架</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-17T23:31:17+08:00">
-                2016-08-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>下图是Collection框架的类关系图：<br><img src="http://obmtcynvx.bkt.clouddn.com/32143ljfdoa9ufd.png" alt="Collection架构图"></p>
-<p>Collection是一个接口，主要有2个分支，分别是<strong>List</strong>和<strong>Set</strong>。List和Set都是接口，他们都继承自Collection接口。List是有序队列，可以有重复元素；Set是数学概念中的集合，无序的，也是没有重复元素的（数学上的集合有三个特征：无序性、互异性、确定性）。</p>
-<p>为了方便，JDK抽象出了AbstractCollection抽象类，它实现了Collection接口中大部分方法。这样在Collection的实现类中，就可以通过集成AbstractCollection省去了很多重复的编码工作。AbstractList和AbstractSet都继承自AbstractCollection，具体的List实现类继承自AbstractList（例如ArrayList、LinkedList、Vector、Stack等），而具体的Set实现类继承自AbstractSet（例如HashSet、TreeSet等）。</p>
-<p>另外，Collection还继承Iterable接口，里面有一个iterator()方法，它返回Iterator接口。通常，我们可以通过Iterator迭代器来遍历集合。ListLiterator接口是List接口特有的，在List接口中，通过调用listIterator()返回一个ListIterator迭代器对象。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/08/17/Java集合系列-1-Collection框架/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1496,7 +1499,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

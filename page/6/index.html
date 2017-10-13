@@ -251,6 +251,283 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/25/Linux&Mac常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/08/25/Linux&Mac常用命令/" itemprop="url">Linxu&Mac 常用命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-25T00:22:40+08:00">
+                2015-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="文件-文件夹-磁盘管理"><a href="#文件-文件夹-磁盘管理" class="headerlink" title="文件/文件夹/磁盘管理"></a>文件/文件夹/磁盘管理</h2><ul>
+<li>由第一行开始显示档案内容(n为显示行号)：<code>cat [-n] &lt;file-name&gt;</code></li>
+<li>从最后一行开始显示(Mac无)：<code>tac &lt;file-name&gt;</code></li>
+<li>查看头几行：<code>head [-lineNumber] &lt;file-name&gt;</code></li>
+<li>查看尾几行：<code>tail [-lineNumber] &lt;file-name&gt;</code></li>
+<li>以二进制的方式读取档案内容：<code>od &lt;file-name&gt;</code></li>
+<li>分页显示文件(space下一页，b上一页)：<code>more &lt;file-name&gt;</code></li>
+<li>分页显示文件(支持PageDown和PageUp)：<code>less &lt;file-name&gt;</code></li>
+<li>创建软链接(inode不一样): <code>ln -s &lt;from-file-with-absolute-path&gt; &lt;soft-link-file-with-absolute-path&gt;</code></li>
+<li>创建硬链接(inode一样): <code>ln &lt;from-file-with-absolute-path&gt; &lt;hard-link-file-with-absolute-path&gt;</code></li>
+<li>查看文件的inode信息: <code>stat &lt;file&gt;</code></li>
+<li>查看硬盘分区的inode总数和已经使用的数量: <code>df -i</code></li>
+<li>查看每个inode节点的大小: <code>sudo dumpe2fs -h /dev/hda | grep &quot;Inode size&quot;</code></li>
+<li>查看文件的inode号码: <code>ls -i &lt;file&gt;</code></li>
+<li>查看当前文件夹磁盘占用情况：<code>du -shc *</code></li>
+<li>查看磁盘使用情况：<code>df -lh</code></li>
+<li>查看inode使用情况： <code>df -hi</code></li>
+<li>找某个文件并打印内容：<code>find . -name &quot;&lt;file-name&gt;&quot; -exec cat {} \;</code></li>
+<li>在当前目录下查找某个字符串并打印行号：<code>find ./* | xargs grep -n &#39;&lt;string-you-find&gt;&#39;</code></li>
+</ul>
+<hr>
+<h2 id="压缩文件管理"><a href="#压缩文件管理" class="headerlink" title="压缩文件管理"></a>压缩文件管理</h2><ul>
+<li>创建tar文件：<br><code>tar -cvf &lt;archive-name.tar&gt; &lt;file1-OR-file2-OR-both-to-archive&gt;</code></li>
+<li>查看tar文件：<code>tar -tvf &lt;archive-to-view.tar&gt;</code></li>
+<li>提取tar文件：<code>tar -xvf &lt;archive-to-extract.tar&gt;</code></li>
+<li>创建和提取gzip压缩文件：<code>gzip &lt;filename&gt;</code></li>
+<li>对gzip文档进行解压：<code>unzip &lt;archive-to-extract.zip&gt;</code></li>
+<li>查看gzip文件：<code>unzip -l &lt;archive-to-extract.zip&gt;</code></li>
+</ul>
+<hr>
+<h2 id="计划任务"><a href="#计划任务" class="headerlink" title="计划任务"></a>计划任务</h2><ul>
+<li>启动crond服务：<code>service crond start</code></li>
+<li>停止crond服务：<code>service crond stop</code></li>
+<li>重启crond服务：<code>service crond restart</code></li>
+<li>为某个使用者建立/移除crontab任务： <code>crontab -u username</code></li>
+<li>编辑crontab任务内容：<code>crontab -e</code></li>
+<li>查看crontab任务内容：<code>crontab -l</code></li>
+<li>移除crontab所有任务：<code>crontab -r</code></li>
+<li>crontab内容格式：<ul>
+<li><code>* * * * *    path</code></li>
+<li>前面5个 <code>*</code> 代表：分(0-59)、时(0-23)、日(1-31)、月(1-12)、周(0-7)</li>
+<li><code>*</code> 号代表任何时间都能接受的意思，任意；</li>
+<li>如果是一段时间，用<code>-</code>连接</li>
+<li>如果是隔开几个时间，用<code>,</code>连接</li>
+<li>如果是某个时间单位每隔多久，用<code>/&lt;interval&gt;</code>连接</li>
+</ul>
+</li>
+<li>例如：<br><code>* */12 * * * /Users/Archerda/Configuration/Script/CodingBit/coding.sh</code><br>代表每隔12个小时执行一次coding.sh</li>
+<li>Mac下的cron日志会在<code>/var/mail/&lt;username&gt;</code>中记录，可以用cat查看。每次cron任务有标准输出时都会记录在该文件中，并且在终端会提醒<code>You have new mail in /var/mail/&lt;username&gt;</code></li>
+</ul>
+<hr>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><ul>
+<li>列出当前用户名：<code>who</code></li>
+<li>查看用户登录状态：<code>w</code></li>
+<li>快速查找某用户信息：<code>finger &lt;user-name&gt;</code></li>
+<li>切换用户(switch user)：<code>su &lt;user-name&gt;</code></li>
+<li>修改用户密码：<code>passwd</code></li>
+<li>查看UID等：<code>id &lt;user-name&gt;</code></li>
+</ul>
+<hr>
+<h2 id="系统相关"><a href="#系统相关" class="headerlink" title="系统相关"></a>系统相关</h2><ul>
+<li>显示系统内核版本：<code>uname</code></li>
+<li>显示系统所有信息：<code>uname -a</code></li>
+<li>显示发行版信息： <code>cat /etc/issue</code></li>
+<li>查看文件系统块大小：<code>blockdev --getbsz &lt;partion&gt;</code> 比如<code>blockdev --getbsz /dev/sda1</code></li>
+<li>查看内存页大小：<code>getconf PAGESIZE</code></li>
+<li>查看swap的使用情况：<code>cat /proc/swaps</code></li>
+</ul>
+<hr>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><ul>
+<li>查看系统资源使用情况并排序：<code>top</code></li>
+<li>可视化查看系统资源使用情况：<code>sudo htop</code></li>
+<li>使用homebrew安装htop：<code>brew intall htop</code></li>
+<li>列出活跃进程：<code>ps</code></li>
+<li>列出所有系统运行命令并分页：<code>ps -A | less</code></li>
+<li>列出指定进程名的进程(BSD格式输出：USER , PID , %CPU , %MEM , VSZ , RSS , TTY , STAT , START , TIME , COMMAND)：<code>ps aux | grep &lt;pname&gt; --color=auto</code></li>
+<li>列出指定进程名的进程(标准格式输出：UID , PID , PPID , C , STIME , TTY , TIME , CMD)：<code>ps -ef | grep &lt;pname&gt; --color=auto</code></li>
+<li>根据ID杀死进程：<code>kill &lt;pid&gt;</code></li>
+<li>根据关键字查询PID：<code>pgrep -f &lt;key-word&gt;</code></li>
+<li>根据进程名称杀死一个进程：<code>pkill &lt;name&gt;</code> <code>killall &lt;name&gt;</code></li>
+<li>杀死图形界面程序(Mac默认没有这个工具)：<code>xkill</code></li>
+<li>改变线程nice值(优先级，-19最高，19最低，0默认)：<code>renice &lt;nice-value&gt; &lt;pid&gt;</code></li>
+<li>在后台不挂断地运行命令(日志默认写在当前目录的nohup.out)：<code>nohup &lt;command&gt; &lt;arg&gt; [&gt; &lt;filename&gt; 2&gt;&amp;1] &amp;</code></li>
+<li>建立一个处于断开模式下的会话：<code>screen -dmS &lt;session-name&gt;</code></li>
+<li>列出所有会话：<code>screen -list</code></li>
+<li>重新连接会话：<code>screen -r &lt;session-name&gt;</code></li>
+<li>跟踪进程执行时的系统调用和所接收的信号 (在调试的时候一般是从后往前看strace命令的结果，这样更容易找到有价值的信息): <code>strace &lt;command&gt;</code></li>
+</ul>
+<hr>
+<h2 id="加密解密"><a href="#加密解密" class="headerlink" title="加密解密"></a>加密解密</h2><ul>
+<li>查看文件的MD5(Mac)：<code>md5 &lt;file-name&gt;</code></li>
+<li>查看文件的SHA1(Mac): <code>shasum -a 1 &lt;file-name&gt;</code></li>
+<li>查看文件的SHA256(Mac): <code>shasum -a 256 &lt;file-name&gt;</code></li>
+<li>查看文件的MD5(Linux)：<code>md5sum &lt;file-name&gt;</code></li>
+<li>查看文件的SHA：<code>shasum &lt;file-name&gt;</code></li>
+<li>查看文件的SHA1：<code>sha1sum &lt;file-name&gt;</code></li>
+<li>生成RSA的SSH： <code>ssh-keygen -t rsa</code></li>
+</ul>
+<h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><ul>
+<li>输出重定向到剪贴板(Mac): <code>&lt;command&gt; | pbcopy</code></li>
+</ul>
+<hr>
+<h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><ul>
+<li>ssh登录：<code>ssh [-p &lt;port&gt;] &lt;user&gt;@&lt;host&gt;&#39;</code></li>
+<li>ssh免密码登录(公钥就是一段字符串，只要把它追加在authorized_keys文件的末尾)：<code>ssh &lt;user&gt;@&lt;host&gt; &#39;mkdir -p .ssh &amp;&amp; cat &gt;&gt; .ssh/authorized_keys&#39; &lt; ~/.ssh/id_rsa.pub</code></li>
+<li>ssh禁用密码登录并启用ssh密钥登录：<code>vim /etc/ssh/sshd_config</code> <code>PubkeyAuthentication yes;AuthorizedKeysFile .ssh/authorized_keys;PasswordAuthentication no</code> <code>service sshd restart</code></li>
+</ul>
+<hr>
+<h2 id="CPU管理"><a href="#CPU管理" class="headerlink" title="CPU管理"></a>CPU管理</h2><ul>
+<li>显示CPU信息：<code>cat /proc/cpuinfo</code></li>
+<li>显示CPU信息：<code>lscpu</code></li>
+<li>显示CPU占用最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k3|head -10</code></li>
+</ul>
+<hr>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><ul>
+<li>显示内存信息：<code>free -m</code></li>
+<li>显示内存信息：<code>cat /proc/meminfo</code></li>
+<li>显示内存消耗最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k4|head -10</code></li>
+<li>显示虚拟内存使用最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k5|head -10</code></li>
+<li>释放buffer和cache: <code>echo 3 &gt; /proc/sys/vm/drop_caches</code></li>
+<li>每隔一秒高亮显示内存变化情况: <code>watch -n 1 -d &quot;free&quot;</code></li>
+</ul>
+<hr>
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><ul>
+<li>查看已用端口：<code>netstat -pltn</code></li>
+<li>查看某个端口被哪个进程占用: <code>lsof -i:&lt;port&gt;</code></li>
+<li>显示机器所属域名: <code>hostname -d</code></li>
+<li>显示完整的主机名和域名: <code>hostname –f</code></li>
+<li>显示当前机器的ip地址: <code>hostname –i</code></li>
+<li>互动式地查询域名记录: <code>nslookup</code></li>
+<li>查询域名对应的IP: <code>dig &lt;domain-name&gt;</code></li>
+<li>查询IP对应的域名: <code>dig -x &lt;ip&gt;</code></li>
+<li>查看网络是否联通: <code>ping &lt;ip|domain-name&gt;</code></li>
+<li>查看公网IP: <code>curl http://members.3322.org/dyndns/getip</code></li>
+<li>每隔一秒高亮显示网络链接数: <code>watch -n 1 -d &quot;netstat -ant&quot;</code></li>
+<li>查看一下当前的网络连接情况: <code>netstat -nt | awk &#39;/^tcp/ {++state[$NF]} END {for(key in state) print key,&quot;t&quot;,state[key]}&#39;</code></li>
+<li>telnet: <code>telnet &lt;ip&gt; &lt;port&gt;</code></li>
+</ul>
+<hr>
+<h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><ul>
+<li>光标回到行首：<code>ctrl + a(ahead)</code></li>
+<li>光标回到行尾：<code>ctrl + e(end)</code></li>
+<li>光标向行首移动一个字符：<code>ctrl + b(backwards)</code></li>
+<li>光标向行尾移动一个字符：<code>ctrl + f(forwards)</code></li>
+<li>删除光标到行首的字符：<code>ctrl + w</code></li>
+<li>删除光标到行尾的字符：<code>ctrl + k</code></li>
+<li>删除整个命令行文本字符：<code>ctrl + u</code></li>
+<li>向行首删除一个字符：<code>ctrl + h</code></li>
+<li>向行尾删除一个字符：<code>ctrl + d</code></li>
+<li>粘贴ctrl+u,ctrl+k,ctrl+w删除的字符：<code>ctrl + y</code></li>
+<li>上一个使用的历史命令：<code>ctrl + p</code></li>
+<li>下一个使用的历史命令：<code>ctrl + n</code></li>
+<li>快速检索历史命令：<code>ctrl + r</code></li>
+<li>交换光标所在和其前的字符：<code>ctrl + t</code></li>
+<li>使终端静止，停止输出：<code>ctrl + s</code></li>
+<li>退出ctrl+q引起的静止：<code>ctrl + q</code></li>
+<li>使正在运行的任务运行于后台：<code>ctrl + z</code></li>
+<li>空命令行状态下退出终端：<code>ctrl + d</code></li>
+<li>显示所有终端支持的命令：<code>esc + esc + esc</code></li>
+</ul>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="external">SSH原理与运用（一）：远程登录</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html" target="_blank" rel="external">SSH原理与运用（二）：远程操作与端口转发</a></li>
+<li><a href="http://my.oschina.net/goberl/blog/85816" target="_blank" rel="external">linux下查看最消耗CPU、内存的进程</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/22/JVM-参数设置及分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1629,180 +1906,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/14/Vim-常用命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/08/14/Vim-常用命令/" itemprop="url">Vim 常用命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-14T17:50:46+08:00">
-                2015-08-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="视觉模式"><a href="#视觉模式" class="headerlink" title="视觉模式"></a>视觉模式</h2><ul>
-<li>选中一个或多个字符：<code>v</code></li>
-<li>选中一行：<code>V</code></li>
-<li>向后翻页(PageDown)：<code>ctrl+f</code></li>
-<li>向前翻页(PageUp)：<code>ctrl+b</code></li>
-</ul>
-<hr>
-<h2 id="插入模式"><a href="#插入模式" class="headerlink" title="插入模式"></a>插入模式</h2><ul>
-<li>进入编辑模式：<ul>
-<li>插入在光标之前：<code>i</code></li>
-<li>插入到行首：<code>I</code></li>
-<li>插入在光标之后：<code>a</code></li>
-<li>插入到行尾：<code>A</code></li>
-</ul>
-</li>
-<li>新开一行：<code>o</code> <code>O</code></li>
-<li>退出插入模式：<code>Esc</code></li>
-</ul>
-<hr>
-<h2 id="编辑"><a href="#编辑" class="headerlink" title="编辑"></a>编辑</h2><ul>
-<li>撤销：<code>u</code></li>
-<li>回滚撤销：<code>ctrl+r</code></li>
-<li>重复上次命令：<code>.</code></li>
-<li>合并下行到上行：<code>J</code></li>
-</ul>
-<hr>
-<h2 id="复制剪切"><a href="#复制剪切" class="headerlink" title="复制剪切"></a>复制剪切</h2><ul>
-<li>删除一行：<code>dd</code></li>
-<li>删除多行：<code>&lt;first-line&gt;, &lt;end-line&gt;&quot;d&quot;</code> 如<code>3,45d</code></li>
-<li>删除一个单词：<code>dw</code></li>
-<li>删除后一个字符：<code>x</code></li>
-<li>删除前一个字符：<code>X</code></li>
-<li>删除行最后一个字符：<code>D</code></li>
-<li>复制一行或N行：<code>[N]yy</code></li>
-<li>粘贴：<code>p</code></li>
-</ul>
-<hr>
-<h2 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h2><ul>
-<li>保存：<code>:w</code></li>
-<li>保存并关闭：<code>:wq</code></li>
-<li>关闭：<code>:q</code></li>
-<li>强制关闭：<code>:q!</code></li>
-</ul>
-<hr>
-<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><ul>
-<li>搜索：<code>/pattern</code></li>
-<li>往后搜索：<code>?pattern</code></li>
-<li>光标到达搜索结果的前一个目标：<code>n</code></li>
-<li>光标到达搜索结果的后一个目标：<code>N</code></li>
-</ul>
-<hr>
-<h2 id="其他设置"><a href="#其他设置" class="headerlink" title="其他设置"></a>其他设置</h2><ul>
-<li>设置行号：<code>:set nu</code> <code>:set number</code></li>
-<li>取消行号：<code>:set nonu</code> <code>:set nonumber</code></li>
-<li>跳到指定行：<code>:line</code></li>
-<li>语法高亮开关：<code>syntax &lt;on | off&gt;</code></li>
-<li>设置文件语法类型：<code>set syn = &lt;syntax-type&gt;</code></li>
-<li>设置自动缩进：<code>set autoindent</code></li>
-<li>开启当前行高亮: <code>set cursorLine</code> </li>
-<li>设置高亮行样式：<code>in CursorLine cterm=NONE ctermbg=white ctermfg=green guibg=NONE guifg=NONE</code></li>
-<li>搜索匹配项高亮：<code>set hlsearch</code></li>
-</ul>
-<hr>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1852,7 +1955,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

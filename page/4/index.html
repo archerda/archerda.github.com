@@ -251,6 +251,189 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/01/Sublime-Text-3-快捷键以及常用配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/01/Sublime-Text-3-快捷键以及常用配置/" itemprop="url">Sublime Text 3 快捷键以及常用配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-01T16:15:01+08:00">
+                2015-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="快捷键（Mac平台）"><a href="#快捷键（Mac平台）" class="headerlink" title="快捷键（Mac平台）"></a>快捷键（Mac平台）</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">⌘</td>
+<td style="text-align:left">command</td>
+</tr>
+<tr>
+<td style="text-align:left">⌃</td>
+<td style="text-align:left">control</td>
+</tr>
+<tr>
+<td style="text-align:left">⌥</td>
+<td style="text-align:left">option/alt</td>
+</tr>
+<tr>
+<td style="text-align:left">⇧</td>
+<td style="text-align:left">shift</td>
+</tr>
+<tr>
+<td style="text-align:left">↩</td>
+<td style="text-align:left">enter</td>
+</tr>
+<tr>
+<td style="text-align:left">⌫</td>
+<td style="text-align:left">delete</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>打开Console：<code>⌃</code> `</li>
+<li>打开命令模式：<code>⌘ ⇧ p</code></li>
+<li>根据文件名打开文件：<code>⌘ p</code></li>
+<li>定位函数方法：<code>⌘  r</code></li>
+<li>多行游标：<code>⌘ d(选中)</code> <code>⌘ k(跳过)</code></li>
+<li>快速跳行：<code>⌃ g</code></li>
+<li>删除整行：<code>⌃ ⇧ k</code></li>
+<li>剪切整行：<code>⌘ x</code></li>
+<li>本文件查找：<code>⌘ f</code></li>
+<li>全局查找：<code>⌘ ⇧ f</code></li>
+<li>替换：<code>⌘ ⌥ f</code></li>
+</ul>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><h3 id="安装Package-Control："><a href="#安装Package-Control：" class="headerlink" title="安装Package Control："></a>安装<strong>Package Control</strong>：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> urllib.request,os,hashlib; h = <span class="string">'2915d1851351e5ee549c20394736b442'</span> + <span class="string">'8bc59f460fa1548d1514676163dafc88'</span>; pf = <span class="string">'Package Control.sublime-package'</span>; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( <span class="string">'http://packagecontrol.io/'</span> + pf.replace(<span class="string">' '</span>, <span class="string">'%20'</span>)).read(); dh = hashlib.sha256(by).hexdigest(); print(<span class="string">'Error validating download (got %s instead of %s), please try manual install'</span> % (dh, h)) <span class="keyword">if</span> dh != h <span class="keyword">else</span> open(os.path.join( ipp, pf), <span class="string">'wb'</span> ).write(by)</div></pre></td></tr></table></figure>
+<h3 id="Emmet："><a href="#Emmet：" class="headerlink" title="Emmet："></a><strong>Emmet</strong>：</h3><p>提供了一种非常简练的语法规则，然后立刻生成对应的 HTML 结构或者 CSS 代码，同时还有多种实用的功能帮助进行前端开发。</p>
+<ul>
+<li>自动生成HTML5初始代码：<code>html:5</code></li>
+<li>生成特定id节点：<code>span#idName</code></li>
+<li>生成特定class节点：<code>span.className</code></li>
+</ul>
+<h3 id="AutoFileName"><a href="#AutoFileName" class="headerlink" title="AutoFileName:"></a><strong>AutoFileName</strong>:</h3><p>自动补全文件路径，非常方便。</p>
+<h3 id="DocBlockr"><a href="#DocBlockr" class="headerlink" title="DocBlockr:"></a><strong>DocBlockr</strong>:</h3><p>DocBlockr会成为你编写代码文档的有效工具。当输入/**并且按下Tab键的时候，这个插件会自动解析任何一个函数并且为你准备好合适的模板。</p>
+<h3 id="Alignment："><a href="#Alignment：" class="headerlink" title="Alignment："></a><strong>Alignment</strong>：</h3><p>代码对齐。</p>
+<h3 id="jQuery："><a href="#jQuery：" class="headerlink" title="jQuery："></a><strong>jQuery</strong>：</h3><p>jQuery代码提示。</p>
+<h3 id="JsFormat："><a href="#JsFormat：" class="headerlink" title="JsFormat："></a><strong>JsFormat</strong>：</h3><p>JavaScript代码格式化。</p>
+<h3 id="Tag："><a href="#Tag：" class="headerlink" title="Tag："></a><strong>Tag</strong>：</h3><p>HTML/XML标签缩进、补全和校验。</p>
+<h3 id="HTML-CSS-JS-Prettify："><a href="#HTML-CSS-JS-Prettify：" class="headerlink" title="HTML-CSS-JS Prettify："></a><strong>HTML-CSS-JS Prettify</strong>：</h3><p>代码美化。</p>
+<h3 id="ConvertToUTF8："><a href="#ConvertToUTF8：" class="headerlink" title="ConvertToUTF8："></a><strong>ConvertToUTF8</strong>：</h3><p>通过本插件，可以编辑并保存目前编码不被 Sublime Text 支持的文件，特别是中日韩用户使用的 GB2312，GBK，BIG5，EUC-KR，EUC-JP 等。</p>
+<h3 id="主题及配色"><a href="#主题及配色" class="headerlink" title="主题及配色"></a>主题及配色</h3><p>Material</p>
+<h2 id="个人配置"><a href="#个人配置" class="headerlink" title="个人配置"></a>个人配置</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="string">"auto_complete"</span> : true,</div><div class="line">	<span class="string">"auto_complete_selector"</span>: <span class="string">"source - comment"</span>,</div><div class="line">	<span class="string">"auto_complete_triggers"</span>: </div><div class="line">	[</div><div class="line">		&#123;</div><div class="line">			<span class="string">"characters"</span>: <span class="string">"."</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="string">"characters"</span>: <span class="string">"&gt;"</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="string">"characters"</span>: <span class="string">":"</span></div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	<span class="string">"bold_folder_labels"</span>: true,</div><div class="line">	<span class="string">"color_scheme"</span>: <span class="string">"Packages/Material Theme/schemes/Material-Theme.tmTheme"</span>,</div><div class="line">	<span class="string">"fade_fold_buttons"</span>: false,</div><div class="line">	<span class="string">"font_face"</span>: <span class="string">"Monaco"</span>,</div><div class="line">	<span class="string">"font_size"</span>: <span class="number">13</span>,</div><div class="line">	<span class="string">"highlight_line"</span>: true,</div><div class="line">	<span class="string">"highlight_modified_tabs"</span>: true,</div><div class="line">	<span class="string">"ignored_packages"</span>:</div><div class="line">	[</div><div class="line">		<span class="string">"Vintage"</span></div><div class="line">	],</div><div class="line">	<span class="string">"line_padding_bottom"</span>: <span class="number">1</span>,</div><div class="line">	<span class="string">"line_padding_top"</span>: <span class="number">1</span>,</div><div class="line">	<span class="string">"open_files_in_new_window"</span>: false,</div><div class="line">	<span class="string">"theme"</span>: <span class="string">"Material-Theme.sublime-theme"</span>,</div><div class="line">	<span class="string">"material_theme_accent_purple"</span>: true,</div><div class="line">	<span class="string">"material_theme_small_statusbar"</span>: true,</div><div class="line">	<span class="string">"material_theme_small_tab"</span>: true,</div><div class="line">	<span class="string">"material_theme_tabs_autowidth"</span>: true,</div><div class="line">	<span class="string">"overlay_scroll_bars"</span>: <span class="string">"enabled"</span>,</div><div class="line">	<span class="string">"smart_indent"</span>: true,</div><div class="line">	<span class="string">"word_wrap"</span>: true</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="subl命令"><a href="#subl命令" class="headerlink" title="subl命令"></a>subl命令</h2><p>在Bash中执行下面语句：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/local/bin/subl</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://packagecontrol.io/installation" target="_blank" rel="external">Package Control Installation</a></li>
+<li><a href="http://www.cnsecer.com/4112.html" target="_blank" rel="external">解决Mac下Sublime Text3因为pyV8无法加载导致Emmet无法使用的问题</a></li>
+<li><a href="https://github.com/liveNo/Sublime-Tutorial?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">Sublime Text 插件与快捷键（Mac 版）</a></li>
+</ul>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/23/Google-s-Java-Style/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1681,153 +1864,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/11/Java-正则表达式详解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/11/Java-正则表达式详解/" itemprop="url">Java 正则表达式详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-11T02:21:27+08:00">
-                2015-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在实际开发过程中,总会遇到很多<strong>有关字符串的查找、匹配、替换、判断等操作</strong>(参加中兴的笔试时也遇到一道相关题目,泪~~),而有时候情况还比较复杂,如果直接用编程的方式来处理,代码量稍多且麻烦,往往效率低下。而这个时候,正则表达式（Regex）就是解决这类问题的利器。</p>
-<p>正则表达式是一种模式匹配和替换的规范,一个正则就是由普通的字符（如a-zA-Z0-9）以及特殊字符（元字符）组成的文字模式,它用以描述文字主体的一个或者多个待匹配的字符。正则表达式作为表达式的一个模板,将某个字符模式与所给字符主题进行匹配。</p>
-<p>需要说明的是,几乎每个语言都提供了正则表达式的功能,但不同语言之间的正则表达式可能略微有些差别。本文主要讲解Java中的正则表达式。</p>
-<h2 id="核心类"><a href="#核心类" class="headerlink" title="核心类"></a>核心类</h2><p>有关正则表达式的类在<code>java.util.regex</code>中,主要包括三个类：<code>Pattern、Matcher、PatternSyntaxException</code>。</p>
-<h3 id="Pattern（模式）"><a href="#Pattern（模式）" class="headerlink" title="Pattern（模式）"></a>Pattern（模式）</h3><p>pattern对象是一个正则表达式的编译表示形式。指定为字符串的正则表达式必须先编译为此类的实例。然后,将得到的模式用于创建Matcher对象（匹配器）。依照正则表达式,该对象可以和任意的字符序列匹配。执行匹配所涉及的状态都驻留在匹配器中,所以多个匹配器可以共用一个模式。</p>
-<ul>
-<li>临时使用Pattern</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">matches</span><span class="params">(String regex, CharSequence input)</span></span></div></pre></td></tr></table></figure>
-<p>matches()方法编译给定正则表达式并尝试将给定输出与其匹配。其中regex是要编译的表达式,input是要匹配的字符序列。调用此便捷方法的形式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">boolean</span> b = Pattern.matches(<span class="string">"a*b"</span>, <span class="string">"aaaaab"</span>);</div></pre></td></tr></table></figure></p>
-<ul>
-<li>复用Pattern</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Pattern <span class="title">compile</span><span class="params">(String regex)</span></span></div><div class="line"><span class="keyword">public</span> Matcher <span class="title">matcher</span><span class="params">(CharSequence input)</span></div></pre></td></tr></table></figure>
-<p>其中compile将给定的正则表达式编译到模式中,而matcher则根据给定的字符序列创建与此模式的匹配器。示例如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Pattern p = Pattern.compile(<span class="string">"a*b"</span>);</div><div class="line"> Matcher m = p.matcher(<span class="string">"aaaaab"</span>);</div><div class="line"> <span class="keyword">boolean</span> b = m.matches();</div></pre></td></tr></table></figure>
-<h3 id="Matcher（匹配器）"><a href="#Matcher（匹配器）" class="headerlink" title="Matcher（匹配器）"></a>Matcher（匹配器）</h3><p>通过编译pattern对字符序列执行匹配操作的引擎。通过调用模式的matcher()方法创建匹配器。</p>
-<h3 id="RegexSyntaxException"><a href="#RegexSyntaxException" class="headerlink" title="RegexSyntaxException"></a>RegexSyntaxException</h3><p>抛出未检查的异常,说明正则表达式中存在语法错误。</p>
-<h2 id="捕获组"><a href="#捕获组" class="headerlink" title="捕获组"></a>捕获组</h2><p>捕获组是把多个字符当一个独立单元进行处理的方法,它通过括号内的字符分组来创建。例如,正则表达式(dog)创建了一个单一的捕获组,组里包含’d’、’o’、’g’。</p>
-<p>捕获组是通过从左到右计算其括号来编号。例如,在表达式<code>( (A) ( B (C) ) )</code>中,有4个捕获组：</p>
-<ul>
-<li>((A)(B(C)))</li>
-<li>(A)</li>
-<li>(B(C))</li>
-<li>(C)</li>
-</ul>
-<p>可以通过matcher对象的groupCount()方法来查看有多少个捕获组。groupCount()返回一个int值,表示matcher对象当前有多少个捕获组。</p>
-<p>还有一个特殊的组（组0）,它总是代表整个表达式。该组不包括在groupCount()的返回值中。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><img src="https://farm1.staticflickr.com/750/21115610099_6e52dbfc33_c.jpg" alt=""><br><img src="https://farm6.staticflickr.com/5661/21291904852_d504878375_c.jpg" alt=""><br><img src="https://farm1.staticflickr.com/585/21114641598_c992430fbb_c.jpg" alt=""><br><img src="https://farm1.staticflickr.com/606/21276261466_2c254a28f6_c.jpg" alt=""></p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.regex.Matcher;</div><div class="line"><span class="keyword">import</span> java.util.regex.Pattern;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RegexMatches</span></span></div><div class="line">&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String args[] )</span></span>&#123;</div><div class="line"></div><div class="line">      <span class="comment">// 按指定模式在字符串查找</span></div><div class="line">      String line = <span class="string">"This order was placed for QT3000! OK?"</span>;</div><div class="line">      String pattern = <span class="string">"(.*)(\\d+)(.*)"</span>;</div><div class="line"></div><div class="line">      <span class="comment">// 创建 Pattern 对象</span></div><div class="line">      Pattern r = Pattern.compile(pattern);</div><div class="line"></div><div class="line">      <span class="comment">// 现在创建 matcher 对象</span></div><div class="line">      Matcher m = r.matcher(line);</div><div class="line">      System.out.println(<span class="string">"groupCount: "</span> + m.groupCount());</div><div class="line">      <span class="keyword">if</span> (m.find( )) &#123;</div><div class="line">         System.out.println(<span class="string">"Found value: "</span> + m.group(<span class="number">0</span>) );</div><div class="line">         System.out.println(<span class="string">"Found value: "</span> + m.group(<span class="number">1</span>) );</div><div class="line">         System.out.println(<span class="string">"Found value: "</span> + m.group(<span class="number">2</span>) );</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">         System.out.println(<span class="string">"NO MATCH"</span>);</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>以上实例编译运行结果如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">groupCount: <span class="number">3</span></div><div class="line">Found value: This order was placed <span class="keyword">for</span> QT3000! OK?</div><div class="line">Found value: This order was placed <span class="keyword">for</span> QT300</div><div class="line">Found value: <span class="number">0</span></div></pre></td></tr></table></figure></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>Java正则的功用还有很多,事实上只要是字符处理,就没有正则做不到的事情存在。（当然,正则解释时较耗时间就是了|||……）</p>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><a href="http://blog.csdn.net/kdnuggets/article/details/2526588" target="_blank" rel="external">CSDN：Java正则表达式入门</a></li>
-<li><a href="http://www.runoob.com/java/java-regular-expressions.html" target="_blank" rel="external">RUNOOB.com：Java 正则表达式</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1877,7 +1913,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

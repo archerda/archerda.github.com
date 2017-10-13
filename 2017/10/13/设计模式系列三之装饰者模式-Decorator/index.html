@@ -1,0 +1,726 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》  装饰者模式的类图 装饰者模式的优点">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式系列三之装饰者模式(Decorator)">
+<meta property="og:url" content="http://yoursite.com/2017/10/13/设计模式系列三之装饰者模式-Decorator/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》  装饰者模式的类图 装饰者模式的优点">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/decorator1.png">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/java-io-decorator1.png">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/java-io-decorator2.png">
+<meta property="og:updated_time" content="2017-10-13T01:42:22.421Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式系列三之装饰者模式(Decorator)">
+<meta name="twitter:description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》  装饰者模式的类图 装饰者模式的优点">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/decorator1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/13/设计模式系列三之装饰者模式-Decorator/"/>
+
+
+
+
+
+  <title>设计模式系列三之装饰者模式(Decorator) | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/13/设计模式系列三之装饰者模式-Decorator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式系列三之装饰者模式(Decorator)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-13T09:41:08+08:00">
+                2017-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是装饰者模式：给爱用继承的人一个全新的设计眼界"><a href="#什么是装饰者模式：给爱用继承的人一个全新的设计眼界" class="headerlink" title="什么是装饰者模式：给爱用继承的人一个全新的设计眼界"></a>什么是装饰者模式：给爱用继承的人一个全新的设计眼界</h2><blockquote>
+<p>装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科</p>
+<p>装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》</p>
+</blockquote>
+<h2 id="装饰者模式的类图"><a href="#装饰者模式的类图" class="headerlink" title="装饰者模式的类图"></a>装饰者模式的类图</h2><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/decorator1.png" alt=""></p>
+<h2 id="装饰者模式的优点与不足"><a href="#装饰者模式的优点与不足" class="headerlink" title="装饰者模式的优点与不足"></a>装饰者模式的优点与不足</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>装饰者模式与继承关系的目的都是为了扩展对象的功能，但是装饰者可以提供比继承更多的灵活性，比如可以在运行着扩展对象的功能，而继承在编译时就已经确定了；</li>
+<li>通过使用不同的具体装饰类以及这些装饰类的排列组合，可以创造出不同行为的组合；</li>
+</ul>
+<h3 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h3><ul>
+<li>比继承更灵活，也意味着更多的复杂性；</li>
+<li>装饰者模式会导致设计中出现很多小类，如果过度使用，会是程序变得很复杂；(Java的IO包就够复杂了)</li>
+<li>装饰者模式是针对抽象组件(Component)类型编程。但是，如果要针对具体组件编程时，就应该重新思考应用架构，以及装饰者是否合适。当然也可以改变Component接口，增加新的公开方法，实现”半透明”的装饰者模式。在实际项目中作出最佳选择。</li>
+</ul>
+<h2 id="装饰者模式的使用"><a href="#装饰者模式的使用" class="headerlink" title="装饰者模式的使用"></a>装饰者模式的使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象组件；</div><div class="line"> *</div><div class="line"> * 饮料类；</div><div class="line"> *</div><div class="line"> * Beverage 是一个抽象类，有两个方法：getDescription() 和 cost();</div><div class="line"> * getDescription() 已经在此实现了，但是 cost()必须在子类实现；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line"></div><div class="line">    String description = <span class="string">"Unknown Beverage"</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> description;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象装饰者；</div><div class="line"> *</div><div class="line"> * 调料类；</div><div class="line"> *</div><div class="line"> * 必须让 CondimentDecorator 能够取代 Beverage, 所以将 CondimentDecorator 继承自 Beverage;</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">CondimentDecorator</span> <span class="keyword">extends</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// 所有的调料者都必须重新实现 getDescription；</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getDescription</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体组件；</div><div class="line"> *</div><div class="line"> * 浓缩咖啡类；</div><div class="line"> *</div><div class="line"> * 首先，让 Coffee 继承自 Beverage类，因为 Coffee 是一种饮料；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Coffee</span> <span class="keyword">extends</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Coffee</span><span class="params">()</span> </span>&#123;</div><div class="line">        description = <span class="string">"Coffee"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">10.00</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体组件；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tea</span> <span class="keyword">extends</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Tea</span><span class="params">()</span> </span>&#123;</div><div class="line">        description = <span class="string">"Tea"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">8</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体装饰者；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Milk</span> <span class="keyword">extends</span> <span class="title">CondimentDecorator</span> </span>&#123;</div><div class="line"></div><div class="line">    Beverage beverage;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Milk</span><span class="params">(Beverage beverage)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.beverage = beverage;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> beverage.cost() + <span class="number">2.0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> beverage.getDescription() + <span class="string">", Milk"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体装饰者；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mocha</span> <span class="keyword">extends</span> <span class="title">CondimentDecorator</span> </span>&#123;</div><div class="line"></div><div class="line">    Beverage beverage;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mocha</span><span class="params">(Beverage beverage)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.beverage = beverage;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> beverage.cost() + <span class="number">1.5</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> beverage.getDescription() + <span class="string">", Mocha"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">// 订一杯 Coffee，不需要调料；</span></div><div class="line">        Beverage beverage1 = <span class="keyword">new</span> Coffee();</div><div class="line">        System.out.println(beverage1.getDescription() + <span class="string">" ￥"</span> + beverage1.cost());</div><div class="line"></div><div class="line">        <span class="comment">// 制造一个 Tea 对象；</span></div><div class="line">        Beverage beverage2 = <span class="keyword">new</span> Tea();</div><div class="line">        beverage2 = <span class="keyword">new</span> Mocha(beverage2); <span class="comment">// 用 Mocha 装饰它；</span></div><div class="line">        beverage2 = <span class="keyword">new</span> Mocha(beverage2); <span class="comment">// 用第二个 Mocha 装饰它；</span></div><div class="line">        beverage2 = <span class="keyword">new</span> Milk(beverage2); <span class="comment">// 用 Milk 装饰它；</span></div><div class="line">        System.out.println(beverage2.getDescription() + <span class="string">" ￥"</span> + beverage2.cost());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Java-IO中装饰者模式的应用"><a href="#Java-IO中装饰者模式的应用" class="headerlink" title="Java IO中装饰者模式的应用"></a>Java IO中装饰者模式的应用</h2><h3 id="Java-I-O的组织"><a href="#Java-I-O的组织" class="headerlink" title="Java I/O的组织"></a>Java I/O的组织</h3><p>下面是一个典型的对象集合，用装饰者将功能结合起来，以读取文件数据：<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/java-io-decorator1.png" alt=""><br>其中BufferedInputStream和LineNumberInputStream都扩展自<strong>FilterInputStream</strong>，它是一个抽象的装饰类。</p>
+<p>下面是java.io库的结构：<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/java-io-decorator2.png" alt=""></p>
+<p>其实，”输出”流的设计方式也是一样的。此外，Reader/Writer流(作为基于字符数据的输入输出)和输入流/输出流相当类似。</p>
+<p>但是，Java I/O也引出装饰者模式的一个”缺点”：利用装饰者模式，常常造成设计中有大量的小类，数量实在太多，可能会造成使用此API程序员的困扰。但是，如果你了解装饰者模式的工作原理，以后当使用别人的大量装饰API时，就可以很容易辨别出他们的装饰者类是如何组织的，以方便包装来取得想要的行为。</p>
+<h3 id="编写自己的Java-I-O装饰者"><a href="#编写自己的Java-I-O装饰者" class="headerlink" title="编写自己的Java I/O装饰者"></a>编写自己的Java I/O装饰者</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator.jdk;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.FilterInputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.InputStream;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体装饰者；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LowerCaseInputStream</span> <span class="keyword">extends</span> <span class="title">FilterInputStream</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LowerCaseInputStream</span><span class="params">(InputStream in)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(in);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        <span class="keyword">int</span> c = <span class="keyword">super</span>.read();</div><div class="line">        <span class="keyword">return</span> c == -<span class="number">1</span> ? c : Character.toLowerCase((<span class="keyword">char</span>) c);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        <span class="keyword">int</span> result = <span class="keyword">super</span>.read(b, off, len);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = off; i &lt; off + result; ++i) &#123;</div><div class="line">            b[i] = (<span class="keyword">byte</span>) Character.toLowerCase((<span class="keyword">char</span>)b[i]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.decorator.jdk;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"><span class="keyword">import</span> java.net.URL;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Create by archerda on 2017/08/24.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="comment">// txt内容是：I'm a TEXT.</span></div><div class="line">        URL resource = Main.class.getClassLoader().getResource(<span class="string">"LowerCaseInputStreamTest.txt"</span>);</div><div class="line">        <span class="keyword">assert</span> resource != <span class="keyword">null</span>;</div><div class="line">        File file = <span class="keyword">new</span> File(resource.toURI());</div><div class="line"></div><div class="line">        <span class="comment">// 具体组件；</span></div><div class="line">        FileInputStream fileInputStream = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">        <span class="comment">// 装饰者；</span></div><div class="line">        BufferedInputStream bufferedInputStream = <span class="keyword">new</span> BufferedInputStream(fileInputStream);</div><div class="line">        <span class="comment">// 自定义装饰者；</span></div><div class="line">        LowerCaseInputStream lowerCaseInputStream = <span class="keyword">new</span> LowerCaseInputStream(bufferedInputStream);</div><div class="line"></div><div class="line">        <span class="keyword">int</span> c;</div><div class="line">        <span class="keyword">while</span> ((c = lowerCaseInputStream.read()) &gt; <span class="number">0</span>) &#123;</div><div class="line">            System.out.print((<span class="keyword">char</span>) c);</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="string">""</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://www.cnblogs.com/god_bless_you/archive/2010/06/10/1755212.html" target="_blank" rel="external">CSDN:装饰者模式</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/19/服务端解决故障的处理思路/" rel="next" title="服务端解决故障的处理思路">
+                <i class="fa fa-chevron-left"></i> 服务端解决故障的处理思路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是装饰者模式：给爱用继承的人一个全新的设计眼界"><span class="nav-number">1.</span> <span class="nav-text">什么是装饰者模式：给爱用继承的人一个全新的设计眼界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰者模式的类图"><span class="nav-number">2.</span> <span class="nav-text">装饰者模式的类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰者模式的优点与不足"><span class="nav-number">3.</span> <span class="nav-text">装饰者模式的优点与不足</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">3.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不足"><span class="nav-number">3.2.</span> <span class="nav-text">不足</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰者模式的使用"><span class="nav-number">4.</span> <span class="nav-text">装饰者模式的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-IO中装饰者模式的应用"><span class="nav-number">5.</span> <span class="nav-text">Java IO中装饰者模式的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-I-O的组织"><span class="nav-number">5.1.</span> <span class="nav-text">Java I/O的组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写自己的Java-I-O装饰者"><span class="nav-number">5.2.</span> <span class="nav-text">编写自己的Java I/O装饰者</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
