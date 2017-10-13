@@ -90,20 +90,20 @@
 
 
 
-<meta name="description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》  装饰者模式的类图 装饰者模式的优点">
+<meta name="description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式系列三之装饰者模式(Decorator)">
 <meta property="og:url" content="http://yoursite.com/2017/10/13/设计模式系列三之装饰者模式-Decorator/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》  装饰者模式的类图 装饰者模式的优点">
+<meta property="og:description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/decorator1.png">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/java-io-decorator1.png">
 <meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/java-io-decorator2.png">
-<meta property="og:updated_time" content="2017-10-13T01:42:22.421Z">
+<meta property="og:updated_time" content="2017-10-13T01:45:21.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式系列三之装饰者模式(Decorator)">
-<meta name="twitter:description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》  装饰者模式的类图 装饰者模式的优点">
+<meta name="twitter:description" content="什么是装饰者模式：给爱用继承的人一个全新的设计眼界 装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科 装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》">
 <meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/decorator1.png">
 
 
@@ -326,6 +326,7 @@
 <p>装饰者模式，是面向对象编程领域中，一种动态地往一个类中添加新行为的设计模式。就功能而言，装饰者模式相比生成子类更加灵活，这样可以给某个对象而不是整个类添加一些功能。- 摘自维基百科</p>
 <p>装饰者模式，动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。- 摘自《HeadFirst设计模式》</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="装饰者模式的类图"><a href="#装饰者模式的类图" class="headerlink" title="装饰者模式的类图"></a>装饰者模式的类图</h2><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/decorator1.png" alt=""></p>
 <h2 id="装饰者模式的优点与不足"><a href="#装饰者模式的优点与不足" class="headerlink" title="装饰者模式的优点与不足"></a>装饰者模式的优点与不足</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>装饰者模式与继承关系的目的都是为了扩展对象的功能，但是装饰者可以提供比继承更多的灵活性，比如可以在运行着扩展对象的功能，而继承在编译时就已经确定了；</li>
