@@ -90,17 +90,17 @@
 
 
 
-<meta name="description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 打包：mvn package 只打 jar 包：mvn jar:jar 已解析依赖树：mvn dependency:">
+<meta name="description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 发布构件(不包含子模块): mvn clean deploy -N 打包：mvn package 只打 jar 包：">
 <meta name="keywords" content="Maven">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven 常识与命令">
 <meta property="og:url" content="http://yoursite.com/2015/08/14/Maven-常识与命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 打包：mvn package 只打 jar 包：mvn jar:jar 已解析依赖树：mvn dependency:">
-<meta property="og:updated_time" content="2017-07-07T02:37:30.000Z">
+<meta property="og:description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 发布构件(不包含子模块): mvn clean deploy -N 打包：mvn package 只打 jar 包：">
+<meta property="og:updated_time" content="2017-11-06T11:01:19.296Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven 常识与命令">
-<meta name="twitter:description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 打包：mvn package 只打 jar 包：mvn jar:jar 已解析依赖树：mvn dependency:">
+<meta name="twitter:description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 发布构件(不包含子模块): mvn clean deploy -N 打包：mvn package 只打 jar 包：">
 
 
 
@@ -325,6 +325,7 @@
 <li>删除 target ：<code>mvn clean</code></li>
 <li>安装构件到本地仓库：<code>mvn install</code></li>
 <li>发布构件到远程仓库：<code>mvn deploy</code></li>
+<li>发布构件(不包含子模块): <code>mvn clean deploy -N</code></li>
 <li>打包：<code>mvn package</code></li>
 <li>只打 jar 包：<code>mvn jar:jar</code></li>
 <li>已解析依赖树：<code>mvn dependency:tree</code></li>
@@ -638,7 +639,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

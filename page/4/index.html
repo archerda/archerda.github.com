@@ -251,6 +251,176 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/13/设计模式系列之单例模式-Singleton/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/10/13/设计模式系列之单例模式-Singleton/" itemprop="url">设计模式系列一之单例模式(Singleton)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-13T12:14:39+08:00">
+                2015-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>学习设计模式的时候，经常会以单例模式作为第一个案例来分析，因为这个模式比较简单，容易理解。但其实一旦牵涉到并发的时候，单例模式也往往很多问题。所以需要系统的梳理一下。</p>
+<p>单例模式是一种<code>创建型模式</code>，在Java应用中，单例对象必须保证在一个Java虚拟机中，该对象有且只能有一个实例。这个模式有一下几种应用场景（或者说有这么些优点）：</p>
+<blockquote>
+<ul>
+<li>某些类的实例对象创建，开销比较大，消耗很多的系统资源；</li>
+<li>对于某些频繁使用的对象，减少new操作，避免在Java堆中产生过多实例，降低GC压力；</li>
+<li>在某些场景中，多个实例对象会导致系统错乱。类似于一个Company有多个CEO，听谁的。</li>
+</ul>
+</blockquote>
+<p>以上这几种情况就非常适合使用单例模式来解决。</p>
+<p>单例模式有一下几个特点：</p>
+<blockquote>
+<ul>
+<li>必须保持只有一个实例；</li>
+<li>必须自己创建一个自己的实例（因为构造方式是private的）；</li>
+<li>必须为其他对象提供唯一的实例（需要提供一个getInstance()方法）；</li>
+</ul>
+</blockquote>
+<p>单例模式主要有以下5种方式，逐一分析下。</p>
+<h2 id="饿汉式（线程安全）"><a href="#饿汉式（线程安全）" class="headerlink" title="饿汉式（线程安全）"></a>饿汉式（线程安全）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="comment">// 类加载的时候就会初始化，这个过程有且仅有一次</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line"></div><div class="line">    <span class="comment">// 私有的构造方法</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="comment">// 对外提供唯一的Singleton实例</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方式非常简单，因为单例的实例被声明为<code>static</code>和<code>final</code>，在JVM第一次加载该单例类到内存中的时候就会初始化【1】，所以创建实例本身是线程安全的。</p>
+<p>然而这种方式的缺点也是显而易见的：</p>
+<blockquote>
+<ul>
+<li>这个方式不是<code>懒加载模式</code>（lazy initialization），单例会在第一次加载的时候就被初始化，即使客户端没有调用getInstance()方法。这个时候如果单例类的开销比较大或者时间花费较多，就会降低系统效率。</li>
+<li>在一些场景中是无法使用这种方式的：比如Singleton的创建是依赖参数或配置文件的，在getInstance之前必须调用某个方法设置参数给它，那么这种单例就无法使用了。</li>
+</ul>
+</blockquote>
+<h2 id="懒汉式（线程不安全）"><a href="#懒汉式（线程不安全）" class="headerlink" title="懒汉式（线程不安全）"></a>懒汉式（线程不安全）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// a</span></div><div class="line">            <span class="comment">// 为了加大出现线程问题的概率，我们在这里休眠1秒</span></div><div class="line">            Thread.sleep(<span class="number">1000</span>);</div><div class="line">            instance = <span class="keyword">new</span> Singleton(); <span class="comment">// b</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这段代码简单明了，而且使用了懒加载模式，但是却存在着致命伤。当有多个线程同时运行这段代码的时候，就非常可能创建出多个实例，也就是说这个单例类在并发环境中是无法正确运行的。</p>
+<p>我们来分析下出现错误的原因：假设有2个线程同时来到了a处，此时的instance为null。假设线程1先进入if语句块中，但是还没执行b，就交出了CPU使用权。接着线程2获取CPU使用权，进入if语句块，执行了b，生成一个对象，这时候交出了CPU使用权。<strong>这时候，线程1接着执行b，又生成了一个对象</strong>。而在这2个对象的创建期间，其他类可能调用了getInstance()方法，极大可能调用了第1个对象，然后第2个对象创建后，其他类又调用的是第2个对象。这就严重违反了单例模式的核心功能，<strong>所以这种写法是完全不正确的</strong>。</p>
+<h2 id="懒汉式（synchronized）"><a href="#懒汉式（synchronized）" class="headerlink" title="懒汉式（synchronized）"></a>懒汉式（synchronized）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// a</span></div><div class="line">            <span class="comment">// 为了出现线程问题，我们在这里休眠1000毫秒。(当然这里并不出现线程安全问题)</span></div><div class="line">            Thread.sleep(<span class="number">1000</span>);</div><div class="line">            instance = <span class="keyword">new</span> Singleton(); <span class="comment">// b：这里不会释放掉对象锁，所以其他线程无法进入</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了解决线程安全问题，我们需要使用Java提供的同步机制。为此我们用<code>synchronized</code>关键字来修饰getInstance()方法。</p>
+<p>这种方式虽然做到了线程安全，但是却也并不高效。<strong>因为每次只能有一个线程调用getInstance()方法，但是明显同步操作只需要在第一次初始化的时候才被需要</strong>。为此我们引入了双重校验锁。</p>
+<h2 id="懒汉式（双重校验锁Double-Checked-Locking）"><a href="#懒汉式（双重校验锁Double-Checked-Locking）" class="headerlink" title="懒汉式（双重校验锁Double Checked Locking）"></a>懒汉式（双重校验锁Double Checked Locking）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;<span class="comment">// private static volatile Singleton instance;</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;<span class="comment">// 第一次校验</span></div><div class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;<span class="comment">// 锁</span></div><div class="line">                <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;<span class="comment">// 第二次校验</span></div><div class="line">                    Thread.sleep(<span class="number">1000</span>);</div><div class="line">                    instance = <span class="keyword">new</span> Singleton();<span class="comment">// a：可加赋值的内存屏障</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其实这种方式本质上就是在同步方式的基础上再加一层校验（也就是if语句判断），只不过把同步的方法换成了同步块。</p>
+<p>但是这段代码还是可能出现问题，问题出现在a处<code>instance = new Singleton();</code>这句代码并非是一个原子操作【2】，JVM大概做了3件事：</p>
+<ol>
+<li>【分配引用内存】给instance分配内存；</li>
+<li>【分配实例内存】调用Singleton的构造函数来初始化成员变量；</li>
+<li>【引用指向实例地址】将instance引用指向分配的实例内存，这时候instance才不为null；</li>
+</ol>
+<p>但是JVM可能存在<code>指令重排序</code>，也就是说上面的2、3顺序是不一定的，最终执行顺序可能是1-2-3，也可能是1-3-2，如果是后者，则在执行完3、2未执行的时候，被线程2夺取了CPU，那么这个时候<strong>instance不为null，但是却没有初始化</strong>，所以线程2直接就返回了instance，使用的时候就报错了。</p>
+<p>为此我们需要把intance声明为<code>volatile</code>，有部分人认为volatile是保证了可见性，也就是保证线程在本地内存中不会存有instance的副本，每次都是去主内存中获取。但其实是不对的，即使是保证了可见性，也还是会出现上面的问题。使用volatile的主要原因是其另外一个特性：<code>禁止指令重排序</code>。<strong>在volatile变量的赋值操作后，会生成一个内存屏障（在汇编代码上），读操作不会被重排序到内存屏障前</strong>。比如上面的例子，取操作必须在执行完1-2-3或1-3-2后，不存在执行到1-3后读取instance的情况。从“<a href="http://www.luohuida.com/2015/08/28/Java-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/#先行发生原则" target="_blank" rel="external">先行发生原则</a>”的角度来理解的话，就是对于一个volatile变量的写操作是先行发生与后面对这个变量的读操作（这里的后面指的是时间概念）。</p>
+<p>但是特别注意的是，在JDK1.5之前，使用volatile的双重校验锁还是有问题的。因为JDK1.5之前的内存模型是存在缺陷的，即使将变量声明为volatile也不能完全避免重排序，主要是volatile变量前后的代码仍然存在重排序问题。在JDK1.5及之后这个问题得到了修复，可以放心使用。</p>
+<h2 id="静态内部类方式"><a href="#静态内部类方式" class="headerlink" title="静态内部类方式"></a>静态内部类方式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span></span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>静态内部类是最被提倡使用的方式，在《effective java》上也是被推荐的。这种写法仍然使用了JVM本身机制保证了线程安全问题。由于SingletonHolder是私有的，除了getInstance()没有其他方法能够访问它，因此它是懒汉式的。同时读取实例的时候不会进行同步，没有性能缺陷；也不依赖 JDK 版本。这种方式其实是懒汉式和饿汉式的结合。</p>
+<p>这种方式使用一个私有静态内部类来维护单例的实现，JVM内部机制保证当一个类被加载时，这个类的加载过程是线程互斥的。这样，当我们第一次调用getInstance()方法的时候，JVM能够帮助我们保证INSTANCE只被创建一次，并且会保证把赋值给INSTANCE的内存初始化完毕，这样我们就不用担心上面的问题了。同时该方法也只会在第一次使用的时候使用互斥机制，这样就解决了低性能的问题。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，编写单例模式的方法一般有4种，懒汉式线程不安全哪种是不正确的写法，自然也就不算。其实在日常开发中，如果单例对象开销不是很大，直接使用饿汉式也是一种不错的选择。而如果需要懒加载的话，用静态内部类是一种更加优雅的写法。</p>
+<hr>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><p>【1】如果是final的话，应该是静态绑定的，在编译期间就可以确定，参考<a href="http://www.luohuida.com/2015/09/09/JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/#被动引用场景-3：使用父类常量不会触发定义常量的类的初始化" target="_blank" rel="external">使用父类常量不会触发定义常量的类的初始化</a>。<br>【2】这与<a href="http://www.luohuida.com/2015/08/28/Java-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" target="_blank" rel="external">Java 内存模型</a>中提到的synchroized保证了原子性有冲突？</p>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://wuchong.me/blog/2014/08/28/how-to-correctly-write-singleton-pattern/" target="_blank" rel="external">Jark’s Blog: 如何正确地写出单例模式
+</a></li>
+<li><a href="http://blog.csdn.net/zhangerqing/article/details/8194653" target="_blank" rel="external">CSDN: Java之美[从菜鸟到高手演变]之设计模式</a></li>
+<li><a href="http://blog.csdn.net/ljhljh8888/article/details/8017701" target="_blank" rel="external">CSDN: 单例模式有什么好处</a></li>
+</ul>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/01/Sublime-Text-3-快捷键以及常用配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1715,155 +1885,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/15/7种经典排序算法总结和实现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/15/7种经典排序算法总结和实现/" itemprop="url">7种经典排序算法总结和实现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-15T20:15:07+08:00">
-                2015-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>基于比较的7种排序算法</p>
-<h2 id="冒泡排序BubbleSort"><a href="#冒泡排序BubbleSort" class="headerlink" title="冒泡排序BubbleSort"></a>冒泡排序BubbleSort</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>冒泡排序的原理比较简单，主要是两两比较，每次把比较大的数据放在后面，这样一次下来，最大的数就放在数组最后了。然后依次类推。</p>
-<p>主要特性如下：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">排序算法</th>
-<th style="text-align:left">平均情况</th>
-<th style="text-align:left">最好情况</th>
-<th style="text-align:left">最坏情况</th>
-<th style="text-align:left">辅助空间</th>
-<th style="text-align:left">稳定性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">冒泡排序</td>
-<td style="text-align:left">O(n^2)</td>
-<td style="text-align:left">O(n)</td>
-<td style="text-align:left">O(n^2)</td>
-<td style="text-align:left">O(1)</td>
-<td style="text-align:left">稳定</td>
-</tr>
-</tbody>
-</table>
-<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ul>
-<li>从索引为0的位置开始，往后依次两两比较，把大的数放在后面，小的数放在前面，这样一次下来最大的数就在数组末尾了(n)；</li>
-<li>最后一个数完成排序，退出排序工作，也就是令n–；</li>
-<li>重复第一步，直到n=0；</li>
-</ul>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</div><div class="line">        <span class="keyword">int</span> temp = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.length - <span class="number">1</span>; i++)&#123;<span class="comment">// 遍历第i次，每一次排好后面的1个</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; a.length - i - <span class="number">1</span>; j++)&#123;<span class="comment">// 从a[0]开始，依次去后面尚未排序的元素两两比较，大的置后</span></div><div class="line">                <span class="keyword">if</span>(a[j] &gt; a[j + <span class="number">1</span>])&#123;</div><div class="line">                    temp = a[j];</div><div class="line">                    a[j] = a[j + <span class="number">1</span>];</div><div class="line">                    a[j + <span class="number">1</span>] = temp;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h3 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h3><ul>
-<li>每次排序，如果没有发生任何一次交换位置，说明已经是有序的了。因此可以用一个标识位记录是否交换了位置，如果没有则直接结束排序工作。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/09/15/7种经典排序算法总结和实现/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1913,7 +1934,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

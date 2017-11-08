@@ -251,6 +251,175 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/14/搭建一个Django工程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/08/14/搭建一个Django工程/" itemprop="url">搭建一个Django工程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-14T19:58:38+08:00">
+                2015-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://farm1.staticflickr.com/401/19950536722_fc5e4c67d1_o.jpg" alt=""></p>
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>如果用Python写Web的吧，那就不得不提及Django了。我们先借助wiki来了解下吧。</p>
+<blockquote>
+<p>Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的软件设计模式，即模型M，视图V和控制器C。Django的主要目标是使得开发复杂的、数据库驱动的网站变得简单。Django注重组件的重用性和“可插拔性”，敏捷开发和DRY法则（Don’t Repeat Yourself）。在Django中Python被普遍使用，甚至包括配置文件和数据模型。—维基百科</p>
+</blockquote>
+<p>上面那段话，我们只需知道Django很好用很快捷就好了。下面我们来看看怎么去搭建一个Django工程。由于操作的时候是在Windows上，所以这里就只写Windows平台了。</p>
+<h2 id="安装Python"><a href="#安装Python" class="headerlink" title="安装Python"></a>安装Python</h2><p>因为Django是基于Python的，所以安装Django之前我们需要先安装好Python，这个有Python的<a href="https://www.python.org/downloads/" target="_blank" rel="external">下载地址</a> 。由于Django最新稳定版推荐使用Python3，所以我们就直接下载最新稳定版的python。下载安装后，我们还需要把Python的安装目录和脚本目录添加到环境变量。如下:</p>
+<blockquote>
+<p>C:\Python34\;C:\Python34\Scripts;</p>
+</blockquote>
+<p>然后我们打开<code>cmd</code>， 输入<code>python</code></p>
+<blockquote>
+<p>C:\Users\archerda&gt; python</p>
+</blockquote>
+<p>如果能看见下面这个输出，就说明安装Python成功了。</p>
+<blockquote>
+<p>C:\Users\archerda&gt;python<br>Python 3.4.3 (v3.4.3:9b73f1c3e601, Feb 24 2015, 22:43:06) [MSC v.1600 32 bit (Intel)] on win32<br>Type “help”, “copyright”, “credits” or “license” for more information.<br>>&gt;&gt;</p>
+</blockquote>
+<h2 id="安装Django"><a href="#安装Django" class="headerlink" title="安装Django"></a>安装Django</h2><p>安装Django有 <strong>2</strong> 种方式，第一种是用 python 自带的 pip，另一种是下载压缩包安装。</p>
+<h3 id="1-pip方式（推荐）"><a href="#1-pip方式（推荐）" class="headerlink" title="1. pip方式（推荐）"></a>1. pip方式（推荐）</h3><p>因为pip放在python目录下的Scripts目录下，所以我们必须先把Scripts文件夹的路径放在环境变量中。然后依次执行以下步骤。</p>
+<ul>
+<li>用管理员权限打开cmd；</li>
+<li>执行 </li>
+</ul>
+<blockquote>
+<p>pip install Django</p>
+</blockquote>
+<ul>
+<li>cmd输出以下语句，安装Django成功</li>
+</ul>
+<blockquote>
+<p>Installing collected packages: Django<br>Successfully installed Django-1.8.3</p>
+</blockquote>
+<h3 id="2-压缩包方式"><a href="#2-压缩包方式" class="headerlink" title="2. 压缩包方式"></a>2. 压缩包方式</h3><p>先下载压缩包<a href="https://www.djangoproject.com/download/1.8.3/tarball/" target="_blank" rel="external">Latest release: Django-1.8.3.tar.gz</a>,下载后放在任意文件夹上，比如</p>
+<blockquote>
+<p>C:\Django-1.8.3</p>
+</blockquote>
+<p>然后cmd切换到该目录，执行以下命令安装Django</p>
+<blockquote>
+<p>python setup.py install</p>
+</blockquote>
+<hr>
+<p>以上 2 种方式安装完成后，会生成以下文件夹</p>
+<blockquote>
+<p>C:\Python34\Lib\site-packages\django</p>
+</blockquote>
+<p>这就是Django的安装目录了。在这里我们需要添加Django环境变量</p>
+<blockquote>
+<p>C:\Python34\Lib\site-packages;</p>
+</blockquote>
+<p>至此， Django安装完毕。我们可以在cmd检测下。</p>
+<blockquote>
+<p>C:\Windows\system32&gt; django-admin –version<br>1.8.3</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/08/14/搭建一个Django工程/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/14/Vim-常用命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -500,6 +669,7 @@
 <li>删除 target ：<code>mvn clean</code></li>
 <li>安装构件到本地仓库：<code>mvn install</code></li>
 <li>发布构件到远程仓库：<code>mvn deploy</code></li>
+<li>发布构件(不包含子模块): <code>mvn clean deploy -N</code></li>
 <li>打包：<code>mvn package</code></li>
 <li>只打 jar 包：<code>mvn jar:jar</code></li>
 <li>已解析依赖树：<code>mvn dependency:tree</code></li>
@@ -774,7 +944,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
