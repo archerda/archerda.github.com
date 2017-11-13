@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="反射破坏单例模式破坏方法在Java中，反射技术可以获取类的所有方法、成员变量，还能访问私有的变量和方法。所以private的构造器也是可以被获取到并执行的。这样一来，单例模式中的的私有构造器被反射多次调用时，就会创建多个实例，进而破坏单例模式。下面是sample：123456789101112131415161718192021222324package com.github.archerda.d">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单例模式的破坏">
+<meta property="og:url" content="http://yoursite.com/2017/11/13/设计模式系列之单例模式的破坏/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="反射破坏单例模式破坏方法在Java中，反射技术可以获取类的所有方法、成员变量，还能访问私有的变量和方法。所以private的构造器也是可以被获取到并执行的。这样一来，单例模式中的的私有构造器被反射多次调用时，就会创建多个实例，进而破坏单例模式。下面是sample：123456789101112131415161718192021222324package com.github.archerda.d">
+<meta property="og:updated_time" content="2017-11-13T02:07:06.842Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单例模式的破坏">
+<meta name="twitter:description" content="反射破坏单例模式破坏方法在Java中，反射技术可以获取类的所有方法、成员变量，还能访问私有的变量和方法。所以private的构造器也是可以被获取到并执行的。这样一来，单例模式中的的私有构造器被反射多次调用时，就会创建多个实例，进而破坏单例模式。下面是sample：123456789101112131415161718192021222324package com.github.archerda.d">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/13/设计模式系列之单例模式的破坏/"/>
+
+
+
+
+
+  <title>单例模式的破坏 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/13/设计模式系列之单例模式的破坏/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">单例模式的破坏</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-13T10:03:22+08:00">
+                2017-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="反射破坏单例模式"><a href="#反射破坏单例模式" class="headerlink" title="反射破坏单例模式"></a>反射破坏单例模式</h2><h3 id="破坏方法"><a href="#破坏方法" class="headerlink" title="破坏方法"></a>破坏方法</h3><p>在Java中，反射技术可以获取类的所有方法、成员变量，还能访问私有的变量和方法。所以private的构造器也是可以被获取到并执行的。这样一来，单例模式中的的私有构造器被反射多次调用时，就会创建多个实例，进而破坏单例模式。下面是sample：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.singleton.sync;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Future;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 单例：利用同步实现</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/12.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">            instance = <span class="keyword">new</span> Singleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.singleton.destory.reflection;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.singleton.sync.Singleton;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 反射破坏单例模式</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/12.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BreakingSingleton</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">// 常规方法获取实例</span></div><div class="line">        Singleton commonSingleton = Singleton.getInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 通过反射创建实例</span></div><div class="line">        Constructor constructor = Singleton.class.getDeclaredConstructor();</div><div class="line">        constructor.setAccessible(<span class="keyword">true</span>);</div><div class="line">        Singleton reflectionSingleton = (Singleton) constructor.newInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 这里会输出： false，证明两个实例不一样，单例模式被破坏了</span></div><div class="line">        System.out.println(reflectionSingleton == commonSingleton);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="伪解决办法"><a href="#伪解决办法" class="headerlink" title="伪解决办法"></a>伪解决办法</h3><p>反射也是要通过私有构造器来实例化，那可以在构造器里面加一个判断，如果已经实例化了，就抛出一个异常。看代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.singleton.destory.reflection;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</div><div class="line"><span class="keyword">import</span> java.lang.reflect.Field;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 利用实例化标志位解决反射破坏单例的问题</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/12.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SolutionSingleton</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SolutionSingleton instance;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isInit = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SolutionSingleton</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">synchronized</span> (SolutionSingleton.class) &#123;</div><div class="line">           <span class="keyword">if</span> (isInit) &#123;</div><div class="line">               <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Singleton has been initialized. Can't initialize more."</span>);</div><div class="line">           &#125; <span class="keyword">else</span> &#123;</div><div class="line">               isInit = <span class="keyword">true</span>;</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> SolutionSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">            instance = <span class="keyword">new</span> SolutionSingleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="comment">// 常规方法获取实例</span></div><div class="line">        SolutionSingleton commonSolutionSingleton = SolutionSingleton.getInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 通过反射获取实例：这里会抛异常，因为只允许实例化一次；</span></div><div class="line">        Constructor constructor = SolutionSingleton.class.getDeclaredConstructor();</div><div class="line">        constructor.setAccessible(<span class="keyword">true</span>);</div><div class="line">        SolutionSingleton reflectionSolutionSingleton = (SolutionSingleton) constructor.newInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 这里不会执行到</span></div><div class="line">        System.out.println(reflectionSolutionSingleton == commonSolutionSingleton);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>main的执行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Exception in thread <span class="string">"main"</span> java.lang.reflect.InvocationTargetException</div><div class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)</div><div class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:<span class="number">62</span>)</div><div class="line">	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:<span class="number">45</span>)</div><div class="line">	at java.lang.reflect.Constructor.newInstance(Constructor.java:<span class="number">423</span>)</div><div class="line">	at com.github.archerda.designpattern.singleton.destory.reflection.SolutionSingleton.main(SolutionSingleton.java:<span class="number">39</span>)</div><div class="line">Caused by: java.lang.RuntimeException: Singleton has been initialized.</div><div class="line">	at com.github.archerda.designpattern.singleton.destory.reflection.SolutionSingleton.&lt;init&gt;(SolutionSingleton.java:<span class="number">18</span>)</div><div class="line">	... <span class="number">5</span> more</div></pre></td></tr></table></figure></p>
+<p>看起来效果达到了，常规方法实例化单例后，再用反射技术实例化，JVM抛出异常了，单例模式得到了保证。</p>
+<p>但是，这样就真的万无一失了吗？<br>不！因为我们仍然可以用反射技术去修改静态变量isInit的值。来看客户端的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">         <span class="comment">// 常规方法获取实例</span></div><div class="line">        SolutionSingleton commonSolutionSingleton = SolutionSingleton.getInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 通过反射修改静态变量isInit的值，然后用反射创建实例</span></div><div class="line">        Field isInitField = SolutionSingleton.class.getDeclaredField(<span class="string">"isInit"</span>);</div><div class="line">        isInitField.setAccessible(<span class="keyword">true</span>);</div><div class="line">        isInitField.set(<span class="keyword">null</span>, <span class="keyword">false</span>); <span class="comment">// 修改isInit的值</span></div><div class="line">        Constructor constructor = SolutionSingleton.class.getDeclaredConstructor();</div><div class="line">        constructor.setAccessible(<span class="keyword">true</span>);</div><div class="line">        SolutionSingleton reflectionSolutionSingleton = (SolutionSingleton) constructor.newInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 这里会输出： false，两个单例不一样，单例模式被破坏了</span></div><div class="line">        System.out.println(reflectionSolutionSingleton == commonSolutionSingleton);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><h3 id="破坏方法-1"><a href="#破坏方法-1" class="headerlink" title="破坏方法"></a>破坏方法</h3><p>除了反射外，序列化和反序列化也会破坏单例模式。我们直接看代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.singleton.destory.serialization;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.Serializable;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Future;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 使用同步方式实现单例，并且实现序列化接口</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/12.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">8646622406647124406L</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">            instance = <span class="keyword">new</span> Singleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.singleton.destory.serialization;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 序列化破坏单例模式；</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/12.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BreakingSingleton</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">// 常规方法获取单例对象</span></div><div class="line">        Singleton commonSingleton = Singleton.getInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 序列化和反序列化获取单例对象</span></div><div class="line">        File file = File.createTempFile(<span class="string">"SerializationBreakingSingleton"</span>, <span class="string">".tmp"</span>);</div><div class="line">        System.out.println(file.getAbsolutePath());</div><div class="line">        FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(file));</div><div class="line">        <span class="comment">// 把常规方法得到的实例序列化到文件中</span></div><div class="line">        oos.writeObject(commonSingleton);</div><div class="line">        oos.close();</div><div class="line">        fos.close();</div><div class="line">        FileInputStream fis = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(fis);</div><div class="line">        <span class="comment">// 从文件中反序列化得到实例</span></div><div class="line">        Singleton serializationSingleton = (Singleton) ois.readObject();</div><div class="line">        ois.close();</div><div class="line">        fis.close();</div><div class="line">        file.deleteOnExit();</div><div class="line"></div><div class="line">        System.out.println(commonSingleton);</div><div class="line">        System.out.println(serializationSingleton);</div><div class="line">        System.out.println(commonSingleton == serializationSingleton);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试代码输出结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">com.github.archerda.designpattern.singleton.destory.serialization.Singleton<span class="meta">@f</span>5f2bb7</div><div class="line">com.github.archerda.designpattern.singleton.destory.serialization.Singleton@<span class="number">246</span>ae04d</div><div class="line"><span class="keyword">false</span></div></pre></td></tr></table></figure></p>
+<p>序列化的实例和反序列化出来的实例不是同一个，说明单例模式被破坏了。</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>为了引出序列化破坏单例的解决方法，我们得先来看下实例是怎么被序列化和反序列化的。</p>
+<p>对象的序列化过程是通过ObjectOutputStream和ObjectInputStream来实现的，那么我们来分析一下ObjectInputStream的<code>readObject</code>方法到底是怎么执行的。</p>
+<p>通过跟踪堆栈，我们可以获取到反序列化时ObjectInputStream的readObject的调用栈：</p>
+<blockquote>
+<p><strong>readObject</strong> -&gt; <strong>readObject0</strong> -&gt; <strong>readOrdinaryObject</strong> -&gt; <strong>checkResolve</strong></p>
+</blockquote>
+<p>我们来重点看一下<strong>readOrdinaryObject</strong>方法的部分代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readOrdinaryObject</span><span class="params">(<span class="keyword">boolean</span> unshared)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        ...</div><div class="line"></div><div class="line">        <span class="comment">// CodeBlock1</span></div><div class="line">        Object obj;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            obj = desc.isInstantiable() ? desc.newInstance() : <span class="keyword">null</span>;</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</div><div class="line">            <span class="keyword">throw</span> (IOException) <span class="keyword">new</span> InvalidClassException(</div><div class="line">                desc.forClass().getName(),</div><div class="line">                <span class="string">"unable to create instance"</span>).initCause(ex);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        ...</div><div class="line"></div><div class="line">        <span class="comment">// CodeBlock2</span></div><div class="line">        <span class="keyword">if</span> (obj != <span class="keyword">null</span> &amp;&amp;</div><div class="line">            handles.lookupException(passHandle) == <span class="keyword">null</span> &amp;&amp;</div><div class="line">            desc.hasReadResolveMethod())</div><div class="line">        &#123;</div><div class="line">            Object rep = desc.invokeReadResolve(obj);</div><div class="line">            <span class="keyword">if</span> (unshared &amp;&amp; rep.getClass().isArray()) &#123;</div><div class="line">                rep = cloneArray(rep);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (rep != obj) &#123;</div><div class="line">                <span class="comment">// Filter the replacement object</span></div><div class="line">                <span class="keyword">if</span> (rep != <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (rep.getClass().isArray()) &#123;</div><div class="line">                        filterCheck(rep.getClass(), Array.getLength(rep));</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        filterCheck(rep.getClass(), -<span class="number">1</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                handles.setObject(passHandle, obj = rep);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> obj;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>这里又分两个代码片段，我们先看CodeBlock1<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CodeBlock1</span></div><div class="line">Object obj;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    obj = desc.isInstantiable() ? desc.newInstance() : <span class="keyword">null</span>;</div><div class="line">&#125; <span class="keyword">catch</span> (Exception ex) &#123;</div><div class="line">    <span class="keyword">throw</span> (IOException) <span class="keyword">new</span> InvalidClassException(</div><div class="line">        desc.forClass().getName(),</div><div class="line">        <span class="string">"unable to create instance"</span>).initCause(ex);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里创建的obj对象，就是本方法要返回的对象，也可以暂时理解为是ObjectInputStream的<strong>readObject</strong>方法返回的对象。</p>
+<blockquote>
+<p><strong>desc.isInstantiable()</strong>：如果一个类实现了Serializable/Externalizable并且可以在运行时被序列化，那么该方法就返回true；<br><strong>desc.newInstance()</strong>：该方法通过反射技术调用无参构造器实例化一个对象；</p>
+</blockquote>
+<p>所以，到这里，也就能明白为什么序列化可以破坏单例，对根到底，还是使用反射来实现的。</p>
+<p>为了解决反序列化破坏单例，我们需要继续看CodeBlock2:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CodeBlock2</span></div><div class="line"><span class="keyword">if</span> (obj != <span class="keyword">null</span> &amp;&amp;</div><div class="line">    handles.lookupException(passHandle) == <span class="keyword">null</span> &amp;&amp;</div><div class="line">    desc.hasReadResolveMethod())</div><div class="line">&#123;</div><div class="line">    Object rep = desc.invokeReadResolve(obj);</div><div class="line">    <span class="keyword">if</span> (unshared &amp;&amp; rep.getClass().isArray()) &#123;</div><div class="line">        rep = cloneArray(rep);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (rep != obj) &#123;</div><div class="line">        <span class="comment">// Filter the replacement object</span></div><div class="line">        <span class="keyword">if</span> (rep != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (rep.getClass().isArray()) &#123;</div><div class="line">                filterCheck(rep.getClass(), Array.getLength(rep));</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                filterCheck(rep.getClass(), -<span class="number">1</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        handles.setObject(passHandle, obj = rep);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">return</span> obj;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>desc.hasReadResolveMethod()</strong>：如果实现了Serializable或Externalizable的类中包含<code>readResolve</code>方法，则返回true；<br><strong>desc.invokeReadResolve(obj)</strong>：通过反射的方式调用被反序列化的类中的<code>readResolve</code>方法。</p>
+</blockquote>
+<p>所以，为了解决序列化破坏的单例，我们只要在单例类中定义一个<code>readResolve</code>方法，并在该方法中指定要返回对象的生成策略，就可以防止单例被破坏了。下面是代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.singleton.destory.serialization;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 通过定义 readResolve方法，防止反序列化破坏单例</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/12.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SolutionSingleton</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">4799829623335297540L</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SolutionSingleton instance;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SolutionSingleton</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> SolutionSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</div><div class="line">            instance = <span class="keyword">new</span> SolutionSingleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 反序列化时，如果定义了readResolve()则直接返回此方法指定的对象。而不需要单独再创建新对象</span></div><div class="line">    <span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">// 常规方法获取单例对象</span></div><div class="line">        SolutionSingleton commonSingleton = SolutionSingleton.getInstance();</div><div class="line"></div><div class="line">        <span class="comment">// 序列化获取单例对象</span></div><div class="line">        File file = File.createTempFile(<span class="string">"SerializationBreakingSingleton"</span>, <span class="string">"txt"</span>);</div><div class="line">        FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(file));</div><div class="line">        oos.writeObject(commonSingleton);</div><div class="line">        oos.close();</div><div class="line">        fos.close();</div><div class="line"></div><div class="line">        FileInputStream fis = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(fis);</div><div class="line">        SolutionSingleton serializationSingleton = (SolutionSingleton) ois.readObject();</div><div class="line">        ois.close();</div><div class="line">        fis.close();</div><div class="line"></div><div class="line">        System.out.println(commonSingleton);</div><div class="line">        System.out.println(serializationSingleton);</div><div class="line"></div><div class="line">        <span class="comment">// 这里会输出：true，单例模式没有被破坏</span></div><div class="line">        System.out.println(commonSingleton == serializationSingleton);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="多个类加载器"><a href="#多个类加载器" class="headerlink" title="多个类加载器"></a>多个类加载器</h2><p>类加载器，是用来把类（Class）装载进JVM的，JVM定义了两种类型的类加载器，一种是JVM缺省的加载器，包括Bootstrap加载器、Extension加载器和System加载器，另外一种是用户自定义的加载器，只要继承自java.lang.ClassLoader类就好了。所以，在一个JVM实例中，可能存在多个ClassLoader，每个ClassLoader拥有自己的命名空间namespace。一个ClassLoader只能拥有一个class对象类型的实例，但是不同的ClassLoader可能拥有多个class对象的实例，这会对单例模式产生致命的问题。比如ClassLoaderA装载类A的实例A1，而ClassLoaderB也装载了类A的实例A2，本来A1==A2应该是true的，但是由于A1和A2来自不同的ClassLoader，它们实际上是完全不同的，如果A中定义了一个静态变量c，那么c在不同的ClassLoader的值是不同的。</p>
+<p>为了解决这个问题，我们要做的是：</p>
+<ul>
+<li>要么保证“多个ClassLoader不会装载同一个单例类”；</li>
+<li>要么让多个ClassLoader继承自同一个父ClassLoader，这样多个ClassLoader都会通过同一个父ClassLoader去装载单例类，进而避免装载多个单例类；</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://blog.csdn.net/lws332969674/article/details/8125893" target="_blank" rel="external">CSDN：java反射技术破坏单例模式</a></li>
+<li><a href="http://www.hollischuang.com/archives/1144" target="_blank" rel="external"> HollisChuang’s Blog：单例与序列化的那些事儿</a></li>
+<li><a href="https://coolshell.cn/articles/265.html" target="_blank" rel="external">CoolShell：深入浅出单实例SINGLETON设计模式</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/08/设计模式系列四之工厂模式-Factory/" rel="next" title="设计模式系列四之工厂模式(Factory)">
+                <i class="fa fa-chevron-left"></i> 设计模式系列四之工厂模式(Factory)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#反射破坏单例模式"><span class="nav-number">1.</span> <span class="nav-text">反射破坏单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#破坏方法"><span class="nav-number">1.1.</span> <span class="nav-text">破坏方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伪解决办法"><span class="nav-number">1.2.</span> <span class="nav-text">伪解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化"><span class="nav-number">2.</span> <span class="nav-text">序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#破坏方法-1"><span class="nav-number">2.1.</span> <span class="nav-text">破坏方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">2.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个类加载器"><span class="nav-number">3.</span> <span class="nav-text">多个类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
