@@ -251,6 +251,356 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/16/详解HTTP超文本传送协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/09/16/详解HTTP超文本传送协议/" itemprop="url">详解HTTP超文本传送协议</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-16T15:12:16+08:00">
+                2015-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>HTTP协议定义了<strong>客户端怎么向服务器请求万维网文档，以及服务器怎么把文档传送到客户端</strong>。从层次的角度看，HTTP是面向事务(一系列的信息交换，而这一系列的信息交换是不可分割的，要么所有信息交换都完成，要么一次交换都不进行)的应用层协议，它是万维网上能够可靠地交换文件(包括文本、声音、图像等各种多媒体文件)的重要基础。</p>
+<h2 id="工作过程"><a href="#工作过程" class="headerlink" title="工作过程"></a>工作过程</h2><p>万维网的工作过程如图：<br><img src="https://farm1.staticflickr.com/607/21428977756_b4ecdbe779_z.jpg" alt=""></p>
+<p>每个万维网网点都有一个服务器进程，它不断地监听TCP的80端口，以便发现是否有客户端向他发出建立连接请求。一旦监听到连接请求并建立了TCP连接后，客户端就向服务器发出浏览某个页面的请求，服务器接着就返回所请求的页面作为响应。最后，TCP连接被释放了。</p>
+<p>在客户端和服务器之间的请求和响应的交互，必须按照规定的格式和遵循一定的规则。这个格式和规则就是超文本传送协议HTTP。</p>
+<p>HTTP规定在客户端和服务器之间的每次交互，都由一个ASCII码串构成的请求和一个类似的通用因特网邮件扩充，即”类MIME(MIME-like)”的响应组成。</p>
+<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><p>用户浏览页面的方式有2种：一种是在浏览器的地址窗口中键入所要找的页面的URL。另一种是在某一个页面中用鼠标点击一个可选部分，这时浏览器会自动跳转在因特网上找到所要链接的页面。</p>
+<p>假定上图中的用户用鼠标点击了屏幕上的一个可选部分。它使用的链接指向了一个URL<code>http:///www.tsinghua.edu.cn/chn/yxsz/index.html</code>，下面我们用HTTTP/1.0更具体地说明在用户点击鼠标后所发生的几件事件：</p>
+<blockquote>
+<ol>
+<li>浏览器分析链接指向页面的URL；</li>
+<li>浏览器向DNS请求解析www.tsinghua.edu.cn的IP地址；</li>
+<li>域名系统DNS解析出清华大学服务器的IP是166.111.4.100；</li>
+<li>浏览器与服务器建立TCP连接(在服务器端IP是166.111.4.100，端口是80)；</li>
+<li>浏览器发出取文件命令：GET /chn/yxsz/index.html；</li>
+<li>服务器www.tsinghua.edu.cn给出响应，把文件index.html发送给浏览器；</li>
+<li>释放TCP连接；</li>
+<li>浏览器显示文件index.html中所有的文本。</li>
+</ol>
+</blockquote>
+<p>浏览器在下载文件时，可以设置为只下载其中的文本部分。这样可以使得下载的速度加快。在这种情况下，文件中原来嵌入的图像或者音频的地方只用一个小图标来显示。用户若要下载这些图像或音频，可用鼠标再分别点击这些图标。每点击一次鼠标，就重复执行一次类似与上面的8个步骤。也就是先建立TCP连接，再使用TCP连接传送命令和传送文件，最后释放TCP连接。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>HTTP通常使用TCP连接传送。HTTP使用了面向连接的TCP作为传输层协议，保证了数据的可靠传输。HTTP不必考虑数据在传输过程中被丢弃后又怎样被重传。但是，HTTP协议<strong>本身是无连接的</strong>。这就是说，虽然HTTP使用了TCP连接，但通信的双方在交换HTTP报文之前不需要先建立HTTP连接。</p>
+<p>HTTP协议是<strong>无状态的</strong>(stateless)。也就是说，同一个客户第二次访问同一个服务器上的页面时，服务器的响应与第一次被访问时的相同(假定现在服务器还没有把页面更新)，因为服务器并不记得曾经访问过的客户，也不记得为该客户服务过多少次。HTTP的无状态特性简化了服务器的设计，使服务器更容易支持大量并发的HTTP请求。</p>
+<h2 id="请求一个文档所需时间"><a href="#请求一个文档所需时间" class="headerlink" title="请求一个文档所需时间"></a>请求一个文档所需时间</h2><p>下面我们粗略估算一下，从浏览器请求一个万维网文档到收到整个文档所需要的时间。如下图。用户在点击鼠标链接某个万维网文档时，HTTP协议首先要和服务器建立TCP连接。这需要使用三次握手。当三次握手的前两部分完成后(即经过一个RTT时间后)，<strong>万维网客户就把HTTP请求报文作为第三次握手的第三个报文的数据发送到服务器(第三次握手可以携带数据，但需要消耗一个序号)。服务器收到请求报文后，就把所请求的文档作为响应报文返回给客户</strong>。<br><img src="https://farm1.staticflickr.com/640/21444244112_ae7f8d9ebc_z.jpg" alt=""><br>从上图可看出，请求一个万维网文档所需要的时间是该文档的传输时间(与文档大小成正比)加上两倍往返时间RTT(一个RTT用于TCP连接，另一个RTT用于请求和接收文档。这里TCP建立连接的三次握手的第三个报文段捎带了客户对万维网文档的请求)。</p>
+<blockquote>
+<p>请求文档时间 = 2 * RTT + 文档传输时间</p>
+</blockquote>
+<h2 id="不足与解决方案"><a href="#不足与解决方案" class="headerlink" title="不足与解决方案"></a>不足与解决方案</h2><p>HTTP/1.0 的主要缺点，就是每请求一个文档就要有两倍RTT的开销。若一个主页上有很多链接的对象(如图片等)，那么每一次链接下载都导致2<em>RTT的开销。特别是万维网服务器往往要同时服务于大量的客户请求，所以这种 <em>*非持续性连接</em></em> 会使万维网服务器的负担很重。好在浏览器都提供了能够打开5~10个并行的TCP连接，而每一个TCP连接处理客户的一个请求。因此，使用并行的TCP连接可以缩短响应时间(然而服务端的负担没有任何减轻)。</p>
+<p>HTTP/1.1 协议较好地解决了这个问题，它使用<strong>持续连接</strong>(persistent connection)。所谓持续连接就是万维网服务器在发送响应后仍然在一段时间内保持这条连接，使同一个客户(浏览器)和该服务器可以继续在这条连接上传送后续的HTTP请求报文和响应报文。这并不局限于传送同一个页面上链接的文档，而是只要这些文档在同一个服务器上就行了。目前大部分浏览器的默认设置就是使用HTTP/1.1.</p>
+<p>HTTP/1.1协议的持续连接有2中工作方式：<strong>非流水线方式(without pipelining)和流水线方式(with pipelining)</strong>。</p>
+<p>非流水线方式的特点，是客户在收到前一个响应后才能发出下一个请求。因此，在TCP连接已经建立后，客户每访问一次对象都要用去一个往返时间RTT。这比非持续性连接要用去2个RTT时间，节省了建立TCP连接的一个RTT时间。但非流水方式还是有缺点的，因为服务器在发送完一个对象后，其TCP连接就处于空闲状态，浪费了服务器资源。</p>
+<p>流水线方式的特点，是客户在收到HTTP的响应报文之前就能够接着发送新的请求报文。于是一个接一个的请求报文到达服务器后，服务器就可连续发回响应报文。因此，使用流水线方式时，客户访问<strong>所有的对象只需要花费一个RTT时间</strong>。流水线工作方式使TCP连接中的空闲时间减少，提高了下载文档的效率。</p>
+<h2 id="HTTP请求报文的常用方法"><a href="#HTTP请求报文的常用方法" class="headerlink" title="HTTP请求报文的常用方法"></a>HTTP请求报文的常用方法</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">请求读取由URL所标识的信息</td>
+</tr>
+<tr>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">给服务器发送信息</td>
+</tr>
+<tr>
+<td style="text-align:left">OPTION</td>
+<td style="text-align:left">请求一些选项信息</td>
+</tr>
+<tr>
+<td style="text-align:left">HEAD</td>
+<td style="text-align:left">请求读取由URL所标识的信息的首部</td>
+</tr>
+<tr>
+<td style="text-align:left">PUT</td>
+<td style="text-align:left">在指明的URL中存储一个文档</td>
+</tr>
+<tr>
+<td style="text-align:left">DELETE</td>
+<td style="text-align:left">删除指明URL所标识的资源</td>
+</tr>
+<tr>
+<td style="text-align:left">TRACE</td>
+<td style="text-align:left">用来进行环回测试的请求报文</td>
+</tr>
+<tr>
+<td style="text-align:left">CONNECT</td>
+<td style="text-align:left">用于代理服务器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><ul>
+<li>1xx消息——请求已被服务器接收，继续处理</li>
+<li>2xx成功——请求已成功被服务器接收、理解、并接受</li>
+<li>3xx重定向——需要后续操作才能完成这一请求<ul>
+<li>301：重定向，资源永久移动，客户端不应该再继续通过该 url 访问该资源</li>
+<li>302：重定向，资源临时移动，以后可能仍然使用该 url</li>
+<li>304：not modified，浏览器可以使用本地缓存</li>
+</ul>
+</li>
+<li>4xx请求错误——请求含有词法错误或者无法被执行<ul>
+<li>400：bad request，客户发送的请求不能理解</li>
+<li>403：forbidden，无权限，服务器拒绝提供服务</li>
+<li>404：not found，没找到资源</li>
+</ul>
+</li>
+<li>5xx服务器错误——服务器在处理某个正确请求时发生错误<ul>
+<li>500：internal server error，服务器内部错误</li>
+<li>502 – 网关错误。常见的情况是反向代理后端的服务器(比如resin或tomcat)没有启动。</li>
+<li>503：server unavaliable，服务暂不可用</li>
+<li>504 – 网关超时。比如请求时长超出了服务器的响应时间限制</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="">计算机网路(第六版) 谢希仁著 电子工业出版社</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/HTTP%E6%8C%81%E4%B9%85%E8%BF%9E%E6%8E%A5" target="_blank" rel="external">维基百科：HTTP持久连接</a></li>
+<li><a href="http://novoland.github.io/%E7%BD%91%E7%BB%9C/2014/07/31/%E5%B8%B8%E8%A7%81%E7%9A%84HTTP%E7%8A%B6%E6%80%81%E7%A0%81.html" target="_blank" rel="external">克鲁斯卡尔的博客：常见的HTTP状态码</a></li>
+</ul>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/16/TCP释放连接-四次挥手/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/09/16/TCP释放连接-四次挥手/" itemprop="url">TCP释放连接-四次挥手</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-16T09:40:17+08:00">
+                2015-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>TCP连接释放过程比较复杂，我们需要结合双方状态去理解。</p>
+<h2 id="四次挥手图"><a href="#四次挥手图" class="headerlink" title="四次挥手图"></a>四次挥手图</h2><p><img src="https://farm6.staticflickr.com/5781/21461116181_dbff398812_z.jpg" alt=""></p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>数据传输结束后，通信双方都可以释放连接。现在A和B都处于<code>ESTABLISHED</code>状态。步骤如下：</p>
+<ul>
+<li>A的应用进程先向其TCP发出连接释放报文段，并停止发送数据，主动关闭TCP连接。A把连接释放报文段(FIN包)首部的终止控制位<code>FIN = 1</code>，其序号<code>seq = u</code>，它等于前面已传送过的数据的最后一个字节+1。这时A进入<code>FIN-WAIT-1</code>状态。<del>注意，FIN报文段即使不携带数据，也要消耗一个序号</del>。</li>
+<li>B收到连接释放报文段后立即发出确认，确认号<code>ack = u + 1</code>，这个报文段自己的 序号<code>seq = v</code>，等于B前面已传送过的数据的最后一个字节的序号+1。然后B就进入<code>CLOSE-WAIT</code>(关闭等待)状态。TCP服务器进程这时应通知高层应用进程，因而从A到B这个方向的连接就释放了，这时的TCP连接处于<code>半关闭</code>(half-close)状态，也就是A已经没有数据要发送了，但是B若发送数据，A仍要接收。也就是说，从B到A这个方向的连接并未关闭，这个状态可能会持续一些时间。</li>
+<li>A接收来自B的确认后，就进入<code>FIN-WAIT-2</code>(终止等待2)状态，等待B发出的连接释放报文段。</li>
+<li>直到B已经没有要向A发送的数据，其应用进程就通知TCP释放连接。这时B发出的连接释放报文段必须使<code>FIN = 1</code>。假定B的序号<code>seq = w</code>(在半关闭状态B可能还发送了一些数据)。B还必须重复确认上次发送过的确认号<code>ack = u + 1</code>。这时B进入<code>LAST-ACK</code>(最后确认)状态，等待A的确认。</li>
+<li>A收到来自B的连接释放报文后，必须对此发出确认。在确认报文段中设置<code>ACK = 1</code>，确认号<code>ack = w + 1</code>，而自己的序号为<code>seq = u + 1</code>(根据TCP标准，前面发送过的FIN报文段要消耗一个序号)。然后进入<code>TIME-WAIT</code>(时间等待)状态。请注意，现在TCP连接还没有释放掉，必须经过<strong>时间等待计数器</strong>设置的时间2MSL(MSL，Maximum Segment Lifetime，叫做最长报文段寿命，RFC793建议设置为2分钟.)后因此，从A进入到TIME-WAIT后，要经过4分钟才能进入<code>CLOSE</code>状态，才能开始建立下一个新的连接。</li>
+<li>B接收到来自A的确认报文段，进入<code>CLOSE</code>状态。</li>
+</ul>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ul>
+<li>为什么A在TIME-WAIT状态必须等待2MSL的时间？<blockquote>
+<ol>
+<li>为了保证A发送的最后一个ACK报文段能够到达B。这个ACK报文段极有可能丢失，因而使得处在<code>LAST-ACK</code>状态的B收不到确认。B会超时重传FIN+ACK报文段，而A就能在2MSL时间内收到这个重传报文。接着A重传一次确认，重新启动2MSL计时器。最后A和B都能正常进入到CLOSED状态。相反滴，如果A在TIME-WAIT不等待一段时间，而是发送完ACK报文段后就立即释放连接进入CLOSED状态，那么就无法收到B重传的FIN+ACK报文段，因而也不会再发送一次确认报文段。这样，B就无法释放连接了。</li>
+<li>防止”已失效的连接请求报文段”出现在本连接中。经过时间2MSL，就可以使本连接的时间所产生的所有报文段从网络中消失，这样就可以使下一个新的连接中不会出现旧的连接请求报文段。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="">计算机网络(第六版) 谢希仁著 电子工业出版社</a></li>
+</ul>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/16/TCP建立连接-Three-way-Handshake/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1517,405 +1867,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/06/JVM-垃圾回收算法及垃圾回收器详解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/06/JVM-垃圾回收算法及垃圾回收器详解/" itemprop="url">JVM 垃圾回收算法及垃圾回收器详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-06T11:30:32+08:00">
-                2015-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
-<p>Java与C++之间有一堵由内存动态分配和垃圾回收技术所围成的”高墙”，墙外的人想进去，墙里面的人想出来。<br>— 摘自《深入理解Java虚拟机》</p>
-</blockquote>
-<p>垃圾回收（Garbags Collection，GC），大部分人说起GC，第一反应都是想到Java吧。其实GC技术的历史比Java悠久，1960年诞生于MIT的Lisp是第一门真正使用内存动态分配和垃圾回收技术的语言。GC需要完成的3件事：</p>
-<ul>
-<li>哪些内存需要回收？</li>
-<li>什么时候回收？</li>
-<li>如何回收？</li>
-</ul>
-<p>之前介绍过Java内存运行时区域的各个部分，其中程序计数器、虚拟机栈、本地方法栈这3个区域随线程而生，随线程而亡；栈中的栈帧随着方法的进入和退出而有条不紊的执行着进栈和出栈操作。每一个栈帧中分配多少内存基本上实在类结构确定下来就已知的(尽管在运行期间JIT编译器进行一些优化，但大体上可以认为在编译期可知的。)，<strong>因此这几个区域的内存分配和回收都具备确定性，在这几个区域内不需要过多考虑回收的问题，因为方法结束或者线程结束时，内存也自然跟着回收了。</strong>而Java堆和方法区则不一样，一个接口中的多个实现类需要的内存可能不一样，一个方法中的多个分支需要的内存也可能不一样。我们只有在程序处于运行期间才能知道会创建哪些对象，这部分内存的分配和回收都是动态的，垃圾收集器所关注的是这部分内存。后续所指的<strong>内存</strong>分配和回收也仅指这一部分内存。</p>
-<h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><p>在堆里面存放着Java世界中几乎所有的对象实例，垃圾收集器在对堆进行回收前，第一件事就是确定哪些对象还”存活”着，哪些已经”死去”(既不可能再被任何途径使用)。</p>
-<h3 id="引用计数算法-Reference-Counting"><a href="#引用计数算法-Reference-Counting" class="headerlink" title="引用计数算法(Reference Counting)"></a>引用计数算法(Reference Counting)</h3><p>原理：给对象添加一个引用计数器，每当有一个地方引用它时，计数器的值+1，当引用失效时，计数器的值-1；任何时候计数器未0的对象就是不可能再被使用的。于是引用计数算法通知GC收集器来回收它们。</p>
-<p>客观地说，引用计数算法的实现简单，判定效率也很高，在大部分情况下它都是一个不错的算法，也有一些比较著名的案例，比如微软的COM技术、使用AS3的FlashPlayer、Python语言和在游戏脚本领域被广泛使用的Squirrel中都使用引用计数算法来进行内存管理。但是，主流的JVM里面没有选用引用计数算法来管理内存，其中最重要的原因就是它很难解决对象循环引用的问题。</p>
-<p>一个简单的循环引用问题描述如下：有对象A和对象B，对象A中含有对象B的引用，对象B中含有对象A的引用。此时，对象A和对象B的引用计数都不为0。但是在系统中却不存在第三个对象引用了A或B，A和B是应该被回收的垃圾对象，但由于垃圾对象的相互引用，从而使得垃圾回收期无法识别，引起内存泄露。</p>
-<h3 id="标记-清除算法-Mark-Sweep"><a href="#标记-清除算法-Mark-Sweep" class="headerlink" title="标记-清除算法(Mark-Sweep)"></a>标记-清除算法(Mark-Sweep)</h3><p>最基础的回收算法，后续的收集算法都是基于它的思路并对其不足进行改进而得到的。如同它的名字一样，算法分为”<strong>标记</strong>“和”<strong>清除</strong>“2个阶段。<br><strong>标记阶段</strong>：在标记阶段首先通过根节点，标记所有从根节点开始的较大对象。因此，未被标记的对象就是未被引用的对象。<br><strong>清除阶段</strong>：回收所有未被标记的对象。<br>标记-清除算法的执行过程如下图所示。<br><img src="https://farm1.staticflickr.com/564/20536042733_ac422639c3.jpg" alt="标记-清除算法的执行过程"><br>然而，它有2个不足的地方：<br>一个是效率问题，标记和清除两个过程的效率都不高；<br>二是空间问题，标记清除之后会产生大量不连续空间的内存碎片，空间碎片太多会导致以后在程序运行过程中需要分配较大对象的时候，无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。</p>
-<h3 id="复制算法-Coping"><a href="#复制算法-Coping" class="headerlink" title="复制算法(Coping)"></a>复制算法(Coping)</h3><p>为了解决效率问题，一种称为”复制”的收集算法出现了，它将可用内存按容量分为大小相等的两块。每次只使用其中的一块。当这一块的内存用完了，就将存活的对象复制到另外一块内存上，然后再把已使用的这一块内存一次清理掉。这样使得每次都是对整个半区进行内存回收，内存分配也就不用考虑内存碎片等复杂情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。复制算法的执行过程如图。<br><img src="https://farm6.staticflickr.com/5748/21131173196_bb466db3df.jpg" alt="复制算法示意图"><br>然而，这种算法的代价是将内存缩小未原来的一半，代价未免太高了。</p>
-<p><strong>现在的商业JVM都采用这种收集算法来回收新生代</strong>。 IBM公司的专门研究表明，新生代中的对象98%是”朝生夕死”的，所以不需要按照1：1比例来划分内存空间，而是将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，将Eden和Survivor还存活着的对象一次性地复制到另外一块Survivor空间上，最后清理掉Eden和刚才用过的Survivor空间。HotSpot虚拟机默认Eden和Survivor的大小比例是8：1，也就是每次新生代中可用内存空间为整个新生代容量的80%+10%，只有10%的内存会被”浪费”。当然，98%的对象可回收只是一般场景下的数据，我们没有办法保证每次回收都只有不多于10%的对象存活，当Survior空间不够用时，需要依赖其他内存（这里指老年代）进行分配担保（Handle Promotion）。<br><img src="https://farm1.staticflickr.com/640/20969743238_1159236a8d_b.jpg" alt=""></p>
-<h3 id="标记-压缩算法-Mark-Compact"><a href="#标记-压缩算法-Mark-Compact" class="headerlink" title="标记-压缩算法(Mark-Compact)"></a>标记-压缩算法(Mark-Compact)</h3><p>复制收集算法在对象存活率较高的时候进行较多的复制操作，效率将会变低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代不能直接选用这种算法。</p>
-<p><strong>根据老年代的特点，”标记-压缩”算法出现了</strong>，标记过程依然与”标记-清除”算法一样，但后续步骤不是直接对可回收对象进行回收，而是让所有存活对象都向一端移动，然后直接清理掉边界以外的内存。标记-压缩算法示意图如下。<br><img src="https://farm1.staticflickr.com/754/21131661626_d9cd6219e6.jpg" alt="标记-压缩算法示意图"></p>
-<h3 id="分代收集算法-Generational-Collection"><a href="#分代收集算法-Generational-Collection" class="headerlink" title="分代收集算法(Generational Collection)"></a>分代收集算法(Generational Collection)</h3><p>当前商业虚拟机的垃圾手机都采用”分代收集”算法，这种算法并没有什么新的思想，只是根据对象存活周期的不同将内存区域划分为几块。一般是把Java堆氛围新生代和老年代，这样 就可以根据各个年代的特点采用最适当的收集算法，在新生代中每次垃圾收集时都会有大批的对象死去，只有少量存活，所以选用复制算法，只需要付出少量存活对象的复制成本就可以完成收集。而老年代中因为对象的存活率高、没有额外空间对它进行分配担保，就必须使用”标记-清理”或者”标记-压缩”算法来进行回收。</p>
-<h2 id="JVM-垃圾回收器分类"><a href="#JVM-垃圾回收器分类" class="headerlink" title="JVM 垃圾回收器分类"></a>JVM 垃圾回收器分类</h2><p>如果说回收算法是内存回收的方法论，那么垃圾回收器就是内存回收的具体实现。JVM规范中对垃圾回收器应该如何实现并没有任何规定，因此不同厂商，不同版本的虚拟机所提供的垃圾回收器都可能有很大区别，并且一般都会提供参数供用户根据自己的特点和要求组合出各个年代所使用的回收器。HotSpot虚拟机所包含的所有回收器如图。（G1是在JDK1.7 Update14之后才正式商用，之前都是实验状态。）<br><img src="https://farm6.staticflickr.com/5625/21166385081_d65e779695.jpg" alt="HotSpot虚拟机的垃圾回收器"></p>
-<p>上图展示的7种不同分代的回收器，如果2个收集器之间存在连线，就说明它们可以搭配使用。虚拟机所处的区域，则表示它是属于新<br>生代回收器还是老年代回收器。</p>
-<p>在介绍这些收集器各自的特性前，我们需要明确一个观点：虽然我们实在对各个收集器进行比较，但并非为了挑选出一个最好的收集器。因为直到目前为止仍然还没有最好的回收器，更加没有万能的回收器，所以我们选择的只是具体应用场景下最合适的回收器。不然，HotSpot虚拟机就没必要实现那么多不同的回收器了。</p>
-<h3 id="Serial回收器"><a href="#Serial回收器" class="headerlink" title="Serial回收器"></a>Serial回收器</h3><p>Serial回收器是最基本、发展历史最悠久的回收器。曾经(JDK1.3前)是虚拟机新生代回收的唯一选择。看名字就知道，这个回收器是一个单线程的回收器，但它的”单线程”的意义并不仅仅说明它只会使用一个CPU或者一条回收线程去完成垃圾回收的工作，更重要的是它在进行垃圾回收的过程中，必须暂停所以其他的工作县城，直到它回收结束。”Stop The World”这个名字听起来或许很酷，但这项工作实际上是有虚拟机在后台自动发起和自动完成的，在用户完全不可见的情况下把用户正常工作的线程全部停掉，这对很多应用来说都是难以接受的。Serial/Serial Old回收器的运行过程如下。<br><img src="https://farm6.staticflickr.com/5632/20977917250_56ea7e4842_z.jpg" alt="Serial/Serial Old回收器运行示意图"></p>
-<p>写到这里，Serial看起来被描述成了一个”老而无用”的鸡肋了，但实际上到目前为止，它依然是虚拟机运行在Client模式下的默认新生代回收器。它也有优于其他回收器的地方：简单而高效(与其他回收器的单线程比)。</p>
-<h3 id="ParNew回收器"><a href="#ParNew回收器" class="headerlink" title="ParNew回收器"></a>ParNew回收器</h3><p>ParNew回收器其实就是Serial回收器的多线程版本，除了使用多条线程进行垃圾回收之外，其他行为包括Serial回收器可用的所有控制参数(例如：-XX:SurvivorRation、-XX:PretenureSizeThreshold、-XX:HandlePromotionFailue等)、回收算法、Stop The World、对象分配规则、回收策略等都与Serial回收器完全一样。在实现上，这2中回收器也共用了很多代码。ParNew回收器的工作流程如图。<br><img src="https://farm6.staticflickr.com/5807/21140032716_897d61ae95_z.jpg" alt="ParNew回收器的工作流程"></p>
-<p>ParNew回收器除了多线程回收之外，其他与Serial回收器相比并没有太多创新之处，但它却是许多运行在Server模式下的虚拟机中首选的新生代回收器，其中有一个与性能无关但很重要的原因是，除了Serial回收器外，目前只有它能与CMS回收器配合工作。在JDK1.5时期，HotSpot推出了一款在强交互应用中几乎可认为有划时代意义的垃圾回收器-CMS回收器(Concurrent Mark Sweep)，这款回收器是HotSpot虚拟机中第一款真正意义上的并发(Concurrent)回收器，它第一次实现了让回收器回收线程和用户线程（基本上）同时工作。</p>
-<p>不幸的是，CMS作为老年代的回收器，却无法与JDK1.4中已经存在的新生代回收器Parallel Scavenge回收器配合工作(Parallel Scavenge回收器及后面提到的G1回收器都没有使用传统的GC回收器代码框架，而另外独立实现，其余几种回收器则共用了部分的框架的代码)。所以在JDK 1.5 中使用CMS来回收老年代的时候，新生代只能选择Serial或者ParNew中的一个。ParNew回收器也是使用-XX:+UseConcMarkSweepGC选项后的默认新生代回收器，也可以使用-XX:UseParNewGC选项来强制指定它。</p>
-<blockquote>
-<p>从ParNew回收器开始，后面还会接触到几款并发和并行的回收器，有必要先解释下这2个名词。它们都是并发编程中的概念，在讨论垃圾回收器的上下文语境中，它们可以解释如下：</p>
-<ul>
-<li>并行（Parallel）：指多条垃圾回收线程并行工作，但此时用户线程仍然处于等待状态。</li>
-<li>并发（Concurrent）：指用户线程和垃圾回收线程同时执行（但不一定是并行，可能会交替进行），用户程序继续运行，而垃圾回收程序运行在另一个CPU上。</li>
-</ul>
-</blockquote>
-<h3 id="Parallel-Scavenge回收器"><a href="#Parallel-Scavenge回收器" class="headerlink" title="Parallel Scavenge回收器"></a>Parallel Scavenge回收器</h3><p>PS回收器是一个新生代回收器，它也是使用复制算法的回收器，又是并行的多线程回收器….看上去和PerNew回收器都一样，那它们有什么不同之处呢？</p>
-<p>PS回收器的特点是它的关注点和其他回收器不同，CMS等回收器的关注点是尽可能缩短垃圾回收时用户线程的等待时间，而PS回收器的目标则是达到一个可控制的吞吐量（Throughput）（=运行用户/(用户线程时间+垃圾回收时间)）。</p>
-<p><strong>停顿时间越短就越适合需要与用户交互的程序，良好的响应时间能提升用户体验，而高吞吐量则可以高效率利用cpu时间，尽快完成程序的运算任务，主要适合在后台运行而不需要太多交互的任务。</strong></p>
-<p>PS回收器提供了2个参数用于精确控制吞吐量，分别是控制最大垃圾回收停顿时间的-XX:MaxGCPauseMillis以及设置吞吐量大小的-XX:GCTimeRatio参数。MaxGCPauseMillis参数允许的值是一个大于0的毫秒数，回收器将尽可能保证内存回收花费的时间不超过设定值。GCTimeRatio参数的值是一个大于0且小于100的数，也就是垃圾回收时间占总时间的比率，相当于吞吐率的倒数，默认值是99，就是允许最大1%（即1/(1+99)）的垃圾回收时间。</p>
-<p>由于PS回收器与吞吐量关系密切，因此也被称为”吞吐量优先”的回收器。除上述2个参数外，PS回收器还有一个参数：-XX:UseAdaptiveSizePolicy值得关注。这是一个开关参数，当这个参数打开以后，就不需要手动指定新生代的大小-Xmn、Eden与Survivor的比例-XX:SurvivorRadio、晋升老年代对象年龄-XX:PretenureSizeThreshold等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或最大的吞吐量。这种调节方式成为GC自适应的调节策略(GC Ergonmics)。<strong>自适应调节也是PS回收器与PerNew回收器的一个重要区别</strong>。</p>
-<h3 id="Serial-Old-回收器"><a href="#Serial-Old-回收器" class="headerlink" title="Serial Old 回收器"></a>Serial Old 回收器</h3><p>Serial Old是Serial的回收器的老年代版本，同样是一个单线程回收器，使用”标记-压缩”算法。</p>
-<p>这个回收器的主要意义也是在给Client模式下的虚拟机使用。如果在Server模式下，主要有2大用途：一是在JDK 1.5 以及之前的版本中与PS回收器配合使用；二是作为CMS回收器的后备方案，在并发回收发生Concurrent Mode Failure时使用。Serial Old的工作过程如图。<br><img src="https://farm6.staticflickr.com/5671/21167620535_5fed69f189_z.jpg" alt=""></p>
-<h3 id="Parallel-Old回收器"><a href="#Parallel-Old回收器" class="headerlink" title="Parallel Old回收器"></a>Parallel Old回收器</h3><p>PO回收器是PS回收器的老年代版本，使用”标记-压缩”算法。这个回收器是在jdk 1.6 才开始提供的，在此之前，新生代的PS回收器一直处于比较尴尬的地位。原因是，如果新生代选择了PS回收器，老年代除了Serial Old回收器外别无选择。由于老年代Serial Old回收器在服务器应用性能上的”拖累”，使用了PS回收器也未必能在整体上获得吞吐量最大化的效果。</p>
-<p>直到PO回收器的出现，“吞吐量优先”回收器终于有了比较名副其实的应用组合，在注重吞吐量以及CPU资源敏感的场合，都可以优先考虑PS+PO回收器。PO回收器的工作流程如下图。<br><img src="https://farm1.staticflickr.com/609/20546629683_ff7aecbffa_z.jpg" alt=""></p>
-<h3 id="CMS-回收器"><a href="#CMS-回收器" class="headerlink" title="CMS 回收器"></a>CMS 回收器</h3><p><strong>CMS（Concurrent Mark Sweep）回收器是一种以获取最短停顿时间为目标的回收器。</strong> 目前很大一部分的Java应用集中在互联网或者B/S系统的服务端上，这类应用尤其重视服务的响应速度，希望系统的停顿时间最短，以给用户较好的体验。CMS回收器就非常符合这类应用的需求。</p>
-<p>从名字就可以看出，CMS回收器是基于“标记-清除”算法实现的，它的运作过程相对于前面几种回收器来说更复杂些。整个过程分为4个步骤，包括：</p>
-<blockquote>
-<ul>
-<li>初始标记CMS initial mark</li>
-<li>并发标记CMS concurrent mark</li>
-<li>重新标记CMS remark</li>
-<li>并发清除CMS concurrent sweep</li>
-</ul>
-</blockquote>
-<p>其中初始标记和重新标记都需要“stop the world”。初始标记仅仅只是标记一下GC Roots能关联到的对象，速度很快；并发标记阶段就是进行GC Roots Tracing的过程；而重新标记则是为了修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿会比初始标记稍长，但远比并发标记的时间短。</p>
-<p>由于整个过程中耗时最长的并发标记和并发清除都可以和用户进程一齐工作，所以总体来说，CMS回收器的内存回收工作是与用户线程一齐并发执行的。由下图可以清楚地看到CMS回收器的运作步骤中并发和需要停顿的时间。<br><img src="https://farm1.staticflickr.com/732/20980112470_79e722bf06_z.jpg" alt=""></p>
-<p>3个明显的缺点：</p>
-<blockquote>
-<ol>
-<li>CMS回收器对CPU资源非常敏感。</li>
-<li>CMS回收器无法处理浮动垃圾，可能出现“Concurrent Mode Failure”失败而导致另一次Full GC出现。</li>
-<li>基于“标记-清除”算法带来的内存碎片。</li>
-</ol>
-</blockquote>
-<h3 id="G1-回收器"><a href="#G1-回收器" class="headerlink" title="G1 回收器"></a>G1 回收器</h3><p>G1（Garbage-First）是一款面向服务端应用的垃圾回收器，在JDK 1.7的HotSpot虚拟机中正式商用。HotSpot开发团队赋予它的使命是（在比较长期的）未来可以替换掉JDK1.5中发布的CMS垃圾回收器。与其他GC回收器相比，G1具备如下特点：</p>
-<blockquote>
-<ul>
-<li><strong>并行与并发</strong>：G1能充分利用多CPU、多核环境下的硬件优势，以此来缩短Stop-The-World停顿时间，部分回收器原本需要停顿Java线程执行的GC操作，G1可以通过并发的方式让Java程序继续运行。</li>
-<li><strong>分代回收</strong>：与其他回收器一样，分代概念在G1中依然得以保留。虽然G1可以不需要其他回收器就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活一段时间、熬过多次GC的旧对象以取得更好的收集效果。</li>
-<li><strong>空间整合</strong>：与CMS回收器的标记-清理算法不同，G1从整体上看是基于标记-压缩算法实现的回收器，从局部（两个Region之间）上看是基于复制算法实现的，但无论如何，这两种算法都意味着G1运行期间不会产生内存空间碎片，回收后能提供完整的可用内存。这种特性有利于程序长时间运行，分配大对象时不会因为无法找到连续空间而提前触发下一次GC。</li>
-<li><strong>可预测的停顿</strong>：这个G1相对于CMS的另一大优势，降低停顿时间是G1和CMS共同的关注点，但G1除了追求低停顿之外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度未M毫秒的时间片段内，消耗在垃圾回收上的时间不得超过N毫秒，这几乎是实时Java（RTSJ）的垃圾回收器的特征了。</li>
-</ul>
-</blockquote>
-<p>在G1之前的其他回收器进行回收的范围都是整个新生代或者老年代，而G1不再是这样。使用G1回收器时，Java堆的内存布局就与其他回收器有很大区别，它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留有新生代和老年代的概念，但新生代和老年代不再是物理隔离的了，它们都是一部分Region（不需要连续）的集合。</p>
-<p>G1回收器之所以能建立可预测的停顿时间模型，是因为它可以有计划地避免在整个Java堆中进行全区域的垃圾回收。G1跟踪各个Region里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），在后台维护一个优先列表，每次根据允许的回收时间，优先回收价值大的Region（这也就是Garbage-First名称的由来）。这种使用Region划分内存以及有优先级的区域回收方式，保证了G1回收器在有限的时间内可以获取尽可能高的收集效率。</p>
-<p>在G1回收器中，Region之间的对象引用以及其他回收器中的新生代与老年代之间的对象引用，虚拟机都是使用Remembered Set来避免全堆扫描的。G1中每个Region都有一个与之对应的Remembered Set，虚拟机发现程序在对Reference类型的数据进行写操作时，会产生一个Write Barrier暂时中断写操作，检查Reference引用的对象是否处于不同的Region之中（在分代的例子中就是检查老年代中的对象引用了新生代的对象），如果是，便通过CardTable把相关引用信息记录到被引用对象所属的Region的Remembered Set即可保证不对全堆扫描也不会有遗漏。</p>
-<p>如果不计算维护Remembered Set的操作，G1回收器的运作大致可划分为一下几个步骤：</p>
-<blockquote>
-<ul>
-<li>初始标记 Initial Marking</li>
-<li>并发标记 Concurrent Marking</li>
-<li>最终标记 Final Marking</li>
-<li>筛选回收 Live Date Counting and Evacuation</li>
-</ul>
-</blockquote>
-<p>我们可以发现，G1的前几个步骤的运作过程和CMS有很多相似之处。初始标记阶段只是标记一下GC Roots能直接关联到的对象，并且修改TAMS(Next Top at Mark Start)的值，让下阶段用户程序并发运行时，能在正确可用的Region中创建新对象，这阶段需要停顿线程，但耗时很短。并发标记阶段是从GC Roots开始对堆中对象进行可达性分析，找出存活对象，这阶段耗时长，但可以与用户程序并发执行。最终标记阶段则是为了修正在并发标记期间因用户程序继续运作而导致标记产生变动那一部分标记记录，虚拟机将这段时间对象变化记录到线程Remembered Set Logs中。然后需要把Remembered Set Logs的数据合并到Remembered Set中，这阶段需要停顿操作，但是可以并发执行。最后在筛选阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来指定回收计划，但是因为只回收一部分Region，时间是用户可控制的，而且停顿用户线程将大幅提高效率。G1回收器的运作步骤中并发和需要的停顿的阶段如图：<br><img src="https://farm6.staticflickr.com/5628/20555231414_d0254702f9_z.jpg" alt=""></p>
-<h2 id="垃圾回收的时机"><a href="#垃圾回收的时机" class="headerlink" title="垃圾回收的时机"></a>垃圾回收的时机</h2><p>通过上面的学习，我们已经堆垃圾回收机制有了一个比较全面的了解。下面堆垃圾回收的时机总结一下。</p>
-<ul>
-<li>对象优先分配在Eden区，当Eden区没有足够的空间时，虚拟机将发生一次<strong>Minor GC</strong>。因为大部分在Eden区的对象都是“朝生夕亡”，所以Minor GC执行非常频繁，而且速度也很快。</li>
-<li>当老年代没有足够的空间时及时发生<strong>Full GC</strong>，发生Full GC的时候一般都会有一次Minor GC。大对象直接进入老年代，如很长的字符串数组，虚拟机提供一个<strong>-XX:PretenureSizeThreadhold</strong>来使得大于这个参数值的对象直接在老年代中分配内存，避免在Eden区和Survivor区发生大量的内存拷贝。</li>
-<li>发生Minor GC的时候，虚拟机会检测之前每次晋升到老年代的平均大小是否大于当前老年代的剩余大小，如果大于，说明老年代可能不够空间，所以会先执行一次Full GC；如果小于，则查看<strong>HandlePromotionFailure</strong>是否允许担保失败，如果允许则只进行Minor GC，如果不允许，则改为进行一次Full GC。</li>
-</ul>
-<h2 id="垃圾回收器参数总结"><a href="#垃圾回收器参数总结" class="headerlink" title="垃圾回收器参数总结"></a>垃圾回收器参数总结</h2><p><img src="https://farm6.staticflickr.com/5625/21166385081_d65e779695.jpg" alt="HotSpot虚拟机的垃圾回收器"></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">参数</th>
-<th style="text-align:left">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">UseSerialGC</td>
-<td style="text-align:left">虚拟机运行在Client模式下的默认值，打开此开关后，使用Serial+Serial Old的回收器组合进行内存回收。</td>
-</tr>
-<tr>
-<td style="text-align:left">UseParNewGC</td>
-<td style="text-align:left">打开此开关后，使用ParNew+CMS+Serial Old的回收器组合进行内存回收。</td>
-</tr>
-<tr>
-<td style="text-align:left">UseConcMarkSweepGC</td>
-<td style="text-align:left">打开此开关后，使用ParNew+CMS+Serial Old组合进行内存回收。Serial Old 讲作为CMS出现Concurrent Mode Failure失败后的后备回收器。</td>
-</tr>
-<tr>
-<td style="text-align:left">UseParallelGC</td>
-<td style="text-align:left">虚拟机运行在Server模式下的默认值，打开此开关后，使用Parallel Scavenge+Serial Old组合。</td>
-</tr>
-<tr>
-<td style="text-align:left">UseParallelOldGC</td>
-<td style="text-align:left">打开此开关，使用Parallel Scavenge+Parallel Old组合。</td>
-</tr>
-<tr>
-<td style="text-align:left">SurvivorRation</td>
-<td style="text-align:left">新生代中Eden区域与Survivor区域的容量比值，默认为8，代表Eden：Survivor=8：1。</td>
-</tr>
-<tr>
-<td style="text-align:left">PretenureSizeThreshold</td>
-<td style="text-align:left">直接晋升到老年代的对象大小，设置这个参数后，大于这个参数的对象将直接在老年代分配。</td>
-</tr>
-<tr>
-<td style="text-align:left">MaxTenuringThreshold</td>
-<td style="text-align:left">直接晋升到老年代的对象年龄。每个对象在坚持过一次Minor GC之后，年龄就+1，当超过这个参数值就进入老年代。</td>
-</tr>
-<tr>
-<td style="text-align:left">UseAdaptiveSizePolicy</td>
-<td style="text-align:left">动态调整Java堆中各个区域的大小以及进入老年代的年龄。</td>
-</tr>
-<tr>
-<td style="text-align:left">HandlePromotionFailure</td>
-<td style="text-align:left">是否允许分配担保失败，即老年代的剩余空间不足以应对新生代的整个Eden和Survivor区的所有对象都存活的极端情况。</td>
-</tr>
-<tr>
-<td style="text-align:left">ParallelGCThreads</td>
-<td style="text-align:left">设置并行GC时进行内存回收的线程数。</td>
-</tr>
-<tr>
-<td style="text-align:left">GCTimeRatio</td>
-<td style="text-align:left">GC时间占总时间的比率，默认值是99，即允许1%的GC时间。仅在使用Parallel Scavenge回收器生效。</td>
-</tr>
-<tr>
-<td style="text-align:left">MaxGCPauseMillis</td>
-<td style="text-align:left">设置GC的最大停顿时间。仅在使用Parallel Scavenge回收器时生效。</td>
-</tr>
-<tr>
-<td style="text-align:left">CMSInitiatingOccupancyFraction</td>
-<td style="text-align:left">设置CMS回收器在老年代空间被使用多少后触发GC。默认值为68%，仅在使用CMS回收器生效。</td>
-</tr>
-<tr>
-<td style="text-align:left">UseCMSCompactAtFullCollection</td>
-<td style="text-align:left">设置CMS回收器在完成GC后是否要进行一次内存碎片整理。仅在使用CMS生效。</td>
-</tr>
-<tr>
-<td style="text-align:left">CMSFullGCBeforeCompaction</td>
-<td style="text-align:left">设置CMS回收器在进行若干次GC后再启动一次内存碎片整理。仅在使用CMS生效。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><a href="">深入理解Java虚拟机 第二版 周志明著</a></li>
-<li><a href="https://www.ibm.com/developerworks/cn/java/j-lo-JVMGarbageCollection/" target="_blank" rel="external">JVM 垃圾回收器工作原理及使用实例介绍</a></li>
-</ul>
-<hr>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/08/31/Java发展历程-图文版/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/08/31/Java发展历程-图文版/" itemprop="url">Java发展历程(图文版)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-31T10:43:25+08:00">
-                2015-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://farm6.staticflickr.com/5688/20398542974_320e0e569a_o.jpg" alt="Java发展历程"></p>
-<hr>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><a href="http://blog.b13technology.com/2015/08/19/java-history/" target="_blank" rel="external">The History of the Java Programming Language (Infographic)</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1965,7 +1916,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">66</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1978,7 +1929,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
