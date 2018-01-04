@@ -2052,6 +2052,7 @@
 <hr>
 <h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><ul>
 <li>更新：<code>git pull</code></li>
+<li>把master的更新merge到dev分支：<code>git checkout dev; git merge master</code></li>
 </ul>
 <hr>
 <h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><ul>
@@ -2075,7 +2076,7 @@
 <li>取消尚未add的修改：<code>git checkout -- &lt;file-name&gt;</code></li>
 <li>取消已经add到未commit的修改：<code>git reset HEAD &lt;file-name&gt;</code></li>
 <li>覆盖上次提交，用于已commit：<code>git commit --amend</code></li>
-<li>撤销本地commit(回滚到某次commit): <code>git log</code> + <code>git reset [--hard] &lt;commit-id&gt;</code></li>
+<li>撤销本地commit(回滚到某次commit): <code>git log; git reset [--hard] &lt;commit-id&gt;; git push --force</code></li>
 </ul>
 <hr>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
@@ -2241,7 +2242,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
