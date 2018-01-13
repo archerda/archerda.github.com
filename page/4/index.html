@@ -251,6 +251,132 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/24/编程之法-字符串的旋转/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/12/24/编程之法-字符串的旋转/" itemprop="url">编程之法-字符串的旋转</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-24T00:08:25+08:00">
+                2015-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>给定一个字符串，要求将字符串前面的若干个字符移到字符串的尾部。例如，将字符串“abcdef”的前三个字母‘a’、‘b’和‘c’移到字符串的尾部，那么原字符串将编程“defabc”。请编写一个函数实现此功能。</p>
+<h2 id="解法一：蛮力移位"><a href="#解法一：蛮力移位" class="headerlink" title="解法一：蛮力移位"></a>解法一：蛮力移位</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>将需要移动的字符一个一个地移动到字符的最后。编写一个leftShiftOne方法，每次将一个字符移动到字符串尾部，然后调用m次这个方法，使得字符串开头的m个字符移到字符串的尾部。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">char</span>[] s = <span class="keyword">new</span> <span class="keyword">char</span>[]&#123;<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>&#125;;</div><div class="line">		leftShiftString(s, s.length, <span class="number">3</span>);</div><div class="line">		System.out.println(s);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//移动首部m位字符到最后</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftShiftString</span><span class="params">(<span class="keyword">char</span>[] s, <span class="keyword">int</span> n, <span class="keyword">int</span> m)</span> </span>&#123;</div><div class="line">		<span class="keyword">while</span> (m &gt; <span class="number">0</span>) &#123;</div><div class="line">			leftShiftOne(s, n);</div><div class="line">			--m;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//移动首位字符到最后</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftShiftOne</span><span class="params">(<span class="keyword">char</span>[] s, <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">		<span class="keyword">char</span> t = s[<span class="number">0</span>];</div><div class="line">		</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</div><div class="line">			s[i - <span class="number">1</span>] = s[i];</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		s[n - <span class="number">1</span>] = t;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>针对长度为n的字符串来说，假设需要移动m个字符到字符串的末尾，那么总共需要m*n次操作，同时设立一个变量保存第一个字符。因此时间复杂度是<code>O(mn)</code>, 空间复杂度是<code>O(1)</code>。</p>
+<h2 id="解法二：三步反转"><a href="#解法二：三步反转" class="headerlink" title="解法二：三步反转"></a>解法二：三步反转</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>先将一个字符串分割成两个部分，然后将这两个部分的字符串分别反转，最后再对整个字符串整体反转（即三步反转），即可解决字符串旋转的问题。</p>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">char</span>[] s = <span class="keyword">new</span> <span class="keyword">char</span>[]&#123;<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>&#125;;</div><div class="line">		leftRotateString(s, s.length, <span class="number">3</span>);</div><div class="line">		System.out.println(s);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//字符串旋转</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftRotateString</span><span class="params">(<span class="keyword">char</span>[] s, <span class="keyword">int</span> n, <span class="keyword">int</span> m)</span> </span>&#123;</div><div class="line">		m %= n; <span class="comment">//若要左移动大于n位，那么与移动%n是等价的;</span></div><div class="line">		reverseString(s, <span class="number">0</span>, m - <span class="number">1</span>);</div><div class="line">		reverseString(s, m, n - <span class="number">1</span>);</div><div class="line">		reverseString(s, <span class="number">0</span>, n - <span class="number">1</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//字符串反转</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reverseString</span><span class="params">(<span class="keyword">char</span>[] s, <span class="keyword">int</span> from, <span class="keyword">int</span> to)</span> </span>&#123;</div><div class="line">		<span class="keyword">while</span> (from &lt; to) &#123;</div><div class="line">			<span class="keyword">char</span> t = s[from];</div><div class="line">			s[from++] = s[to];</div><div class="line">			s[to--] = t;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>这个方法的时间复杂度为<code>O(n)</code>，空间复杂度为<code>O(1)</code>。</p>
+<h2 id="举一反三：单词反转"><a href="#举一反三：单词反转" class="headerlink" title="举一反三：单词反转"></a>举一反三：单词反转</h2><h3 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h3><p>输入一个英文句子，翻转句子中单词的顺序。要求单词内字符的顺序保持不变，句子中单词以空格隔开。为简单起见，标点符号和普通字符一样处理。例如，若输入”I am a student.”，则输出”student. a am I”.</p>
+<h3 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h3><p>先反转每一个单词，再反转整个字符串。</p>
+<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		String str = <span class="string">"My name is luohuida!"</span>;</div><div class="line">		<span class="keyword">char</span>[] chs = leftRotateString(str.toCharArray(), str.length());</div><div class="line">		System.out.println(chs);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//单词翻转</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">char</span>[] leftRotateString(<span class="keyword">char</span>[] s, <span class="keyword">int</span> n) &#123;</div><div class="line">		<span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">		<span class="keyword">int</span> j = <span class="number">0</span>;</div><div class="line">		</div><div class="line">		<span class="comment">//先翻转每个单词</span></div><div class="line">		<span class="keyword">for</span> (; j &lt; n; ++j) &#123;</div><div class="line">			<span class="keyword">if</span> (j == n - <span class="number">1</span> || s[j+<span class="number">1</span>] == <span class="string">' '</span>) &#123;</div><div class="line">				reverseString(s, i, j);</div><div class="line">				i = j + <span class="number">2</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		reverseString(s, <span class="number">0</span>, n - <span class="number">1</span>);</div><div class="line"></div><div class="line">		<span class="keyword">return</span> s;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//字符串反转</span></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reverseString</span><span class="params">(<span class="keyword">char</span>[] s, <span class="keyword">int</span> from, <span class="keyword">int</span> to)</span> </span>&#123;</div><div class="line">		<span class="keyword">while</span> (from &lt; to) &#123;</div><div class="line">			<span class="keyword">char</span> t = s[from];</div><div class="line">			s[from++] = s[to];</div><div class="line">			s[to--] = t;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h3><p>时间复杂度<code>O(nlogn)</code>，空间复杂度<code>O(1)</code>。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="">《编程之法》</a></li>
+</ul>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/05/设计模式-六大设计原则/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1790,174 +1916,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/20/JVM-内存溢出异常实例/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/20/JVM-内存溢出异常实例/" itemprop="url">JVM 内存溢出异常实例</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-20T22:51:27+08:00">
-                2015-09-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在JVM规范的描述中，除了PC外，虚拟机内存的其他几个运行时区域都有发生<code>OutOfMemoryError</code>(OOM)异常的可能性。为了对这些异常进一步理解，我们将通过若干实例来验证异常发生的场景，并且会介绍几个与内存相关的最基本的虚拟机参数。</p>
-<p>其实写记录这篇文章的原因有2个：</p>
-<blockquote>
-<ol>
-<li>通过代码验证Java虚拟机规范中描述的各个运行时区域存储的内容；</li>
-<li>希望以后在工作中遇到实际的内存溢出异常是，能根据异常的信息快速判断是那个区域的内存溢出，知道什么样的代码可能会导致这些区域内存溢出，以及出现异常后该如何处理。</li>
-</ol>
-</blockquote>
-<p>首先，为了避免每次启动程序都需要手动敲入JVM参数，我们用Intellij IDEA来测试，并且在<code>RUN/DEBUG Configurations---VM options</code>中键入(参数说明请看这里：<a href="http://www.luohuida.com/2015/08/22/JVM-%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE%E5%8F%8A%E5%88%86%E6%9E%90/" target="_blank" rel="external">JVM-参数分析</a>)</p>
-<blockquote>
-<p>-verbose:gc -Xms20M -Xmx20M -Xmn10M<br>-XX:+PrintGCDetails -XX:SurvivorRatio=8</p>
-</blockquote>
-<p>如下图。<br><img src="https://c1.staticflickr.com/1/738/21374151329_35db70e94d_z.jpg" alt="在Intellij IDEA中设置虚拟机参数"></p>
-<h2 id="Java堆溢出"><a href="#Java堆溢出" class="headerlink" title="Java堆溢出"></a>Java堆溢出</h2><p>Java堆用于存储对象实例，只要不断地创建对象，并且保证GC Roots到对象之间有可达路径来避免GC来清除这些对象，那么在对象数量达到最大堆的容量限制后就回产生内存溢出异常。</p>
-<p>在下面的代码中，我们限制饿了Java堆的大小为20M，不可扩展(<strong>将堆的初始值-Xms与最大值-Xmx参数设置为一样即可避免堆自动扩展</strong>)，通过参数<code>-XX:+HeapDumpOnOutOfMemoeyError</code>可以让虚拟机在出现内存溢出异常时Dump出当前的内存堆转储快照以便事后进行分析。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.archerda.oom;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * VM options: -Xms20m -Xmx20m -XX:HeapDumpOnOutOfMemoryError</div><div class="line"> * Created by Archerda on 15/9/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeapOOM</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMObject</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        List&lt;OOMObject&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">            list.add(<span class="keyword">new</span> OOMObject());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>输出结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">java.lang.OutOfMemoryError: Java heap space</div><div class="line">Dumping heap to java_pid23366.hprof ...</div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.OutOfMemoryError: Java heap space</div><div class="line">Heap dump file created [<span class="number">27701731</span> bytes in <span class="number">0.202</span> secs]</div></pre></td></tr></table></figure></p>
-<p>Java堆内存的OOM异常是实际应用中常见的内存溢出异常情况。当出现Java堆内存溢出异常时，异常堆栈信息<code>java.lang.OutOfMemoryError</code>会跟着进一步提示<code>Java heap space</code>。</p>
-<p>要解决这个区域的异常，一般的手段是先通过内存映像分析工具Jstat工具来分析下。首先找到堆转储文件java_pid23366.hprof，默认在工程的根目录下，也可以通过-XX:+HeapDumpOnOutOfMemoeyError=&lt; file-path &gt;来指定。然后运行<code>jstat java_pid23366.hprof</code>，jstat分析完成后会生成html文件并启动服务器，我们访问默认端口localhost:7000打开分析结果页面，默认会显示功能列表，我们主要关注的是有多少个实例存在导致了内存异常，所以我们点击链接<code>Show instance counts for all classes (excluding platform)</code>。如下图。<br><img src="https://c1.staticflickr.com/1/759/21570648651_f2f93da65d_z.jpg" alt=""></p>
-<p>然后会调到下面这个页面，从这张图中我们可以很清晰的看见堆中竟然存在810326个OOMObject对象，由此问题的根源就显而易见了。<br><img src="https://c2.staticflickr.com/6/5700/20940716653_d806a7835d_z.jpg" alt=""></p>
-<p>除了用jstat这个命令行工具外，我们还可以使用jvisualvm这个可视化工具来分析，只要把.hprof文件导入进去就可以了。如下图。<br><img src="https://c1.staticflickr.com/1/633/21551225682_c26ee32d5b_z.jpg" alt="利用jvisualvm分析堆转储文件"></p>
-<p>如果是内存泄露，可进一步通过工具查看泄露对象到GC Roots的引用链。于是就能找到泄露对象是通过怎样的路径与GC Roots相关联并导致GC无法自动回收它们的。掌握了泄露对象的类型信息及GC Roots引用链的信息，就可以比较准确地定位出泄露代码的位置。</p>
-<p>如果不存在泄露，换句话说，就是内存中的对象确实都还必须存活着，那就应当检查虚拟机的参数(-Xms与-Xmx)，与物理机内存对比看是否还可以调大，从代码检查是否存在某些对象生命周期过长、持有状态时间过长的情况，尝试减少程序运行时期的内存消耗。</p>
-<h2 id="虚拟机栈和本地方法栈溢出"><a href="#虚拟机栈和本地方法栈溢出" class="headerlink" title="虚拟机栈和本地方法栈溢出"></a>虚拟机栈和本地方法栈溢出</h2><p>由于在HotSpot虚拟机中不区分虚拟机栈和本地方法栈，因此，对于HotSpot来说，虽然-Xoss参数(设置本地方法栈大小)存在，但是毫无意义，栈容量只由<strong>-Xss</strong>参数设定。关于虚拟机栈和本地方法栈，在Java虚拟机规范中描述了2中异常：</p>
-<ol>
-<li>如果线程请求的栈深度大于虚拟机所允许的最大深度，将抛出StackOverflowError异常；</li>
-<li>如果虚拟机在扩展时无法申请到足够的内存空间，将抛出OutOfMemoryError异常；</li>
-</ol>
-<p>这里把异常分为2中情况，看似更加严谨，但却存在一些互相重叠的地方：当栈空间无法继续分配时，到底是内存太小，还是已使用的栈空间太大，其本质上都是对同一件事情的两种描述而已。</p>
-<p>在实验中，将范围限制于单线程中的操作，尝试了下面2中方法均无法让虚拟机产生OutOfMemoryError异常，尝试的结果都是获得StackOverflowError异常，测试代码如下：</p>
-<ol>
-<li>使用<strong>-Xss</strong>参数减少栈内存容量。结果：抛出StackOverflowError异常，异常出现时将输出栈的深度；</li>
-<li>定义了大量的本地变量，增大此方法帧中本地变量表的长度，结果：抛出StackOverflowError异常。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.archerda.oom;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * VM Options: -Xss160k</div><div class="line"> * Created by Archerda on 15/9/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaVMStackOF</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> stackLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stackLeak</span><span class="params">()</span> </span>&#123;</div><div class="line">        stackLength++;</div><div class="line">        stackLeak();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable</span>&#123;</div><div class="line">        JavaVMStackOF oom = <span class="keyword">new</span> JavaVMStackOF();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            oom.stackLeak();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"stack length: "</span> + oom.stackLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>输出结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">stack length: <span class="number">751</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">	at com.archerda.oom.JavaVMStackOF.stackLeak(JavaVMStackOF.java:<span class="number">11</span>)</div><div class="line">	at com.archerda.oom.JavaVMStackOF.stackLeak(JavaVMStackOF.java:<span class="number">12</span>)</div><div class="line">...后面省略</div></pre></td></tr></table></figure></p>
-<p>结果表明：在单个线程的情况下，无论是由于栈帧太大还是虚拟机栈容量太小，当内存无法分配的时候，虚拟机抛出的都是StackOverflowError异常。</p>
-<h2 id="方法区和运行时常量池溢出"><a href="#方法区和运行时常量池溢出" class="headerlink" title="方法区和运行时常量池溢出"></a>方法区和运行时常量池溢出</h2><p>由于运行时常量池是方法区的一部分，因此这2个区域的溢出测试就放在一齐进行。之前说过JDK1.7开始逐步”去永久代”的事情，在此就以测试代码观察一下这件事对程序的实际影响。</p>
-<p>String.intern()是一个native方法，它的作用是：如果字符串常量池中已经包含了一个等于此String对象的字符串，则返回代表池中这个字符串的String对象；否则，将此String对象包含的字符串添加到常量池中，并且返回此String对象的引用。在JDK1.6及之前的版本中，由于常量池分配在永久代中，我们可以通过<code>-XX:PermSIze</code>和<code>-XX:MaxPernSize</code>限制方法区大小，从而间接限制其中常量池的容量。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.archerda.oom;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * JDK 1.6中有效，JDK1.7中无效。</div><div class="line"> * VM Options: -XX:PermSize=10m -XX:MaxPermSize=10m</div><div class="line"> * Created by Archerda on 15/9/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(); <span class="comment">// 使用List保持常量池的引用，避免FullGC回收常量池行为.</span></div><div class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">            list.add(String.valueOf(i).intern()); <span class="comment">// 10MB的PermSize在integer范围内足够产生OOM了.</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>运行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Exception in thread <span class="string">"main"</span> java.lang.OutOfMemoryError: PermGen space</div><div class="line"> at java.lang.String.intern(Native Method)</div><div class="line"> at com.archerda.oom.RuntimeConstantPoolOOM...</div></pre></td></tr></table></figure></p>
-<p>从运行结果中可以看出，运行时常量池溢出，在OutOfMemoryError后面跟随的提示信息是”<strong>PermGen space</strong>“，说明运行时常量池属于方法区(HotSpot虚拟机中的永久代)的一部分。</p>
-<p>而使用JDK1.7运行这段程序就不会等到相同的结果，while循环将一直循环下去。关于这个字符串常量池的实现问题，还可以引申出一个有意思的影响，看如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.archerda.oom;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by Archerda on 15/9/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        String str1 = <span class="keyword">new</span> StringBuilder(<span class="string">"计算机"</span>).append(<span class="string">"软件"</span>).toString();</div><div class="line">        System.out.println(str1.intern() == str1);</div><div class="line"></div><div class="line">        String str2 = <span class="keyword">new</span> StringBuilder(<span class="string">"ja"</span>).append(<span class="string">"va"</span>).toString();</div><div class="line">        System.out.println(str2.intern() == str2);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>JDK1.6运行结果:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">false</span></div><div class="line"><span class="keyword">false</span></div></pre></td></tr></table></figure></p>
-<p>JDK1.7运行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">true</span></div><div class="line"><span class="keyword">false</span></div></pre></td></tr></table></figure></p>
-<p>分析：</p>
-<blockquote>
-<p>在1.6中，intern()方法会把首次遇到的字符串实例复制到常量池中，返回的也是常量池中的这个字符串实例的引用，而StringBuilder创建的字符串在堆上，所有必然不是同一个引用，所以2个都是false。</p>
-<p>而在1.7中，intern()实现<strong>不会再复制</strong>，只是在常量池中记录首次出现的实例引用，因此intern()返回的引用和由StringBuilder创建的那个字符串是同一个。对于str2比较返回是false是因为”java”这个字符串在执行StringBuilder.toString()之前已经出现过(？？？哪里出现了卧槽，虚拟机加载的关键字么，可是pack+age还是返回true啊)，字符串常量池已经有它的引用了，不符合“首次出现”的原则，而“计算机软件”这个字符串是首次出现的。</p>
-</blockquote>
-<p>方法区用于存放Class的相关信息，如类名、访问修饰符、常量池、字段描述、方法描述等。对于这些区域的测试，基本的思路是运行时生成大量的类去填满方法区，直到溢出。虽然直接使用Java SE API也可以动态产生类(如反射时的GeneratedConstructorAccessor和动态代理等)，但我们这次使用CGLib直接操作字节码运行时生成大量的动态类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.archerda.oom;</div><div class="line"></div><div class="line"><span class="keyword">import</span> net.sf.cglib.proxy.Enhancer;</div><div class="line"><span class="keyword">import</span> net.sf.cglib.proxy.MethodInterceptor;</div><div class="line"><span class="keyword">import</span> net.sf.cglib.proxy.MethodProxy;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.lang.reflect.Method;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by Archerda on 15/9/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaMethodAreaOOM</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">            Enhancer enhancer = <span class="keyword">new</span> Enhancer();</div><div class="line">            enhancer.setSuperclass(OOMObject.class);</div><div class="line">            enhancer.setUseCache(<span class="keyword">false</span>);</div><div class="line">            enhancer.setCallback(<span class="keyword">new</span> MethodInterceptor() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">                    <span class="keyword">return</span> methodProxy.invokeSuper(o, objects);</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            enhancer.create();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMObject</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>运行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Caused by: java.lang.OutOfMemoryError: PernGen space</div><div class="line">    at...</div></pre></td></tr></table></figure></p>
-<p>值得注意的是，我们在这个例子中的模拟场景并不是一个纯碎的实验，这样的应用经常会出现在实际的应用之中：当前很多主流的框架，如Spring、Hibernate，在对类进行增强的时候，都是使用CGLib这类字节码技术，增强的类越多，就需要越大的方法区来保证动态生成的Class可以载入内存。</p>
-<p>方法区溢出也是一种常见的内存溢出异常，一个类要被GC回收掉，判定条件是比较苛刻的。在经常动态生成大量Class的应用中，需要特别注意类的回收情况。这类场景除了CGLib字节码增强之外，常见的还有：大量JSP或动态产生JSP文件的应用（JSP第一次运行需要被编译为Java类）、基于OSGi的应用（即使是同一个类文件，被不同的类加载器加载会视为不同的类）等。</p>
-<hr>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><a href="">深入理解Java虚拟机(第二版) 周志明著</a></li>
-</ul>
-<hr>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2007,7 +1965,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
