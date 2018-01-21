@@ -90,17 +90,17 @@
 
 
 
-<meta name="description" content="连接远程Server：zkCli.sh –server &amp;lt;ip&amp;gt;:&amp;lt;port&amp;gt; 查看节点数据：ls &amp;lt;path&amp;gt;，比如ls / 则查看根目录节点数据 查看节点数据并能看到更新次数等数据：ls2 &amp;lt;path&amp;gt;，输出字段含义如下： cZxid：创建节点的事务id ctime：创建节点的时间 mZxid：修改节点的事务id mtime：修改节点的时间 p">
+<meta name="description" content="连接 连接本地Server：bash zkCli.sh 连接远程Server：bash zkCli.sh –server &amp;lt;ip&amp;gt;:&amp;lt;port&amp;gt;  配置 获取服务器配置信息： telnet &amp;lt;host&amp;gt; &amp;lt;port&amp;gt;, conf echo conf | nc &amp;lt;host&amp;gt; &amp;lt;port&amp;gt;   获取所有客户端连接的详细信息：ech">
 <meta name="keywords" content="Zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zookeeper常用命令">
 <meta property="og:url" content="http://yoursite.com/2017/11/16/Zookeeper常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
-<meta property="og:description" content="连接远程Server：zkCli.sh –server &amp;lt;ip&amp;gt;:&amp;lt;port&amp;gt; 查看节点数据：ls &amp;lt;path&amp;gt;，比如ls / 则查看根目录节点数据 查看节点数据并能看到更新次数等数据：ls2 &amp;lt;path&amp;gt;，输出字段含义如下： cZxid：创建节点的事务id ctime：创建节点的时间 mZxid：修改节点的事务id mtime：修改节点的时间 p">
-<meta property="og:updated_time" content="2017-11-16T11:47:09.533Z">
+<meta property="og:description" content="连接 连接本地Server：bash zkCli.sh 连接远程Server：bash zkCli.sh –server &amp;lt;ip&amp;gt;:&amp;lt;port&amp;gt;  配置 获取服务器配置信息： telnet &amp;lt;host&amp;gt; &amp;lt;port&amp;gt;, conf echo conf | nc &amp;lt;host&amp;gt; &amp;lt;port&amp;gt;   获取所有客户端连接的详细信息：ech">
+<meta property="og:updated_time" content="2018-01-21T15:24:14.460Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper常用命令">
-<meta name="twitter:description" content="连接远程Server：zkCli.sh –server &amp;lt;ip&amp;gt;:&amp;lt;port&amp;gt; 查看节点数据：ls &amp;lt;path&amp;gt;，比如ls / 则查看根目录节点数据 查看节点数据并能看到更新次数等数据：ls2 &amp;lt;path&amp;gt;，输出字段含义如下： cZxid：创建节点的事务id ctime：创建节点的时间 mZxid：修改节点的事务id mtime：修改节点的时间 p">
+<meta name="twitter:description" content="连接 连接本地Server：bash zkCli.sh 连接远程Server：bash zkCli.sh –server &amp;lt;ip&amp;gt;:&amp;lt;port&amp;gt;  配置 获取服务器配置信息： telnet &amp;lt;host&amp;gt; &amp;lt;port&amp;gt;, conf echo conf | nc &amp;lt;host&amp;gt; &amp;lt;port&amp;gt;   获取所有客户端连接的详细信息：ech">
 
 
 
@@ -318,9 +318,28 @@
       
 
       
-        <ul>
-<li>连接远程Server：<code>zkCli.sh –server &lt;ip&gt;:&lt;port&gt;</code></li>
-<li>查看节点数据：<code>ls &lt;path&gt;</code>，比如<code>ls /</code> 则查看根目录节点数据</li>
+        <h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><ul>
+<li>连接本地Server：<code>bash zkCli.sh</code></li>
+<li>连接远程Server：<code>bash zkCli.sh –server &lt;ip&gt;:&lt;port&gt;</code></li>
+</ul>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li>获取服务器配置信息：<ul>
+<li><code>telnet &lt;host&gt; &lt;port&gt;</code>, <code>conf</code></li>
+<li><code>echo conf | nc &lt;host&gt; &lt;port&gt;</code></li>
+</ul>
+</li>
+<li>获取所有客户端连接的详细信息：<code>echo cons | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>重置所有客户端连接的统计信息：<code>echo crst | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>输出当前集群的所有会话信息：<code>echo dump | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>获取服务器运行时的环境信息：<code>echo envi | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>判断服务器是否正在运行：<code>echo ruok | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>获取服务器运行时状态信息：<code>echo stat | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>获取当前服务器上管理的Watcher的概要信息：<code>echo wchs | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>获取当前服务器上管理的Watcher的详细信息：<code>echo wchc | nc &lt;host&gt; &lt;port&gt;</code></li>
+<li>获取比stat更详细的服务器统计信息：<code>echo mntr | nc &lt;host&gt; &lt;port&gt;</code><br>-</li>
+</ul>
+<h2 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h2><ul>
+<li>查看节点数据：<code>ls &lt;path&gt; [watch]</code>，比如<code>ls /</code> 则查看根目录节点数据</li>
 <li>查看节点数据并能看到更新次数等数据：<code>ls2 &lt;path&gt;</code>，输出字段含义如下：<ul>
 <li>cZxid：创建节点的事务id</li>
 <li>ctime：创建节点的时间</li>
@@ -335,9 +354,9 @@
 <li>numChildren：子节点数量</li>
 </ul>
 </li>
-<li>创建节点：<code>create &lt;path&gt; &lt;data&gt;</code></li>
+<li>创建节点：<code>create [-s] [-e] &lt;path&gt; &lt;data&gt; [acl]</code>，其中-s指定为顺序节点，-e为临时节点，不指定则为持久性节点；</li>
 <li>获取节点，包含数据和更新次数等数据：<code>get &lt;path&gt;</code></li>
-<li>修改节点：<code>set &lt;path&gt; &lt;data&gt;</code></li>
+<li>修改节点：<code>set &lt;path&gt; &lt;data&gt; [version]</code></li>
 <li>删除节点：<code>delete &lt;path&gt;</code>，如果有子节点存在则删除失败</li>
 </ul>
 
@@ -441,8 +460,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
@@ -515,6 +543,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接"><span class="nav-number">1.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据操作"><span class="nav-number">3.</span> <span class="nav-text">数据操作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
