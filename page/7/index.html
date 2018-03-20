@@ -355,6 +355,8 @@
 <li>从版本控制中删除某个文件：<code>git rm [dir-name/]&lt;file-name&gt;</code></li>
 <li>提交修改：<code>git commit -m &quot;&lt;your-commit-note&gt;&quot;</code></li>
 <li>推送到远程仓库：<code>git push [origin master]</code></li>
+<li>创建本地分支：<code>git checkout -b [new branch name]</code></li>
+<li>推送本地分支到远程分支：<code>git push origin localBranchName:remoteBranchName</code></li>
 </ul>
 <hr>
 <h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><blockquote>
@@ -1361,9 +1363,11 @@
 <li>已解析依赖列表：<code>mvn dependency:resolve</code> <code>mvn dependency:list</code></li>
 <li>分析依赖：<code>mvn dependency:analyze</code></li>
 <li>获取插件帮助</li>
+<li>跳过Test：<code>-DskipTests(编译但是不运行)</code> <code>-Dmaven.test.skip=true(不编译不运行)</code></li>
+<li>build一个失败后，继续执行其他：<code>-fn</code></li>
 </ul>
 <h2 id="archetype插件"><a href="#archetype插件" class="headerlink" title="archetype插件"></a>archetype插件</h2><ul>
-<li>创建mvn项目：<code>mvn archetype:generate</code><br><code>mvn archetype:generate -DgroupId=&lt;your-groupId&gt; -DartifactId=&lt;your-artifactId&gt; -Dversion=&lt;version&gt; -Dpackage=&lt;package-name&gt;</code></li>
+<li>创建mvn项目：<code>mvn archetype:generate</code> <code>mvn archetype:generate -DgroupId=&lt;your-groupId&gt; -DartifactId=&lt;your-artifactId&gt; -Dversion=&lt;version&gt; -Dpackage=&lt;package-name&gt;</code></li>
 </ul>
 <h2 id="web容器中间件插件"><a href="#web容器中间件插件" class="headerlink" title="web容器中间件插件"></a>web容器中间件插件</h2><ul>
 <li>运行项目于 jetty 上：<code>mvn -Djetty.port=&lt;port&gt; jetty:run</code></li>

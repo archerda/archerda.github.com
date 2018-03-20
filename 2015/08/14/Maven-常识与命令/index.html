@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/14/Maven-常识与命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 发布构件(不包含子模块): mvn clean deploy -N 打包：mvn package 只打 jar 包：">
-<meta property="og:updated_time" content="2017-11-06T11:01:19.296Z">
+<meta property="og:updated_time" content="2018-03-20T15:33:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven 常识与命令">
 <meta name="twitter:description" content="基本命令 打印系统所有的系统属性和环境变量：mvn help:system 查看版本：mvn -v mvn -version 编译：mvn compile 删除 target ：mvn clean 安装构件到本地仓库：mvn install 发布构件到远程仓库：mvn deploy 发布构件(不包含子模块): mvn clean deploy -N 打包：mvn package 只打 jar 包：">
@@ -332,9 +332,11 @@
 <li>已解析依赖列表：<code>mvn dependency:resolve</code> <code>mvn dependency:list</code></li>
 <li>分析依赖：<code>mvn dependency:analyze</code></li>
 <li>获取插件帮助</li>
+<li>跳过Test：<code>-DskipTests(编译但是不运行)</code> <code>-Dmaven.test.skip=true(不编译不运行)</code></li>
+<li>build一个失败后，继续执行其他：<code>-fn</code></li>
 </ul>
 <h2 id="archetype插件"><a href="#archetype插件" class="headerlink" title="archetype插件"></a>archetype插件</h2><ul>
-<li>创建mvn项目：<code>mvn archetype:generate</code><br><code>mvn archetype:generate -DgroupId=&lt;your-groupId&gt; -DartifactId=&lt;your-artifactId&gt; -Dversion=&lt;version&gt; -Dpackage=&lt;package-name&gt;</code></li>
+<li>创建mvn项目：<code>mvn archetype:generate</code> <code>mvn archetype:generate -DgroupId=&lt;your-groupId&gt; -DartifactId=&lt;your-artifactId&gt; -Dversion=&lt;version&gt; -Dpackage=&lt;package-name&gt;</code></li>
 </ul>
 <h2 id="web容器中间件插件"><a href="#web容器中间件插件" class="headerlink" title="web容器中间件插件"></a>web容器中间件插件</h2><ul>
 <li>运行项目于 jetty 上：<code>mvn -Djetty.port=&lt;port&gt; jetty:run</code></li>
