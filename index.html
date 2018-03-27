@@ -251,6 +251,236 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/27/性能优化指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/27/性能优化指南/" itemprop="url">性能优化指南</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-27T23:05:22+08:00">
+                2018-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h2><h3 id="术语解析"><a href="#术语解析" class="headerlink" title="术语解析"></a>术语解析</h3><ul>
+<li>TPS/QPS/RPS<ul>
+<li>每秒事务处理数/每秒查询数/每秒请求数；</li>
+<li>TPS是软件测试结果的测试单位。一个事务是指一个客户机向服务器发送请求然后服务器作出响应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，依次来计算使用的时间和完成的事务个数；</li>
+</ul>
+</li>
+<li>RT<ul>
+<li>Response Time，系统对请求作出响应的时间，一般取平均响应时间；</li>
+</ul>
+</li>
+<li>吞吐量<ul>
+<li>指一次性能测试过程中网络上传输的数据量的总和。</li>
+<li>对于交互式的应用来说，吞吐量反应了服务器承受的压力，能够说明系统级别的负载能力。</li>
+</ul>
+</li>
+<li>ThroughPut<ul>
+<li>吞吐率</li>
+<li>我们一般使用单位时间内服务器处理的请求数来描述其并发处理能力。称之为吞吐率（Throughput），单位是 “req/s”。吞吐率特指Web服务器单位时间内处理的请求数。</li>
+<li>另一种描述，吞吐率是，单位时间内网络上传输的数据量，也可以指单位时间内处理客户请求数量。它是衡量网络性能的重要指标。通常情况下，吞吐率“字节数/秒”来衡量。当然你也可以用“请求数/秒”和“页面数/秒”来衡量。其实不管一个请求还是一个页面，它的本质都是在网络上传输的数据，那么用来表述数据的单位就是字节数。</li>
+</ul>
+</li>
+<li>并发数<ul>
+<li>系统同时处理的请求数/事务数；</li>
+<li>TPS(QPS)=并发数/平均响应时间。假如某个应用的并发数是200，平均响应时间是50ms，那么它的TPS=200/0.05=4000。</li>
+</ul>
+</li>
+<li><p>错误数</p>
+<ul>
+<li>单位时间内请求的错误数；</li>
+</ul>
+<p><strong>一个系统吞吐量通常由QPS（TPS）、并发数两个因素决定</strong>，每套系统这两个值都有一个相对极限值，在应用场景访问压力下，只要某一项达到系统最高值，系统的吞吐量就上不去了，如果压力继续增大，系统的吞吐量反而会下降，原因是系统超负荷工作，上下文切换、内存等等其它消耗导致系统性能下降。</p>
+</li>
+</ul>
+<h3 id="图谱分析"><a href="#图谱分析" class="headerlink" title="图谱分析"></a>图谱分析</h3><h4 id="TPS折线下滑"><a href="#TPS折线下滑" class="headerlink" title="TPS折线下滑"></a>TPS折线下滑</h4><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-154749.jpg" alt="TPS异常"></p>
+<p>现象：横坐标代表TPS，纵坐标代表自然时间。可以发现，在9：00时，TPS突然开始急剧下滑，到11：00时，TPS接近为0；</p>
+<p>分析：</p>
+<ul>
+<li>网路IO问题。如果机器负载（CPU和内存）正常，有可能是网络出现阻塞，延时现象严重，进而导致TPS急剧下降；</li>
+<li>程序阻塞问题。如果机器负载正常，并且IO也正常，那么把堆栈信息打印出来，看是否是死锁导致TPS急剧下降；</li>
+<li>内存溢出。如果机器的内存不足，极大可能是内存溢出了，把堆信息打印出来看下；</li>
+<li>数据库连接数过小。导致很多请求处于等待状态，导致TPS下滑；</li>
+<li>应用服务器线程数过小。导致很多请求处于等待状态，导致TPS下滑；</li>
+</ul>
+<h4 id="TPS波动"><a href="#TPS波动" class="headerlink" title="TPS波动"></a>TPS波动</h4><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-161134.jpg" alt="TPS波动"></p>
+<p>现象：在9：00到15：00之间，TPS一直来回波动；</p>
+<p>分析：</p>
+<ul>
+<li>定时任务。查看程序代码，看是否有定时任务在这个时间点运行，如果这个定时任务消耗了过多的资源，会导致TPS稳定地来回波动；</li>
+<li>FullGC。JVM执行FullGC的时候，会StopTheWorld，导致短时间内应用停顿，会造成TPS来回波动；</li>
+<li>日志输出。有时间规律的小幅度波动，可能是日志写硬盘造成的；</li>
+<li>Redis持久化。持久化时，会将内存中的数据写入到硬盘中，这时如果很有规律的波动，也有可能是redis有规律的写入硬盘造成硬盘那个点无法提供服务造成的波动；</li>
+<li>网络问题。如果是无规律的波动，可能是网络问题，这个比较难排查，可以根据其他服务的TPS来协助定位；</li>
+<li>黑白名单。一个用户1秒请求次数太多，导致被拒绝；</li>
+</ul>
+<h4 id="LR图区域分析"><a href="#LR图区域分析" class="headerlink" title="LR图区域分析"></a>LR图区域分析</h4><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-162252.jpg" alt="LR图区域分析"></p>
+<ul>
+<li>性能平稳期：在不进行更多性能调优情况下所能达到的最佳性能，在与压力区域的拐点所对应的并发数为最佳并发；</li>
+<li>压力区域：RT轻微上升的区域，可以通过对应需求的RT阈值来得到应用可容忍的最大并发；</li>
+<li>性能拐点：RT急剧上升，性能急剧下降；</li>
+</ul>
+<h2 id="性能优化的准备"><a href="#性能优化的准备" class="headerlink" title="性能优化的准备"></a>性能优化的准备</h2><h3 id="目标制定"><a href="#目标制定" class="headerlink" title="目标制定"></a>目标制定</h3><p>比如：</p>
+<ul>
+<li>TPS在1000以上；单就静态页面，TPS大概能到1W+，简单数据库操作大概2K+的样子，用Cache大概能到5K+。</li>
+<li>TPS波动在一定范围内；TPS应该是一个比较平稳的曲线，而不是上下波动,TPS波动范围 = TPS标准差/TPS平均值 * 100%,在5%内算是正常的</li>
+<li>平均响应时间在200ms内；</li>
+<li>超时概率小于1/10000；</li>
+<li>并发数在500以上；</li>
+<li>错误概率小于1/10000；</li>
+<li>FullGC频率平均大于半小时1次；</li>
+<li>CPU利用率小于75%；</li>
+<li>平均每core的CPU的load小于1；</li>
+</ul>
+<h3 id="了解系统架构"><a href="#了解系统架构" class="headerlink" title="了解系统架构"></a>了解系统架构</h3><h3 id="了解使用的组件"><a href="#了解使用的组件" class="headerlink" title="了解使用的组件"></a>了解使用的组件</h3><h4 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h4><p>//TODO<br>tomcat最大tps、最大并发</p>
+<h4 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h4><p>//TODO<br>mysql最大TPS、最大并发</p>
+<h4 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h4><p>//TODO<br>reids最大TPS</p>
+<h3 id="了解工具"><a href="#了解工具" class="headerlink" title="了解工具"></a>了解工具</h3><h4 id="LR"><a href="#LR" class="headerlink" title="LR"></a>LR</h4><h4 id="JMeter"><a href="#JMeter" class="headerlink" title="JMeter"></a>JMeter</h4><h4 id="Top"><a href="#Top" class="headerlink" title="Top"></a>Top</h4><h4 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h4><h4 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h4><h2 id="性能优化定理"><a href="#性能优化定理" class="headerlink" title="性能优化定理"></a>性能优化定理</h2><h3 id="资源来源"><a href="#资源来源" class="headerlink" title="资源来源"></a>资源来源</h3><h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><ul>
+<li>IO资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：批量（Buffer）输入/输出，顺序写/预读；</li>
+<li>增强：固态硬盘、磁盘阵列、PCIE接口；</li>
+</ul>
+</li>
+<li>CPU资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：减少线程切换（sy -&gt; us），优化算法；</li>
+<li>增强：增加CPU核心/频率；</li>
+</ul>
+</li>
+<li>内存资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：内存 -&gt; 磁盘（LRU）</li>
+<li>增强：增加内存；</li>
+</ul>
+</li>
+</ul>
+<h4 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h4><ul>
+<li>IO资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：压缩、批量（Buffer）输入输出，TCP参数调优；</li>
+<li>增强：增加带宽；</li>
+</ul>
+</li>
+</ul>
+<h3 id="性能平衡"><a href="#性能平衡" class="headerlink" title="性能平衡"></a>性能平衡</h3><ul>
+<li>掌握好平衡度，可以让整体性能提升更大</li>
+<li>优化是个双刃剑，在性能提升的同时可能带来更多的麻烦</li>
+</ul>
+<p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-165129.jpg" alt="难度与性能"></p>
+<h4 id="二八原则"><a href="#二八原则" class="headerlink" title="二八原则"></a>二八原则</h4><p>80%的性能提升在20%的优化点上</p>
+<h3 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h3><ul>
+<li>过早优化是万恶之源</li>
+<li>尽量使用硬件优化代替深度的代码优化</li>
+<li>尽量保证简单</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://blog.csdn.net/ll413343176/article/details/38735705" target="_blank" rel="external">压力测试tps性能下降问题解决方案</a></li>
+<li><a href="http://www.cnblogs.com/shengs/p/4771995.html" target="_blank" rel="external">网站性能测试PV到TPS的转换以及TPS的波动和淘宝性能测试要点</a></li>
+<li><a href="http://www.cnblogs.com/zhanjindong/p/concurrent-and-tomcat-threads-updated.html#update-2015-1-20" target="_blank" rel="external">聊下并发和Tomcat线程数</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/13/设计原则以及模式分类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1359,128 +1589,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/设计模式系列二之观察者模式-Observer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/20/设计模式系列二之观察者模式-Observer/" itemprop="url">设计模式系列二之观察者模式(Observer)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-20T20:44:35+08:00">
-                2017-08-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="什么是观察者模式：让你的对象知悉现状"><a href="#什么是观察者模式：让你的对象知悉现状" class="headerlink" title="什么是观察者模式：让你的对象知悉现状"></a>什么是观察者模式：让你的对象知悉现状</h2><blockquote>
-<p><strong>观察者模式</strong>是软件设计模式中的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常呼叫各个观察者所提供的方法来实现。</p>
-<ul>
-<li>摘自维基百科</li>
-</ul>
-</blockquote>
-<p>简单来说，<strong>观察者模式</strong>定义了对象之间的一对多依赖，这样一来，当一个对象改变状态是，它的所有依赖者都会收到通知并自动更新。在观察者模式中，一对多依赖中的”一”一般被称作<strong>主题(Subject)</strong>，而”多”则被称作<strong>观察者(Observer)</strong>。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/20/设计模式系列二之观察者模式-Observer/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1530,7 +1638,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

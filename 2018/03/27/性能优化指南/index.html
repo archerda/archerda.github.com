@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="性能指标术语解析 TPS/QPS/RPS 每秒事务处理数/每秒查询数/每秒请求数； TPS是软件测试结果的测试单位。一个事务是指一个客户机向服务器发送请求然后服务器作出响应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，依次来计算使用的时间和完成的事务个数；   RT Response Time，系统对请求作出响应的时间，一般取平均响应时间；   吞吐量 指一次性能测试过程中网络上传">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能优化指南">
+<meta property="og:url" content="http://yoursite.com/2018/03/27/性能优化指南/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="性能指标术语解析 TPS/QPS/RPS 每秒事务处理数/每秒查询数/每秒请求数； TPS是软件测试结果的测试单位。一个事务是指一个客户机向服务器发送请求然后服务器作出响应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，依次来计算使用的时间和完成的事务个数；   RT Response Time，系统对请求作出响应的时间，一般取平均响应时间；   吞吐量 指一次性能测试过程中网络上传">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-154749.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-161134.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-162252.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-165129.jpg">
+<meta property="og:updated_time" content="2018-03-27T16:53:19.620Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="性能优化指南">
+<meta name="twitter:description" content="性能指标术语解析 TPS/QPS/RPS 每秒事务处理数/每秒查询数/每秒请求数； TPS是软件测试结果的测试单位。一个事务是指一个客户机向服务器发送请求然后服务器作出响应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，依次来计算使用的时间和完成的事务个数；   RT Response Time，系统对请求作出响应的时间，一般取平均响应时间；   吞吐量 指一次性能测试过程中网络上传">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-154749.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/27/性能优化指南/"/>
+
+
+
+
+
+  <title>性能优化指南 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/27/性能优化指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">性能优化指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-27T23:05:22+08:00">
+                2018-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h2><h3 id="术语解析"><a href="#术语解析" class="headerlink" title="术语解析"></a>术语解析</h3><ul>
+<li>TPS/QPS/RPS<ul>
+<li>每秒事务处理数/每秒查询数/每秒请求数；</li>
+<li>TPS是软件测试结果的测试单位。一个事务是指一个客户机向服务器发送请求然后服务器作出响应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，依次来计算使用的时间和完成的事务个数；</li>
+</ul>
+</li>
+<li>RT<ul>
+<li>Response Time，系统对请求作出响应的时间，一般取平均响应时间；</li>
+</ul>
+</li>
+<li>吞吐量<ul>
+<li>指一次性能测试过程中网络上传输的数据量的总和。</li>
+<li>对于交互式的应用来说，吞吐量反应了服务器承受的压力，能够说明系统级别的负载能力。</li>
+</ul>
+</li>
+<li>ThroughPut<ul>
+<li>吞吐率</li>
+<li>我们一般使用单位时间内服务器处理的请求数来描述其并发处理能力。称之为吞吐率（Throughput），单位是 “req/s”。吞吐率特指Web服务器单位时间内处理的请求数。</li>
+<li>另一种描述，吞吐率是，单位时间内网络上传输的数据量，也可以指单位时间内处理客户请求数量。它是衡量网络性能的重要指标。通常情况下，吞吐率“字节数/秒”来衡量。当然你也可以用“请求数/秒”和“页面数/秒”来衡量。其实不管一个请求还是一个页面，它的本质都是在网络上传输的数据，那么用来表述数据的单位就是字节数。</li>
+</ul>
+</li>
+<li>并发数<ul>
+<li>系统同时处理的请求数/事务数；</li>
+<li>TPS(QPS)=并发数/平均响应时间。假如某个应用的并发数是200，平均响应时间是50ms，那么它的TPS=200/0.05=4000。</li>
+</ul>
+</li>
+<li><p>错误数</p>
+<ul>
+<li>单位时间内请求的错误数；</li>
+</ul>
+<p><strong>一个系统吞吐量通常由QPS（TPS）、并发数两个因素决定</strong>，每套系统这两个值都有一个相对极限值，在应用场景访问压力下，只要某一项达到系统最高值，系统的吞吐量就上不去了，如果压力继续增大，系统的吞吐量反而会下降，原因是系统超负荷工作，上下文切换、内存等等其它消耗导致系统性能下降。</p>
+</li>
+</ul>
+<h3 id="图谱分析"><a href="#图谱分析" class="headerlink" title="图谱分析"></a>图谱分析</h3><h4 id="TPS折线下滑"><a href="#TPS折线下滑" class="headerlink" title="TPS折线下滑"></a>TPS折线下滑</h4><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-154749.jpg" alt="TPS异常"></p>
+<p>现象：横坐标代表TPS，纵坐标代表自然时间。可以发现，在9：00时，TPS突然开始急剧下滑，到11：00时，TPS接近为0；</p>
+<p>分析：</p>
+<ul>
+<li>网路IO问题。如果机器负载（CPU和内存）正常，有可能是网络出现阻塞，延时现象严重，进而导致TPS急剧下降；</li>
+<li>程序阻塞问题。如果机器负载正常，并且IO也正常，那么把堆栈信息打印出来，看是否是死锁导致TPS急剧下降；</li>
+<li>内存溢出。如果机器的内存不足，极大可能是内存溢出了，把堆信息打印出来看下；</li>
+<li>数据库连接数过小。导致很多请求处于等待状态，导致TPS下滑；</li>
+<li>应用服务器线程数过小。导致很多请求处于等待状态，导致TPS下滑；</li>
+</ul>
+<h4 id="TPS波动"><a href="#TPS波动" class="headerlink" title="TPS波动"></a>TPS波动</h4><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-161134.jpg" alt="TPS波动"></p>
+<p>现象：在9：00到15：00之间，TPS一直来回波动；</p>
+<p>分析：</p>
+<ul>
+<li>定时任务。查看程序代码，看是否有定时任务在这个时间点运行，如果这个定时任务消耗了过多的资源，会导致TPS稳定地来回波动；</li>
+<li>FullGC。JVM执行FullGC的时候，会StopTheWorld，导致短时间内应用停顿，会造成TPS来回波动；</li>
+<li>日志输出。有时间规律的小幅度波动，可能是日志写硬盘造成的；</li>
+<li>Redis持久化。持久化时，会将内存中的数据写入到硬盘中，这时如果很有规律的波动，也有可能是redis有规律的写入硬盘造成硬盘那个点无法提供服务造成的波动；</li>
+<li>网络问题。如果是无规律的波动，可能是网络问题，这个比较难排查，可以根据其他服务的TPS来协助定位；</li>
+<li>黑白名单。一个用户1秒请求次数太多，导致被拒绝；</li>
+</ul>
+<h4 id="LR图区域分析"><a href="#LR图区域分析" class="headerlink" title="LR图区域分析"></a>LR图区域分析</h4><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-162252.jpg" alt="LR图区域分析"></p>
+<ul>
+<li>性能平稳期：在不进行更多性能调优情况下所能达到的最佳性能，在与压力区域的拐点所对应的并发数为最佳并发；</li>
+<li>压力区域：RT轻微上升的区域，可以通过对应需求的RT阈值来得到应用可容忍的最大并发；</li>
+<li>性能拐点：RT急剧上升，性能急剧下降；</li>
+</ul>
+<h2 id="性能优化的准备"><a href="#性能优化的准备" class="headerlink" title="性能优化的准备"></a>性能优化的准备</h2><h3 id="目标制定"><a href="#目标制定" class="headerlink" title="目标制定"></a>目标制定</h3><p>比如：</p>
+<ul>
+<li>TPS在1000以上；单就静态页面，TPS大概能到1W+，简单数据库操作大概2K+的样子，用Cache大概能到5K+。</li>
+<li>TPS波动在一定范围内；TPS应该是一个比较平稳的曲线，而不是上下波动,TPS波动范围 = TPS标准差/TPS平均值 * 100%,在5%内算是正常的</li>
+<li>平均响应时间在200ms内；</li>
+<li>超时概率小于1/10000；</li>
+<li>并发数在500以上；</li>
+<li>错误概率小于1/10000；</li>
+<li>FullGC频率平均大于半小时1次；</li>
+<li>CPU利用率小于75%；</li>
+<li>平均每core的CPU的load小于1；</li>
+</ul>
+<h3 id="了解系统架构"><a href="#了解系统架构" class="headerlink" title="了解系统架构"></a>了解系统架构</h3><h3 id="了解使用的组件"><a href="#了解使用的组件" class="headerlink" title="了解使用的组件"></a>了解使用的组件</h3><h4 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h4><p>//TODO<br>tomcat最大tps、最大并发</p>
+<h4 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h4><p>//TODO<br>mysql最大TPS、最大并发</p>
+<h4 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h4><p>//TODO<br>reids最大TPS</p>
+<h3 id="了解工具"><a href="#了解工具" class="headerlink" title="了解工具"></a>了解工具</h3><h4 id="LR"><a href="#LR" class="headerlink" title="LR"></a>LR</h4><h4 id="JMeter"><a href="#JMeter" class="headerlink" title="JMeter"></a>JMeter</h4><h4 id="Top"><a href="#Top" class="headerlink" title="Top"></a>Top</h4><h4 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h4><h4 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h4><h2 id="性能优化定理"><a href="#性能优化定理" class="headerlink" title="性能优化定理"></a>性能优化定理</h2><h3 id="资源来源"><a href="#资源来源" class="headerlink" title="资源来源"></a>资源来源</h3><h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><ul>
+<li>IO资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：批量（Buffer）输入/输出，顺序写/预读；</li>
+<li>增强：固态硬盘、磁盘阵列、PCIE接口；</li>
+</ul>
+</li>
+<li>CPU资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：减少线程切换（sy -&gt; us），优化算法；</li>
+<li>增强：增加CPU核心/频率；</li>
+</ul>
+</li>
+<li>内存资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：内存 -&gt; 磁盘（LRU）</li>
+<li>增强：增加内存；</li>
+</ul>
+</li>
+</ul>
+<h4 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h4><ul>
+<li>IO资源<ul>
+<li>压榨：是否已经充分利用（达到极限）</li>
+<li>转移：压缩、批量（Buffer）输入输出，TCP参数调优；</li>
+<li>增强：增加带宽；</li>
+</ul>
+</li>
+</ul>
+<h3 id="性能平衡"><a href="#性能平衡" class="headerlink" title="性能平衡"></a>性能平衡</h3><ul>
+<li>掌握好平衡度，可以让整体性能提升更大</li>
+<li>优化是个双刃剑，在性能提升的同时可能带来更多的麻烦</li>
+</ul>
+<p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-27-165129.jpg" alt="难度与性能"></p>
+<h4 id="二八原则"><a href="#二八原则" class="headerlink" title="二八原则"></a>二八原则</h4><p>80%的性能提升在20%的优化点上</p>
+<h3 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h3><ul>
+<li>过早优化是万恶之源</li>
+<li>尽量使用硬件优化代替深度的代码优化</li>
+<li>尽量保证简单</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://blog.csdn.net/ll413343176/article/details/38735705" target="_blank" rel="external">压力测试tps性能下降问题解决方案</a></li>
+<li><a href="http://www.cnblogs.com/shengs/p/4771995.html" target="_blank" rel="external">网站性能测试PV到TPS的转换以及TPS的波动和淘宝性能测试要点</a></li>
+<li><a href="http://www.cnblogs.com/zhanjindong/p/concurrent-and-tomcat-threads-updated.html#update-2015-1-20" target="_blank" rel="external">聊下并发和Tomcat线程数</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/13/设计原则以及模式分类/" rel="next" title="设计原则以及模式分类">
+                <i class="fa fa-chevron-left"></i> 设计原则以及模式分类
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#性能指标"><span class="nav-number">1.</span> <span class="nav-text">性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#术语解析"><span class="nav-number">1.1.</span> <span class="nav-text">术语解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图谱分析"><span class="nav-number">1.2.</span> <span class="nav-text">图谱分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS折线下滑"><span class="nav-number">1.2.1.</span> <span class="nav-text">TPS折线下滑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TPS波动"><span class="nav-number">1.2.2.</span> <span class="nav-text">TPS波动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LR图区域分析"><span class="nav-number">1.2.3.</span> <span class="nav-text">LR图区域分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化的准备"><span class="nav-number">2.</span> <span class="nav-text">性能优化的准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目标制定"><span class="nav-number">2.1.</span> <span class="nav-text">目标制定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#了解系统架构"><span class="nav-number">2.2.</span> <span class="nav-text">了解系统架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#了解使用的组件"><span class="nav-number">2.3.</span> <span class="nav-text">了解使用的组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tomcat"><span class="nav-number">2.3.1.</span> <span class="nav-text">tomcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql"><span class="nav-number">2.3.2.</span> <span class="nav-text">mysql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis"><span class="nav-number">2.3.3.</span> <span class="nav-text">redis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#了解工具"><span class="nav-number">2.4.</span> <span class="nav-text">了解工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LR"><span class="nav-number">2.4.1.</span> <span class="nav-text">LR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JMeter"><span class="nav-number">2.4.2.</span> <span class="nav-text">JMeter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Top"><span class="nav-number">2.4.3.</span> <span class="nav-text">Top</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jstack"><span class="nav-number">2.4.4.</span> <span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jstat"><span class="nav-number">2.4.5.</span> <span class="nav-text">jstat</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化定理"><span class="nav-number">3.</span> <span class="nav-text">性能优化定理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#资源来源"><span class="nav-number">3.1.</span> <span class="nav-text">资源来源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务器"><span class="nav-number">3.1.1.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络"><span class="nav-number">3.1.2.</span> <span class="nav-text">网络</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能平衡"><span class="nav-number">3.2.</span> <span class="nav-text">性能平衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#二八原则"><span class="nav-number">3.2.1.</span> <span class="nav-text">二八原则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原则"><span class="nav-number">3.3.</span> <span class="nav-text">原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
