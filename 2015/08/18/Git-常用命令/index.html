@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/18/Git-常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="设置 设置全局用户名：git config --global user.name &amp;lt;your-user-name&amp;gt; 设置全局邮箱：git config --global user.email &amp;lt;your-email&amp;gt; 查看全局设置：git config --global --list 设置项目用户名：git config user.name &amp;lt;your-user-na">
-<meta property="og:updated_time" content="2018-03-20T16:36:53.447Z">
+<meta property="og:updated_time" content="2018-03-28T02:27:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="设置 设置全局用户名：git config --global user.name &amp;lt;your-user-name&amp;gt; 设置全局邮箱：git config --global user.email &amp;lt;your-email&amp;gt; 查看全局设置：git config --global --list 设置项目用户名：git config user.name &amp;lt;your-user-na">
@@ -334,20 +334,11 @@
 <li>查看全部帮助：<code>git help -a</code></li>
 <li>查看某个命令帮助：<code>git help &lt;command-name&gt;</code></li>
 <li>查看版本：<code>git --version</code></li>
-</ul>
-<hr>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
 <li>初始化：<code>git init</code></li>
 <li>关联远程仓库：<code>git remote add origin &lt;git-url&gt;</code></li>
 <li>克隆项目到本地：<code>git clone &lt;git-url&gt;</code></li>
-</ul>
-<hr>
-<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><ul>
 <li>更新：<code>git pull</code></li>
 <li>把master的更新merge到dev分支：<code>git checkout dev; git merge master</code></li>
-</ul>
-<hr>
-<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><ul>
 <li>添加某个文件到版本控制中：<code>git add [dir-name/]&lt;file-name&gt;</code></li>
 <li>添加某个文件夹到版本控制中：<code>git add &lt;dir-name&gt;</code></li>
 <li>添加所有文件到版本控制中：<code>git add .</code></li>
@@ -356,8 +347,9 @@
 <li>推送到远程仓库：<code>git push [origin master]</code></li>
 <li>创建本地分支：<code>git checkout -b [new branch name]</code></li>
 <li>推送本地分支到远程分支：<code>git push origin localBranchName:remoteBranchName</code></li>
+<li>删除本地分支：<code>git branch -D [local branch name]</code></li>
+<li>删除远程分支：<code>git push origin :[remote branch name]</code> （origin后面有空格）</li>
 </ul>
-<hr>
 <h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><blockquote>
 <p><strong>工作目录</strong>：git clone 后获得的一份本地的代码，也包括新编辑的，尚未加入版本控制的代码;<br><strong>暂存区域</strong>：git add 后暂存起来，尚未 git commit 的代码;<br><strong>本地仓库</strong>：git commit 后正式被版本控制记录起来的代码；</p>
 </blockquote>
@@ -573,7 +565,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置"><span class="nav-number">1.</span> <span class="nav-text">设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">2.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">3.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新"><span class="nav-number">4.</span> <span class="nav-text">更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改"><span class="nav-number">5.</span> <span class="nav-text">修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查"><span class="nav-number">6.</span> <span class="nav-text">检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消修改"><span class="nav-number">7.</span> <span class="nav-text">取消修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">8.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置"><span class="nav-number">1.</span> <span class="nav-text">设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">2.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查"><span class="nav-number">3.</span> <span class="nav-text">检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消修改"><span class="nav-number">4.</span> <span class="nav-text">取消修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
 
           </div>
