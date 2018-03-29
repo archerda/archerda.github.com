@@ -1509,12 +1509,9 @@
 </ul>
 <hr>
 <h2 id="系统相关"><a href="#系统相关" class="headerlink" title="系统相关"></a>系统相关</h2><ul>
-<li>显示系统内核版本：<code>uname</code></li>
-<li>显示系统所有信息：<code>uname -a</code></li>
+<li>显示系统内核信息：<code>uname -a</code></li>
 <li>显示发行版信息： <code>cat /etc/issue</code></li>
 <li>查看文件系统块大小：<code>blockdev --getbsz &lt;partion&gt;</code> 比如<code>blockdev --getbsz /dev/sda1</code></li>
-<li>查看内存页大小：<code>getconf PAGESIZE</code></li>
-<li>查看swap的使用情况：<code>cat /proc/swaps</code></li>
 </ul>
 <hr>
 <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><ul>
@@ -1565,6 +1562,8 @@
 <h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><ul>
 <li>显示内存信息：<code>free -m</code></li>
 <li>显示内存信息：<code>cat /proc/meminfo</code></li>
+<li>查看内存页大小：<code>getconf PAGESIZE</code></li>
+<li>查看swap的使用情况：<code>cat /proc/swaps</code></li>
 <li>显示内存消耗最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k4|head -10</code></li>
 <li>显示虚拟内存使用最多的前10个进程：<code>ps auxw|head -1;ps auxw|sort -rn -k5|head -10</code></li>
 <li>释放buffer和cache: <code>echo 3 &gt; /proc/sys/vm/drop_caches</code></li>
