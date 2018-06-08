@@ -570,6 +570,11 @@
 <li>覆盖上次提交，用于已commit：<code>git commit --amend</code></li>
 <li>撤销远程commit(回滚到某次commit): <code>git log; git reset [--hard] &lt;commit-id&gt;; git push --force</code></li>
 <li>撤销最近一次本地commit：<code>git reset HEAD~1</code></li>
+<li>恢复删除的文件：<ul>
+<li><code>git log --diff-filter=D --summary</code> 查看所有删除的文件；</li>
+<li><code>git checkout $commit~1 filename</code> 恢复文件，其中<code>$commit</code>是上面获取到的commitId；</li>
+</ul>
+</li>
 </ul>
 <hr>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>

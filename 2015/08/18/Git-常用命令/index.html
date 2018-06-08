@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/18/Git-常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="设置 设置全局用户名：git config --global user.name &amp;lt;your-user-name&amp;gt; 设置全局邮箱：git config --global user.email &amp;lt;your-email&amp;gt; 查看全局设置：git config --global --list 设置项目用户名：git config user.name &amp;lt;your-user-na">
-<meta property="og:updated_time" content="2018-03-28T02:27:50.000Z">
+<meta property="og:updated_time" content="2018-06-08T03:07:08.729Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="设置 设置全局用户名：git config --global user.name &amp;lt;your-user-name&amp;gt; 设置全局邮箱：git config --global user.email &amp;lt;your-email&amp;gt; 查看全局设置：git config --global --list 设置项目用户名：git config user.name &amp;lt;your-user-na">
@@ -364,6 +364,11 @@
 <li>覆盖上次提交，用于已commit：<code>git commit --amend</code></li>
 <li>撤销远程commit(回滚到某次commit): <code>git log; git reset [--hard] &lt;commit-id&gt;; git push --force</code></li>
 <li>撤销最近一次本地commit：<code>git reset HEAD~1</code></li>
+<li>恢复删除的文件：<ul>
+<li><code>git log --diff-filter=D --summary</code> 查看所有删除的文件；</li>
+<li><code>git checkout $commit~1 filename</code> 恢复文件，其中<code>$commit</code>是上面获取到的commitId；</li>
+</ul>
+</li>
 </ul>
 <hr>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
