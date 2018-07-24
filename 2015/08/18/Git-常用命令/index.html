@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/18/Git-常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="设置 设置全局用户名：git config --global user.name &amp;lt;your-user-name&amp;gt; 设置全局邮箱：git config --global user.email &amp;lt;your-email&amp;gt; 查看全局设置：git config --global --list 设置项目用户名：git config user.name &amp;lt;your-user-na">
-<meta property="og:updated_time" content="2018-07-17T08:14:05.750Z">
+<meta property="og:updated_time" content="2018-07-24T03:18:40.806Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="设置 设置全局用户名：git config --global user.name &amp;lt;your-user-name&amp;gt; 设置全局邮箱：git config --global user.email &amp;lt;your-email&amp;gt; 查看全局设置：git config --global --list 设置项目用户名：git config user.name &amp;lt;your-user-na">
@@ -350,6 +350,16 @@
 <li>推送本地分支到远程分支：<code>git push origin localBranchName:remoteBranchName</code></li>
 <li>删除本地分支：<code>git branch -D [local branch name]</code></li>
 <li>删除远程分支：<code>git push origin :[remote branch name]</code> （origin后面有空格）</li>
+<li>fork后同步源更新内容：<ol>
+<li>查看远程状态：<code>git remote -v</code></li>
+<li>确定一个将被同步给fork库的远程上游仓库：<code>git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git</code></li>
+<li>再次查看远程状态：<code>git remote -v</code></li>
+<li>从上游仓库 fetch 分支和提交点，提交给本地 master，并会被存储在一个本地分支 upstream/master ：<code>git fetch upstream</code></li>
+<li>切换到本地主分支（如果不在的话）：<code>git checkout master</code></li>
+<li>把 upstream/master 分支合并到本地 master 上，这样就完成了同步，并且不会丢掉本地修改的内容：<code>git merge upstream/master</code></li>
+<li>如果想更新到 GitHub 的 fork 上，直接：<code>git push origin master</code></li>
+</ol>
+</li>
 </ul>
 <h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><blockquote>
 <p><strong>工作目录</strong>：git clone 后获得的一份本地的代码，也包括新编辑的，尚未加入版本控制的代码;<br><strong>暂存区域</strong>：git add 后暂存起来，尚未 git commit 的代码;<br><strong>本地仓库</strong>：git commit 后正式被版本控制记录起来的代码；</p>
