@@ -412,6 +412,9 @@
 <h2 id="JConsole"><a href="#JConsole" class="headerlink" title="JConsole"></a>JConsole</h2><p>JConsole（Java Monitoring and Management Console），是一种基于JMX的可视化监视、管理工具。它管理部分的功能是针对JMX MBean进行管理，由于MBean可以使用代码、中间件服务器的管理控制台或者所有符合JMX规范的软件进行访问，所以重点是使用JConsole的监视功能。</p>
 <hr>
 <h2 id="JVisualVM"><a href="#JVisualVM" class="headerlink" title="JVisualVM"></a>JVisualVM</h2><p>JVisualVM（All-in-One Java Troubleshooting Tool），Java多合一故障处理工具。是目前为止随JDK发布的功能最强大的运行监视和故障处理程序，并且可以预见在未来一段时间内都是官方主力发展的虚拟机故障处理工具。而且还有很多高效的插件可以使用。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li>运行期间dump出class类: <code>sudo java -classpath &quot;$JAVA_HOME/lib/sa-jdi.jar&quot; -Dsun.jvm.hotspot.tools.jcore.filter=sun.jvm.hotspot.tools.jcore.PackageNameFilter -Dsun.jvm.hotspot.tools.jcore.PackageNameFilter.pkgList=&lt;package-name&gt; sun.jvm.hotspot.tools.jcore.ClassDump &lt;pid&gt;</code></li>
+</ul>
 <hr>
 
           
