@@ -1,0 +1,748 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据结构," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述我们知道，线性表分为顺序表和链式表。顺序表是基于数组的存储表示，其特点是用物理位置上的邻接关系来表示结点间的逻辑关系。但是基于数组的顺序表的缺点也非常明显，比如说插入/删除的效率低下（平均需要移动一半元素）、需要预先进行存储分配等。 为了克服顺序表的缺点，可以采用链接方式来存储线性表，通常将链接方式的线性表称为链表。链表适用于插入/删除频繁，存储空间不确定的场景。单链表的特点是长度可以很方便地">
+<meta name="keywords" content="数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单链表的基础操作">
+<meta property="og:url" content="http://yoursite.com/2015/10/14/单链表的基础操作/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="概述我们知道，线性表分为顺序表和链式表。顺序表是基于数组的存储表示，其特点是用物理位置上的邻接关系来表示结点间的逻辑关系。但是基于数组的顺序表的缺点也非常明显，比如说插入/删除的效率低下（平均需要移动一半元素）、需要预先进行存储分配等。 为了克服顺序表的缺点，可以采用链接方式来存储线性表，通常将链接方式的线性表称为链表。链表适用于插入/删除频繁，存储空间不确定的场景。单链表的特点是长度可以很方便地">
+<meta property="og:image" content="https://c1.staticflickr.com/1/631/21509590143_579b0d0b40_z.jpg">
+<meta property="og:image" content="https://c2.staticflickr.com/6/5658/21510886033_db7ebd8b1b_z.jpg">
+<meta property="og:image" content="https://c2.staticflickr.com/6/5783/21948392158_887cc9754b_z.jpg">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单链表的基础操作">
+<meta name="twitter:description" content="概述我们知道，线性表分为顺序表和链式表。顺序表是基于数组的存储表示，其特点是用物理位置上的邻接关系来表示结点间的逻辑关系。但是基于数组的顺序表的缺点也非常明显，比如说插入/删除的效率低下（平均需要移动一半元素）、需要预先进行存储分配等。 为了克服顺序表的缺点，可以采用链接方式来存储线性表，通常将链接方式的线性表称为链表。链表适用于插入/删除频繁，存储空间不确定的场景。单链表的特点是长度可以很方便地">
+<meta name="twitter:image" content="https://c1.staticflickr.com/1/631/21509590143_579b0d0b40_z.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/10/14/单链表的基础操作/"/>
+
+
+
+
+
+  <title>单链表的基础操作 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/14/单链表的基础操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">单链表的基础操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-14T00:01:36+08:00">
+                2015-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>我们知道，线性表分为顺序表和链式表。顺序表是基于数组的存储表示，其特点是用物理位置上的邻接关系来表示结点间的逻辑关系。但是基于数组的顺序表的缺点也非常明显，比如说插入/删除的效率低下（平均需要移动一半元素）、需要预先进行存储分配等。</p>
+<p>为了克服顺序表的缺点，可以采用链接方式来存储线性表，通常将链接方式的线性表称为链表。<strong>链表适用于插入/删除频繁，存储空间不确定的场景</strong>。单链表的特点是<strong>长度可以很方便地进行扩充，其数据元素的顺序与其链表表示中节点的物理顺序可能不一致，一般通过单链表的指针将各个数据元素按照线性表的逻辑顺序连接起来</strong>，如下图：<br><img src="https://c1.staticflickr.com/1/631/21509590143_579b0d0b40_z.jpg" alt="单链表示意图"></p>
+<p>由于链表的每个节点带有指针域(引用)，因而在存储空间上比顺序表要付出较大的代价。</p>
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><p>创建单链表主要有前插和后插两种方法，建立的方式不同，最终得到的链表也不相同。</p>
+<h3 id="前插法建立单链表"><a href="#前插法建立单链表" class="headerlink" title="前插法建立单链表"></a>前插法建立单链表</h3><p>前插法是指每次插入新节点总是在表的前端进行，这样插入的结果是<strong>链表中各节点中数据的逻辑顺序与输入顺序是正好相反的</strong>。其主要步骤如下：</p>
+<blockquote>
+<ol>
+<li>生成新节点newNode，将读入数据存放到newNode的data域中；</li>
+<li>将newNode插入到链表的前端；</li>
+</ol>
+</blockquote>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 建立链表</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Node <span class="title">buildList</span><span class="params">(<span class="keyword">int</span> size)</span> </span>&#123;</div><div class="line">	Node first = <span class="keyword">null</span>;</div><div class="line">	Node newNode = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="comment">// 头插入法</span></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</div><div class="line">		newNode = <span class="keyword">new</span> Node(i);</div><div class="line">		newNode.next = first;</div><div class="line">		first = newNode;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> first;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="后插法建立单链表"><a href="#后插法建立单链表" class="headerlink" title="后插法建立单链表"></a>后插法建立单链表</h3><p>后插法是指每次newNode总是插入到链表的尾端，这样插入的结果，链表中各个节点的逻辑顺序和输入数据的顺序是完全一致的。这个方法需要设置一个<strong>尾指针last</strong>，总是指向新链表中最后一个节点，新节点连接到它所指链尾的后面。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Node <span class="title">buildListLast</span><span class="params">(<span class="keyword">int</span> size)</span> </span>&#123;</div><div class="line">	Node first = <span class="keyword">null</span>;</div><div class="line">	Node last = <span class="keyword">null</span>;</div><div class="line">	Node now = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="comment">// 后插法</span></div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</div><div class="line">		now = <span class="keyword">new</span> Node(i);</div><div class="line">		now.next = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">		<span class="keyword">if</span>(first == <span class="keyword">null</span>) &#123;				</div><div class="line">			first = now;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			last.next = now;				</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		last = now;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> first;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>利用单链表来表示线性表，将使得插入和删除变得非常方便，只要修改链中节点指针或引用的值，无需移动表中的元素，就能高效地实现插入和删除操作。</p>
+<p>对于插入，我们希望在单链表（a1，a2，a3，…an）的包含数据ai的节点之后插入一个newNode，那么可能会出现3种情况：</p>
+<ol>
+<li><p>插入到链表头部。这个时候newNode应插入在<strong>第一个节点之前</strong>，如下图a所示。这时必须修改头指针first。插入操作为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">newNode.next = first；</div><div class="line">first = newNode;</div></pre></td></tr></table></figure>
+</li>
+<li><p>插入到链表中间。此时，首先让一个<strong>检测指针current</strong>指向ai所在节点，再将新节点插入到ai之后，如下图b所示。插入操作为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">newNode.next = current.next;</div><div class="line">current.next = newNode;</div></pre></td></tr></table></figure>
+</li>
+<li><p>插入到链表尾端。新节点追加到表尾，如下图c所示。这时，应先令检测指针current指向最后一个节点an，再执行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">newNode.next = current.next;</div><div class="line">current.next = newNode;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="https://c2.staticflickr.com/6/5658/21510886033_db7ebd8b1b_z.jpg" alt="链表插入的示例"></p>
+<p>从上面可以看出，2和3情形的操作一致，所以这2中情况可以合并考虑。综上，最后可得单链表的插入算法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将新元素插入到第index个节点之后。index从1开始，index = 0表示插入到第一个节点之前</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Node <span class="title">insert</span><span class="params">(Node first, Node newNode, <span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">	<span class="comment">// ①如果链表为空，或者插入的索引为0，则插入到前端</span></div><div class="line">	<span class="keyword">if</span>(first == <span class="keyword">null</span> || index == <span class="number">0</span>) &#123;</div><div class="line">		newNode.next = first;</div><div class="line">		first = newNode;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		Node current = first;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; index; k++) &#123;</div><div class="line">			<span class="keyword">if</span>(current == <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				current = current.next;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span>(current == <span class="keyword">null</span>) &#123;</div><div class="line">			System.out.println(<span class="string">"无效的插入位置"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> &#123; <span class="comment">//  ②插入中间或尾部</span></div><div class="line">			newNode.next = current.next;</div><div class="line">			current.next = newNode;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> first;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>单链表的删除算法比较简单，但也分为2种情况：</p>
+<ol>
+<li><p>删除头部。这时需要用一个del引用先保存头部节点，再将表头引用指向下一个节点，使其成为新链表的头部，最后删除del保存的节点。如下图a所示。删除操作为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Node del = first;</div><div class="line">first = first.next;</div><div class="line">del = <span class="keyword">null</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除中间节点或尾部。设删除链表中的第i个节点，首先用引用del保存第i个节点，再让第i-1个节点的next引用指向第i+1个节点，通过重新拉链，把第i个节点从链表中分离出来，最后删除del引用的节点。如下图b所示。删除操作为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Node del = current.next;</div><div class="line">current.next = del.next;</div><div class="line">del = <span class="keyword">null</span>;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="https://c2.staticflickr.com/6/5783/21948392158_887cc9754b_z.jpg" alt="在单链表中删除ai节点"></p>
+<p>由此可得单链表的删除算法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将链表的第index个元素删除，index从1开始</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Node <span class="title">delete</span><span class="params">(Node first, <span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">	Node del = <span class="keyword">null</span>;</div><div class="line">	Node current = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(index &lt; <span class="number">1</span>) &#123; <span class="comment">// ①删除头结点</span></div><div class="line">		del = first;</div><div class="line">		first = first.next;</div><div class="line">		del = <span class="keyword">null</span>; <span class="comment">// 让GC回收</span></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		current = first;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; index - <span class="number">1</span>; k++) &#123;</div><div class="line">			<span class="keyword">if</span>(current == <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				current = current.next;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span>(current == <span class="keyword">null</span> || current.next == <span class="keyword">null</span>) &#123;</div><div class="line">			System.out.println(<span class="string">"无效的删除位置"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> &#123; <span class="comment">// ②删除中间节点或尾部节点</span></div><div class="line">			del = current.next;</div><div class="line">			current.next = del.next;</div><div class="line">			del = <span class="keyword">null</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> first;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h2><p>遍历应该是最简单的了，直接看代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 遍历链表</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">traveling</span><span class="params">(Node first)</span> </span>&#123;</div><div class="line">	Node h = first;   </div><div class="line"></div><div class="line">    <span class="keyword">while</span> (h != <span class="keyword">null</span>) &#123;   </div><div class="line">        System.out.print(h.value + <span class="string">" "</span>);   </div><div class="line">        h = h.next;   </div><div class="line">    &#125;   </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要介绍了链表的相关基础操作：创建、插入、删除、遍历。链表本身很灵活，所以很考察编程功底，所以掌握基础至关重要，接下来还会再写一篇，记录下其他链表的其他进一步的运用。</p>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="">数据结构(用面向对象方法与C++语言描述) 第二版 殷人昆主编 清华大学出版社</a></li>
+<li><a href="http://www.julyedu.com/video/play/?id=31&amp;course=25" target="_blank" rel="external">七月算法：链表面试精讲</a></li>
+</ul>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/13/设计模式系列一之单例模式-Singleton/" rel="next" title="设计模式系列一之单例模式(Singleton)">
+                <i class="fa fa-chevron-left"></i> 设计模式系列一之单例模式(Singleton)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/25/链表-常见面试问题总结/" rel="prev" title="链表-常见面试问题总结">
+                链表-常见面试问题总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建"><span class="nav-number">2.</span> <span class="nav-text">创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前插法建立单链表"><span class="nav-number">2.1.</span> <span class="nav-text">前插法建立单链表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后插法建立单链表"><span class="nav-number">2.2.</span> <span class="nav-text">后插法建立单链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入"><span class="nav-number">3.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除"><span class="nav-number">4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历"><span class="nav-number">5.</span> <span class="nav-text">遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

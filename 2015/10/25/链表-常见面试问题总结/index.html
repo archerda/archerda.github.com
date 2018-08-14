@@ -1,0 +1,809 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据结构,面试," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="最近这段时间都在忙活校招，在面试的过程中遇到了很多有关链表的问题，由于以前没怎么搞过ACM，数据结构也忘的七七八八了，所以总体感觉回答得不是很好。昨天把链表的基础回顾了下，见这里单链表的基础操作，于是今天把面试过程中经常遇到的链表相关的问题总结下。 翻转单链表的反转是面试的常用考点，所以必须掌握。思路是把当前节点拿过来作为已经翻转的表头，成为一个已翻转的子链，用result指向其头部（也就是当前节">
+<meta name="keywords" content="数据结构,面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="链表-常见面试问题总结">
+<meta property="og:url" content="http://yoursite.com/2015/10/25/链表-常见面试问题总结/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="最近这段时间都在忙活校招，在面试的过程中遇到了很多有关链表的问题，由于以前没怎么搞过ACM，数据结构也忘的七七八八了，所以总体感觉回答得不是很好。昨天把链表的基础回顾了下，见这里单链表的基础操作，于是今天把面试过程中经常遇到的链表相关的问题总结下。 翻转单链表的反转是面试的常用考点，所以必须掌握。思路是把当前节点拿过来作为已经翻转的表头，成为一个已翻转的子链，用result指向其头部（也就是当前节">
+<meta property="og:image" content="https://c1.staticflickr.com/1/620/22399861952_2440672711_c.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/1/649/22234956790_1986323deb_c.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/1/583/22236866799_dbacbb5d5e_c.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/1/602/22251236159_7a98624fd3_c.jpg">
+<meta property="og:image" content="https://c1.staticflickr.com/1/745/22428455812_4c8560e01e_c.jpg">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="链表-常见面试问题总结">
+<meta name="twitter:description" content="最近这段时间都在忙活校招，在面试的过程中遇到了很多有关链表的问题，由于以前没怎么搞过ACM，数据结构也忘的七七八八了，所以总体感觉回答得不是很好。昨天把链表的基础回顾了下，见这里单链表的基础操作，于是今天把面试过程中经常遇到的链表相关的问题总结下。 翻转单链表的反转是面试的常用考点，所以必须掌握。思路是把当前节点拿过来作为已经翻转的表头，成为一个已翻转的子链，用result指向其头部（也就是当前节">
+<meta name="twitter:image" content="https://c1.staticflickr.com/1/620/22399861952_2440672711_c.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/10/25/链表-常见面试问题总结/"/>
+
+
+
+
+
+  <title>链表-常见面试问题总结 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/25/链表-常见面试问题总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">链表-常见面试问题总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-25T02:56:01+08:00">
+                2015-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近这段时间都在忙活校招，在面试的过程中遇到了很多有关链表的问题，由于以前没怎么搞过ACM，数据结构也忘的七七八八了，所以总体感觉回答得不是很好。昨天把链表的基础回顾了下，见这里<a href="http://www.luohuida.com/2015/10/14/%E5%8D%95%E9%93%BE%E8%A1%A8%E7%9A%84%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" target="_blank" rel="external">单链表的基础操作</a>，于是今天把面试过程中经常遇到的链表相关的问题总结下。</p>
+<h2 id="翻转"><a href="#翻转" class="headerlink" title="翻转"></a>翻转</h2><p>单链表的反转是面试的常用考点，所以必须掌握。思路是<strong>把当前节点拿过来作为已经翻转的表头，成为一个已翻转的子链，用result指向其头部（也就是当前节点）</strong>。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 反转单链表</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">traversingReverse</span><span class="params">(Node head)</span> </span>&#123;</div><div class="line">	Node result = <span class="keyword">null</span>;</div><div class="line">	Node temp = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="comment">// 头反转法：把当前节点拿过来作为已经翻转结果的表头</span></div><div class="line">	<span class="keyword">while</span> (head != <span class="keyword">null</span>) &#123;</div><div class="line">		temp = head.next; <span class="comment">// 保存下一个节点</span></div><div class="line">		head.next = result; <span class="comment">// 当前节点放在结果的开头</span></div><div class="line">		result = head; <span class="comment">// 当前节点的头</span></div><div class="line">		head = temp; <span class="comment">// head指向下一个节点</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="懒删除-在O-1-时间删除链表节点"><a href="#懒删除-在O-1-时间删除链表节点" class="headerlink" title="懒删除(在O(1)时间删除链表节点)"></a>懒删除(在O(1)时间删除链表节点)</h2><p>有一种情况，当我们的now引用指向某一个节点的时候，我们需要删除该节点。然而如果不知道now节点的前驱节点，一般方法是无法删除now这个节点的。</p>
+<p>这个时候，我们可以使用“懒”删除，这种方法的思想是：<strong>把now节点后驱节点的值赋给now节点，然后now节点的next指向的它后驱节点的下一个节点</strong>。因为不用遍历，所以这个算法的时间复杂度是O(1)。然而要注意的是尾节点，当now节点就是尾节点的时候，这种办法就行不通了。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// O(1)复杂度删除某个节点</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lazyDelete</span><span class="params">(Node now)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span>(now.next != <span class="keyword">null</span>) &#123; <span class="comment">// ①非尾节点</span></div><div class="line">        now.value = now.next.value; <span class="comment">// 复制后驱节点的值</span></div><div class="line">        now.next = now.next.next; <span class="comment">// “删除”后驱节点</span></div><div class="line">    &#125;  <span class="keyword">else</span>&#123; <span class="comment">// ②尾节点，行不通</span></div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="求链表倒数第k个节点"><a href="#求链表倒数第k个节点" class="headerlink" title="求链表倒数第k个节点"></a>求链表倒数第k个节点</h2><p>经常会遇到求单链表倒数第几个节点的问题，如果按常规方法的话，我们需要先遍历整个链表，记录下节点个数，假设为n，然后再遍历一遍，第n-k+1个就是所求节点了。可是这个方法效率太低，需要两次遍历，有没有更加高效的方法呢？答案是肯定的。我们可以用 <strong>快慢指针</strong> 来解决这个问题，这个方法的思想是这样的：</p>
+<blockquote>
+<ul>
+<li>假设有引用fast、slow，开始都指向首节点;</li>
+<li>fast先走k次，这样fast和slow就相隔了k个节点;</li>
+<li>然后fast、slow一起走，当fast走到链表末尾为null的时候，slow就是所求节点了。</li>
+</ul>
+</blockquote>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 求单链表倒数第k个节点</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getKNode</span><span class="params">(Node head, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    Node fast = head;</div><div class="line">    Node slow = head;</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span>(; i &lt; k &amp;&amp; fast != <span class="keyword">null</span>; i++) &#123;</div><div class="line">        fast = fast.next;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span>(i != k) &#123;</div><div class="line">        System.out.println(k + <span class="string">"位置超出链表长度"</span>);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">while</span>(fast != <span class="keyword">null</span>) &#123;</div><div class="line">        fast = fast.next;</div><div class="line">        slow = slow.next;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> slow;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="求链表的中间节点"><a href="#求链表的中间节点" class="headerlink" title="求链表的中间节点"></a>求链表的中间节点</h2><p>如果要求一个链表的中间节点，常规的方法是先遍历一次获取链表的长度n，如果n是偶数就n/2、n/2+1都可以，如果n是奇数，那就第n/2+1个。可是这个方法的效率也是非常低。</p>
+<p>其实通过上面找用快慢指针的方法来找倒数第k个数，我们可以衍生到这里来。这个方法的思路是这样的：</p>
+<blockquote>
+<ul>
+<li>假设有引用fast、slow，开始都指向首节点;</li>
+<li>fast、slow同时走，但是fast每次走2步，slow每次走1步；</li>
+<li>当fast走到链表末尾时，slow就是中间节点；</li>
+</ul>
+</blockquote>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 求链表的中间节点</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getMiddleNode</span><span class="params">(Node head)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    Node fast = head;</div><div class="line">    Node slow = head;</div><div class="line">    </div><div class="line">    <span class="comment">// ①如果fast==null的话，说明是偶数个；而fast.next==null的话，说明是奇数个</span></div><div class="line">    <span class="comment">// ①条件返回的是偶数情况中的后者，如果要返回前者，可用下面判断条件：</span></div><div class="line">    <span class="comment">// while (fast != null &amp;&amp; fast.next != null &amp;&amp; fast.next.next != null)</span></div><div class="line">    <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) &#123; <span class="comment">// ①</span></div><div class="line">        fast = fast.next.next; <span class="comment">// 快指针走2步</span></div><div class="line">        slow = slow.next; <span class="comment">// 慢指针走1步</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> slow;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="单链表是否存在环-leetcode-141"><a href="#单链表是否存在环-leetcode-141" class="headerlink" title="单链表是否存在环(leetcode 141)"></a>单链表是否存在环(leetcode 141)</h2><p>其实判断单链表是否有环有2种方法，第一种是用Set集合的方法，第二种是用快慢指针的方法。</p>
+<h3 id="利用HashSet集合"><a href="#利用HashSet集合" class="headerlink" title="利用HashSet集合"></a>利用HashSet集合</h3><p>这个方法的思想很简单，就是<strong>遍历该链表，每走一次，就判断HashSet中是否存在该节点，如果存在则说明有环，结束；如果不存在，说明还没有环，把该节点放到HashSet中去，直到链表的末尾</strong>。如果利用的是HashSet，则该算法的时间复杂度也是O(n)，就是空间复杂度大了点。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 利用HashMap判断是否有环</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasCircle</span><span class="params">(Node head)</span> </span>&#123;</div><div class="line">    Set&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (head != <span class="keyword">null</span>) &#123;</div><div class="line">    	<span class="keyword">if</span>(getFromSet(set, head) != <span class="keyword">null</span>) &#123;</div><div class="line">    		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    	&#125;</div><div class="line">    	</div><div class="line">    	set.add(head);</div><div class="line">    	head = head.next;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 由于Set没有提供get()方法，所以自己实现一个</span></div><div class="line"><span class="comment">// 缘何Set不提供get()？？？</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getFromSet</span><span class="params">(Set&lt;Node&gt; set, Node node)</span> </span>&#123;</div><div class="line">	Iterator it = set.iterator();</div><div class="line">	Node tmp;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>(it.hasNext()) &#123;</div><div class="line">		tmp = (Node)it.next();</div><div class="line">		<span class="keyword">if</span>(tmp == node) &#123;</div><div class="line">			<span class="keyword">return</span> tmp;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="利用快慢指针"><a href="#利用快慢指针" class="headerlink" title="利用快慢指针"></a>利用快慢指针</h3><p>上面的方法实现起来很简单高效，但是却需要额外的空间，空间复杂度是O(n)，而快慢指针是一个更高效的方法。<strong>让快指针每次走2步，慢指针每次走1步，两个指针的速度不一样，如果存在环的话，那么最后快慢指针肯定会相遇</strong>。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 利用快慢指针判断链表是否有环</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasCircle</span><span class="params">(Node head)</span> </span>&#123;</div><div class="line">    Node fast = head;</div><div class="line">    Node slow = head;</div><div class="line">    </div><div class="line">    <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) &#123;</div><div class="line">        fast = fast.next.next;</div><div class="line">        slow = slow.next;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (fast == slow) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="单链表中环的起点-leetcode-142"><a href="#单链表中环的起点-leetcode-142" class="headerlink" title="单链表中环的起点(leetcode 142)"></a>单链表中环的起点(leetcode 142)</h2><p><img src="https://c1.staticflickr.com/1/620/22399861952_2440672711_c.jpg" alt="快慢指针求环起点"><br>假设链表中存在环，我们先设定几个参数：n(环的长度=7)、a(链表起点到环起点的距离=3)、x(fast指针到环起点的时候，slow指针在环中的位置0 &lt;= x &lt; n)，由此我们可以推出下面几个性质：</p>
+<blockquote>
+<ol>
+<li>slow到起点(s3)的时候，fast在环中走了x步(f3)，那么fast和slow相差 n - x 步，也就是说 n - x 步后，fast会追上slow；</li>
+<li>经过 n - x 步后(4步)，fast和slow在环中M点相遇(f7与s7)；</li>
+<li>假设这时候相遇点M与环起点的距离为b(=4)，则slow走过的距离是 a + b ，而fast走过的距离为 a + b + k <em> n 。显然fast走的长度是slow的2倍，所以2 </em> ( a + b ) = a + b + k <em> n，则 **a + b = k </em> n**；</li>
+<li>把fast指针拉回链表的起始点，这时候fast和slow每次都走一步，经过a步后，fast和slow在环的起始点相遇。</li>
+</ol>
+</blockquote>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 使用快慢指针求环起点</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">listCircleStart</span><span class="params">(Node head)</span> </span>&#123;</div><div class="line">    <span class="comment">// 空链或者单节点，不存在环</span></div><div class="line">    <span class="keyword">if</span>(head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    Node fast = head;</div><div class="line">    Node slow = head;</div><div class="line">    </div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        <span class="keyword">if</span> (fast == <span class="keyword">null</span> || fast.next == <span class="keyword">null</span>) &#123; <span class="comment">// 无环</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        fast = fast.next.next; <span class="comment">// 走2步</span></div><div class="line">        slow = slow.next; <span class="comment">// 走1步</span></div><div class="line">    &#125; <span class="keyword">while</span> (fast != slow) <span class="comment">// 直到fast和slow相遇</span></div><div class="line">    </div><div class="line">    fast = head; <span class="comment">// 重新拉回链表起点</span></div><div class="line">    <span class="keyword">while</span> (fast != slow) &#123; <span class="comment">// 相遇即为环起点</span></div><div class="line">        fast = fast.next; <span class="comment">// 走1步</span></div><div class="line">        slow = slow.next; <span class="comment">// 走1步</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> fast;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="单链表中环的长度"><a href="#单链表中环的长度" class="headerlink" title="单链表中环的长度"></a>单链表中环的长度</h2><p>在上面，我们找到环的起点后，再用slow指针走一遍，就可以算出环的长度了。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 使用快慢指针求环长度</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">listCircleLength</span><span class="params">(Node head)</span> </span>&#123;</div><div class="line">    Node cicleStart = listCircleStart(head); <span class="comment">// 先利用上面的方法求出环起点</span></div><div class="line">    </div><div class="line">    <span class="keyword">if</span>(cicleStart == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    Node tmp = cicleStart.next;</div><div class="line">    <span class="keyword">int</span> counter = <span class="number">1</span>;</div><div class="line">    <span class="keyword">while</span> (tmp != cicleStart) &#123; <span class="comment">// 重走一遍，直到回到环起点</span></div><div class="line">        counter++;</div><div class="line">        tmp = tmp.next;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> counter;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="两个链表是否相交并求出交点-leetcode-160"><a href="#两个链表是否相交并求出交点-leetcode-160" class="headerlink" title="两个链表是否相交并求出交点(leetcode 160)"></a>两个链表是否相交并求出交点(leetcode 160)</h2><p>给定2个链表，判断这两个链表是否相交，如果相交的话，就类似于一个向左翻转90°的Y。见下图：<br><img src="https://c1.staticflickr.com/1/649/22234956790_1986323deb_c.jpg" alt="相交链表"></p>
+<p>这个问题相比环来说简单很多，我们可以用Set集合方法、链长先走方法、成环方法来解决。下面我们逐一来看。</p>
+<h3 id="Set集合方法"><a href="#Set集合方法" class="headerlink" title="Set集合方法"></a>Set集合方法</h3><p>这个方法的思路最简单：</p>
+<blockquote>
+<ol>
+<li>先遍历a链，依次把所有节点放入到Set中去；</li>
+<li>然后遍历b链，每到一个节点，就去Set看是否存在该节点，如果存在，则说明有交点，而交点就是该节点(第一个相等的肯定是交点)；</li>
+<li>如果直到b链的末尾都没有相等节点，则说明没有交点；</li>
+</ol>
+</blockquote>
+<p>这个方法其实比较笨，效率也比较低。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 利用Set求2链表交点</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getCrossNode</span><span class="params">(Node headA, Node headB)</span> </span>&#123;</div><div class="line">    Set&lt;Node&gt; set = <span class="keyword">new</span> Hash&lt;&gt;();</div><div class="line">    </div><div class="line">    <span class="comment">// 把a链全部放入Set中</span></div><div class="line">    <span class="keyword">while</span> (headA != <span class="keyword">null</span>) &#123;</div><div class="line">        set.add(headA);</div><div class="line">        headA = headA.next;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// 遍历b链</span></div><div class="line">    <span class="keyword">while</span> (headB != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">if</span>(set.getFromSet(set, headB) != <span class="keyword">null</span>) &#123; <span class="comment">// 相交</span></div><div class="line">            <span class="keyword">return</span> headB;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getFromSet</span><span class="params">(Set&lt;Node&gt; set, Node node)</span> </span>&#123;</div><div class="line">	Iterator it = set.iterator();</div><div class="line">	Node tmp;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>(it.hasNext()) &#123;</div><div class="line">		tmp = (Node)it.next();</div><div class="line">		<span class="keyword">if</span>(tmp == node) &#123;</div><div class="line">			<span class="keyword">return</span> tmp;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="链长先走方法"><a href="#链长先走方法" class="headerlink" title="链长先走方法"></a>链长先走方法</h3><p>这个方法的思路是这样的：</p>
+<blockquote>
+<ol>
+<li>遍历一次，求出链a的长度x，链b的长度y，求出|x-y|=k，这个k是链a和链b的长度差；</li>
+<li>让长的链先走k步，这样a、b链剩下的长度都是一样的；</li>
+<li>然后a、b一起走，遇到相等的节点，就是它们的交点；如果没相遇，说明没有交点；</li>
+</ol>
+</blockquote>
+<p>这个方法比Set的方法好很多，因为不用用到Set集合，所以快很多。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 链长先走求2链交点</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getCrossNode</span><span class="params">(Node headA, Node headB)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> x = <span class="number">0</span>; <span class="comment">// 链a长度</span></div><div class="line">    <span class="keyword">int</span> y = <span class="number">0</span>; <span class="comment">// 链b长度</span></div><div class="line">    </div><div class="line">    Node tmp = headA; <span class="comment">// 因为后续还要用到headA，所以用临时变量来遍历</span></div><div class="line">    <span class="keyword">while</span>(tmp != <span class="keyword">null</span>) &#123;</div><div class="line">        x++;</div><div class="line">        tmp = tmp.next;</div><div class="line">    &#125;</div><div class="line">    tmp = headB;</div><div class="line">    <span class="keyword">while</span>(tmp != <span class="keyword">null</span>) &#123;</div><div class="line">        y++;</div><div class="line">        tmp = tmp.next;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> k; <span class="comment">// 链长度差</span></div><div class="line">    <span class="keyword">if</span> (x - y &gt; <span class="number">0</span>) &#123; <span class="comment">// a链长</span></div><div class="line">        k = x - y;</div><div class="line">        </div><div class="line">        <span class="comment">// a链走k步</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</div><div class="line">            headA = headA.next;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        k = y - x;</div><div class="line">        </div><div class="line">        <span class="comment">// b链走k步</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</div><div class="line">            headB = headB.next;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// 这时候，headA指向的子链和headB指向的子链长度一样，一起走</span></div><div class="line">    <span class="keyword">while</span> (headA != <span class="keyword">null</span>) &#123; <span class="comment">// 这里不需要判断headB，因为headA和headB肯定同时为null</span></div><div class="line">        <span class="keyword">if</span>(headA == headB) &#123; <span class="comment">// 相遇的节点是交点</span></div><div class="line">            <span class="keyword">return</span> headA</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        headA = headA.next;</div><div class="line">        headB = headB.next;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="成环方法"><a href="#成环方法" class="headerlink" title="成环方法"></a>成环方法</h3><p>我们把a链的首尾连接起来，这样a链就形成了一个环。如果a、b链相交，那么从b链来看，链b这个时候就会出现环路，我们可以用上面找环的方法来解决。如下图：<br><img src="https://c1.staticflickr.com/1/583/22236866799_dbacbb5d5e_c.jpg" alt="成环方法求两链交点"></p>
+<p>这个方法的思路如下：</p>
+<blockquote>
+<ol>
+<li>把a链的尾部指向a链头部，让其形成一个环；</li>
+<li>从b链头部开始遍历，如果b中能找到环，说明ab相交，环的起点即为交点；如果不能找到环，说明无交点；</li>
+<li>把a链中的环断开，恢复链a；</li>
+</ol>
+</blockquote>
+<p>这个方法的代码和找环的代码差不多，这里就不写了。</p>
+<h2 id="复制带有随机指针的链表-leetcode-138"><a href="#复制带有随机指针的链表-leetcode-138" class="headerlink" title="复制带有随机指针的链表(leetcode 138)"></a>复制带有随机指针的链表(leetcode 138)</h2><p>一个单链表除了next指针外，还有一个random指针，random指针随机指向任何一个元素(可能为null)，然后我们的任务是复制它。</p>
+<p>这个复制其实next指针直接用常规方法就能解决，<strong>难点在于random指针，因为我们不知道random指针在复制后的地址-复制元素的地址变了，而且random指向的元素可能还没生成</strong>。</p>
+<p>要解决这个问题，我们有2种方法：map集合方法、“副本”方法。</p>
+<h3 id="map集合方法"><a href="#map集合方法" class="headerlink" title="map集合方法"></a>map集合方法</h3><p>这个方法的思路是这样的：</p>
+<blockquote>
+<ol>
+<li>先遍历一次原链，用常规方法复制一个新链，使其next指针指向正确的位置，random指针为null；而且在这个过程中，每生成一个新节点，用map来保存旧节点到新节点的映射，类似与map(oldNode, newNode);</li>
+<li>再同时遍历原链和新链，在原链中得到节点的random指向的oldNode，然后利用map.get(oldNode)获取newCode，把新链节点的random指向这个newNode；</li>
+</ol>
+</blockquote>
+<p>结合下图：<br><img src="https://c1.staticflickr.com/1/602/22251236159_7a98624fd3_c.jpg" alt="利用map复制带random的链表"></p>
+<p>容易知道，这个方法的时间复杂度是O(n)，空间复杂度也是O(n)，效率比较低。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 利用map实现带random指针的链表复制</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> NodeWithRandom <span class="title">copyWithRandom</span> <span class="params">(NodeWithRandom h)</span> </span>&#123;</div><div class="line">	NodeWithRandom newNode = <span class="keyword">null</span>;</div><div class="line">	Map&lt;NodeWithRandom, NodeWithRandom&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line">	map.put(<span class="keyword">null</span>, <span class="keyword">null</span>); <span class="comment">// 解决random指向null的情况</span></div><div class="line"></div><div class="line">	<span class="comment">// 先用常规方法复制链表</span></div><div class="line">	NodeWithRandom tmp1 = h;</div><div class="line">	NodeWithRandom h2 = <span class="keyword">null</span>;</div><div class="line">	<span class="keyword">while</span> (tmp1 != <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">if</span>(newNode == <span class="keyword">null</span>) &#123; <span class="comment">// 表头</span></div><div class="line">			newNode = <span class="keyword">new</span> NodeWithRandom(tmp1.value);</div><div class="line">			h2 = newNode;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			newNode.next = <span class="keyword">new</span> NodeWithRandom(tmp1.value);</div><div class="line">			newNode = newNode.next;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		map.put(tmp1, newNode); <span class="comment">// 旧地址到新地址的映射</span></div><div class="line">		tmp1 = tmp1.next;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// 再两个链表同时走复制random，a'.random = map[a.random]</span></div><div class="line">	tmp1 = h;</div><div class="line">	NodeWithRandom tmp2 = h2;</div><div class="line">	<span class="keyword">while</span> (tmp1 != <span class="keyword">null</span>) &#123;</div><div class="line">		tmp2.random = map.get(tmp1.random); <span class="comment">// 利用map的映射，将新链表的random指针指向新节点</span></div><div class="line">		tmp1 = tmp1.next;</div><div class="line">		tmp2 = tmp2.next;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> h2;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 带random的节点</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NodeWithRandom</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">int</span> value;</div><div class="line">	<span class="keyword">public</span> NodeWithRandom next;</div><div class="line">	<span class="keyword">public</span> NodeWithRandom random;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NodeWithRandom</span> <span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.value = value;</div><div class="line">		<span class="keyword">this</span>.next = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">this</span>.random = <span class="keyword">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="“副本”方法"><a href="#“副本”方法" class="headerlink" title="“副本”方法"></a>“副本”方法</h3><p>这个方法的思路主要是：</p>
+<blockquote>
+<ol>
+<li>new副本：在每个旧节点后插入一个当前节点的副本，重新拉成链；</li>
+<li>复制random：新节点的random=旧节点random的next；</li>
+<li>拆分：奇数项都是旧节点，偶数项都是新节点，提取偶数项成链；</li>
+</ol>
+</blockquote>
+<p>如下图：<br><img src="https://c1.staticflickr.com/1/745/22428455812_4c8560e01e_c.jpg" alt="“副本”方法复制带随机指针的链表"></p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// "副本"方式复制带随机指针链表</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> NodeWithRandom <span class="title">copyRandomList</span> <span class="params">(NodeWithRandom head)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// 在每个节点后创建副本，拉成链</span></div><div class="line">	NodeWithRandom now = head; </div><div class="line">	<span class="keyword">while</span> (now != <span class="keyword">null</span>) &#123;</div><div class="line">		NodeWithRandom copy = <span class="keyword">new</span> NodeWithRandom(now.value);</div><div class="line">		copy.next = now.next;</div><div class="line">		now.next = copy;</div><div class="line"></div><div class="line">		now = copy.next;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// 复制random</span></div><div class="line">	<span class="keyword">for</span> (now = head; now != <span class="keyword">null</span>; now = now.next.next) &#123;</div><div class="line">		now.next.random = now.random == <span class="keyword">null</span> ? <span class="keyword">null</span> : now.random.next; <span class="comment">// 新节点的random=旧节点random的next</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// 奇数项为旧节点，偶数项为新节点</span></div><div class="line">	<span class="comment">// 提取出偶数项就是所求</span></div><div class="line">	NodeWithRandom h = head.next; <span class="comment">// 新链头部</span></div><div class="line">	NodeWithRandom t = h; <span class="comment">// 遍历游标</span></div><div class="line">	NodeWithRandom tail = head;</div><div class="line">	<span class="keyword">for</span> (;;) &#123;</div><div class="line">		tail.next = t.next; <span class="comment">// 重连旧节点</span></div><div class="line">		tail = tail.next; <span class="comment">// 移向下一个旧节点</span></div><div class="line">		<span class="keyword">if</span>(tail == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		t.next = tail.next; <span class="comment">// 连接新节点</span></div><div class="line">		t = t.next; <span class="comment">// 移向下一个新节点</span></div><div class="line">	&#125; </div><div class="line"></div><div class="line">	<span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="链表partition过程-leetcode-86"><a href="#链表partition过程-leetcode-86" class="headerlink" title="链表partition过程(leetcode 86)"></a>链表partition过程(leetcode 86)</h2><p>链表里存放整数，给定x，把x小的节点放在&gt;=x之前，这就是一个partition过程，数组在partition的过程就是这样做的。然而链表和数组不同的是，在patition的过程中，链表没必要赋值来赋值去，而是重新起一个头，把比x小的连起来，把&gt;=x的连成另外一条链，最后再把这2条链连起来就是了。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 链表的partition过程</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="title">Node</span><span class="params">(Node head, <span class="keyword">int</span> x)</span> </span>&#123;</div><div class="line">    Node h1 = <span class="keyword">null</span>; <span class="comment">// 小子链头部</span></div><div class="line">    Node h2 = <span class="keyword">null</span>; <span class="comment">// 大子链头部</span></div><div class="line">    Node t1 = <span class="keyword">null</span>; <span class="comment">// 小子链尾部</span></div><div class="line">    Node t2 = <span class="keyword">null</span>; <span class="comment">// 大子链尾部</span></div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (; head != <span class="keyword">null</span>; head = head.next) &#123;</div><div class="line">        <span class="keyword">if</span> (head.val &lt; x) &#123; <span class="comment">// 比x小</span></div><div class="line">            <span class="keyword">if</span> (h1 = <span class="keyword">null</span>) &#123; <span class="comment">// 头部</span></div><div class="line">                h1 = head;</div><div class="line">                t1 = head;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                t1.next = head;</div><div class="line">                t1 = t1.next;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (h2 == <span class="keyword">null</span>) &#123;</div><div class="line">                h2 = head;</div><div class="line">                t2 = head;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                t2.next = head;</div><div class="line">                t2 = t2.next;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (t2 != <span class="keyword">null</span>) &#123; <span class="comment">// 大子链有节点</span></div><div class="line">        t2.next = <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(t1 != <span class="keyword">null</span>) &#123; <span class="comment">// 小子链有节点</span></div><div class="line">        t1.next = h2;</div><div class="line">    &#125;</div><div class="line">        </div><div class="line">    <span class="keyword">return</span> h1 != <span class="keyword">null</span> ? h1 : h2;    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从上面可以看出，涉及链表的问题，大部分都可以用快慢指针或集合的方式来解决，所以遇到这种问题可以往这方面考虑。由于链表实在非常灵活，所以具体的问题还是得灵活处理。</p>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://wuchong.me/blog/2014/03/25/interview-link-questions/" target="_blank" rel="external">面试精选：链表问题集锦</a></li>
+<li><a href="http://www.julyedu.com/video/play/?id=31&amp;course=25" target="_blank" rel="external">七月算法：链表面试精讲</a></li>
+</ul>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+            <a href="/tags/面试/" rel="tag"># 面试</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/14/单链表的基础操作/" rel="next" title="单链表的基础操作">
+                <i class="fa fa-chevron-left"></i> 单链表的基础操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/11/Intellij-IDEA部署本地Tomcat/" rel="prev" title="Intellij IDEA部署本地Tomcat">
+                Intellij IDEA部署本地Tomcat <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#翻转"><span class="nav-number">1.</span> <span class="nav-text">翻转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#懒删除-在O-1-时间删除链表节点"><span class="nav-number">2.</span> <span class="nav-text">懒删除(在O(1)时间删除链表节点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求链表倒数第k个节点"><span class="nav-number">3.</span> <span class="nav-text">求链表倒数第k个节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求链表的中间节点"><span class="nav-number">4.</span> <span class="nav-text">求链表的中间节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单链表是否存在环-leetcode-141"><span class="nav-number">5.</span> <span class="nav-text">单链表是否存在环(leetcode 141)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#利用HashSet集合"><span class="nav-number">5.1.</span> <span class="nav-text">利用HashSet集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用快慢指针"><span class="nav-number">5.2.</span> <span class="nav-text">利用快慢指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单链表中环的起点-leetcode-142"><span class="nav-number">6.</span> <span class="nav-text">单链表中环的起点(leetcode 142)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单链表中环的长度"><span class="nav-number">7.</span> <span class="nav-text">单链表中环的长度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两个链表是否相交并求出交点-leetcode-160"><span class="nav-number">8.</span> <span class="nav-text">两个链表是否相交并求出交点(leetcode 160)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Set集合方法"><span class="nav-number">8.1.</span> <span class="nav-text">Set集合方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链长先走方法"><span class="nav-number">8.2.</span> <span class="nav-text">链长先走方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#成环方法"><span class="nav-number">8.3.</span> <span class="nav-text">成环方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制带有随机指针的链表-leetcode-138"><span class="nav-number">9.</span> <span class="nav-text">复制带有随机指针的链表(leetcode 138)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map集合方法"><span class="nav-number">9.1.</span> <span class="nav-text">map集合方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“副本”方法"><span class="nav-number">9.2.</span> <span class="nav-text">“副本”方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链表partition过程-leetcode-86"><span class="nav-number">10.</span> <span class="nav-text">链表partition过程(leetcode 86)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">11.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">12.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

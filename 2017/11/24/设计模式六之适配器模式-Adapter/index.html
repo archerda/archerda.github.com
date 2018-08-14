@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是适配者模式 适配者模式 将一个类的接口，装换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。  《Head First 设计模式》   适配者别名为包装器(Wrapper)。">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式六之适配器模式(Adapter)">
+<meta property="og:url" content="http://yoursite.com/2017/11/24/设计模式六之适配器模式-Adapter/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="什么是适配者模式 适配者模式 将一个类的接口，装换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。  《Head First 设计模式》   适配者别名为包装器(Wrapper)。">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/adapter.png">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-15-061933.jpg">
+<meta property="og:updated_time" content="2018-03-15T06:22:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式六之适配器模式(Adapter)">
+<meta name="twitter:description" content="什么是适配者模式 适配者模式 将一个类的接口，装换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。  《Head First 设计模式》   适配者别名为包装器(Wrapper)。">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/adapter.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/24/设计模式六之适配器模式-Adapter/"/>
+
+
+
+
+
+  <title>设计模式六之适配器模式(Adapter) | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/24/设计模式六之适配器模式-Adapter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式六之适配器模式(Adapter)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-24T12:07:46+08:00">
+                2017-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是适配者模式"><a href="#什么是适配者模式" class="headerlink" title="什么是适配者模式"></a>什么是适配者模式</h2><blockquote>
+<p><strong>适配者模式</strong> 将一个类的接口，装换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。</p>
+<ul>
+<li>《Head First 设计模式》</li>
+</ul>
+</blockquote>
+<p>适配者别名为<strong>包装器(Wrapper)</strong>。</p>
+<a id="more"></a>
+<h2 id="适配者模式有什么用"><a href="#适配者模式有什么用" class="headerlink" title="适配者模式有什么用"></a>适配者模式有什么用</h2><p>通常情况下，客户端可以通过目标类的接口访问它所提供的服务。有时，现有的类可以满足客户端的需求，但是它所提供的接口不一定是客户端所需要的，这可能是因为现有类中的方法名和目标类的方法名不一致等原因导致的。在这种情况下，现有的接口需要转化为客户端所需要的接口，这样保证了对现有类的重用。如果不进行这样的转化客户端就不能利用现有类所提供的功能，而适配器模式就可以完成这样的转化。</p>
+<p>在适配器模式中，可以定义一个适配类，或者叫包装类，包装不兼容的接口的对象，它所包装的对象就是适配器类(Adaptee)，即被适配的类。</p>
+<p>适配器提供客户端所需要的接口，适配器的实现就是把客户端的请求转化为对被适配者的相应接口的调用。也就是说，当客户端调用适配器的方法时，在适配器内部将调用被适配者类的方法，而这个过程对客户端来说是透明的，客户类并不直接访问被适配者类。因此，适配器可以使由于接口不兼容而不能交互的类一起工作。</p>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p>适配器模式包含的角色如下：</p>
+<ul>
+<li><strong>Target</strong>：目标抽象类</li>
+<li><strong>Adapter</strong>：适配器类</li>
+<li><strong>Adaptee</strong>：被适配者类</li>
+<li><strong>Client</strong>：客户端</li>
+</ul>
+<h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/adapter.png" alt=""></p>
+<h2 id="适配者模式的使用"><a href="#适配者模式的使用" class="headerlink" title="适配者模式的使用"></a>适配者模式的使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.adapter;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Target：目标抽象类</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Duck</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.adapter;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Create by archerda on 2017/11/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Turkey</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">gobble</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.adapter;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Adapter：适配器</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TurkeyAdapter</span> <span class="keyword">implements</span> <span class="title">Duck</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// Adaptee：被适配者</span></div><div class="line">    <span class="keyword">private</span> Turkey turkey;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TurkeyAdapter</span><span class="params">(Turkey turkey)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.turkey = turkey;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>&#123;</div><div class="line">        turkey.gobble();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</div><div class="line">            turkey.fly();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.adapter;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Client：客户端</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/20.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">// 要的是Duck，却只有Turkey，那就写个适配器吧</span></div><div class="line">        Turkey turkey = <span class="keyword">new</span> WildTurkey();</div><div class="line">        Duck adapter = <span class="keyword">new</span> TurkeyAdapter(turkey);</div><div class="line">        adapter.quack();</div><div class="line">        adapter.fly();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>将目标类与适配者类通过适配器解耦，可以重用代码，而无需修改原来的代码；</li>
+<li>扩展性很好，可以很方便地更换适配器，符合<strong>开闭原则</strong>；</li>
+<li>被适配的任何子类，都可以搭配适配器使用；</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>替换被适配者的方法比较麻烦，需要写一个子类继承适配者类，然后覆盖适配者的方法。再把这个子类作为最后的适配者类与适配器进行配合，比较麻烦。</li>
+</ul>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>下面这些场景可以考虑使用适配器模式：</p>
+<ul>
+<li>系统需要使用现有的类，但是这些类的接口不符合系统的需要；</li>
+<li>想要建立一个可以重用的类，这个类关联其他类进行工作，而且要考虑到将来可能会引入新的类；</li>
+</ul>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>当不需要实现所有目标接口的方式时，可提供一个抽象类实现目标接口，并为接口方法提供默认方法(空方法)，那么该抽象类的子类就可以有选择性的实现方法来完成需求。它适用于一个接口不想使用其所有方法的情况，这种模式也叫做 <strong>单接口适配器模式</strong>。</p>
+<h2 id="在JDK中的应用"><a href="#在JDK中的应用" class="headerlink" title="在JDK中的应用"></a>在JDK中的应用</h2><p>在JDK的io包中，有两个类，分别是<code>InputStreamReader</code>和<code>OutputStreamWriter</code>，用于把字节流适配成字符流。</p>
+<p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2018-03-15-061933.jpg" alt="适配图"></p>
+<p>具体应用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(<span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"text.txt"</span>))));</div></pre></td></tr></table></figure>
+<h2 id="在Spring中的应用"><a href="#在Spring中的应用" class="headerlink" title="在Spring中的应用"></a>在Spring中的应用</h2><p>在Spring AOP中，使用Advice(通知)来增强被代理类的能力。通过在被代理类执行的方法前设置拦截器，增强了被代理方法的功能。位于org.springframework.aop.framework.adapter包中的AdvisorAdapter是一个适配器接口，它定义了自己支持的Advice类型，并且能把一个Advisor适配成MethodInterceptor。</p>
+<p>被适配抽象类：<code>Advice</code><br>被适配具体类：<code>MethodBeforeAdvice</code> <code>AfterReturningAdvice</code> <code>ThrowsAdvice</code><br>适配器抽象类：<code>AdvisorAdapter</code><br>适配器具体类：<code>MethodBeforeAdviceAdapter</code> <code>AfterReturningAdviceAdapter</code> <code>ThrowsAdviceAdapter</code><br>目标类抽象类：<code>MethodBeforeAdviceInterceptor</code> <code>AfterReturningAdviceInterceptor</code> <code>ThrowsAdviceInterceptor</code><br>客户端：<code>DefaultAdvisorAdapterRegistry</code></p>
+<p>// TODO 这块其实理解的还不清晰，后续学习Spring源码后再进行补充。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.html" target="_blank" rel="external">Graphic Design Pattern：适配者模式</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-lo-adapter-pattern/index.html" target="_blank" rel="external">developerWorks：适配器模式原理及实例介绍</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/16/Zookeeper常用命令/" rel="next" title="Zookeeper常用命令">
+                <i class="fa fa-chevron-left"></i> Zookeeper常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/13/设计原则以及模式分类/" rel="prev" title="设计原则以及模式分类">
+                设计原则以及模式分类 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是适配者模式"><span class="nav-number">1.</span> <span class="nav-text">什么是适配者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配者模式有什么用"><span class="nav-number">2.</span> <span class="nav-text">适配者模式有什么用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式结构"><span class="nav-number">3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类图"><span class="nav-number">4.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配者模式的使用"><span class="nav-number">5.</span> <span class="nav-text">适配者模式的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">6.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺点"><span class="nav-number">7.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">8.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展"><span class="nav-number">9.</span> <span class="nav-text">扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在JDK中的应用"><span class="nav-number">10.</span> <span class="nav-text">在JDK中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在Spring中的应用"><span class="nav-number">11.</span> <span class="nav-text">在Spring中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">12.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Java集合," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述上次学习了Vector,今天学习Stack,这也是Collecton集合下最后解析的一个了.Stack比较简单,它直接继承自Vector. 学习内容分为下面几个部分:  Stack简介 数据结构分析 源码解析(基于JDK1.8)">
+<meta name="keywords" content="Java,Java集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合系列[6]-Stack分析与源码解析">
+<meta property="og:url" content="http://yoursite.com/2016/09/04/Java集合系列-6-Stack分析与源码解析/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="概述上次学习了Vector,今天学习Stack,这也是Collecton集合下最后解析的一个了.Stack比较简单,它直接继承自Vector. 学习内容分为下面几个部分:  Stack简介 数据结构分析 源码解析(基于JDK1.8)">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2016-09-04_Stack%E4%B8%8ECollection%E7%9A%84%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta property="og:updated_time" content="2017-05-19T09:01:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合系列[6]-Stack分析与源码解析">
+<meta name="twitter:description" content="概述上次学习了Vector,今天学习Stack,这也是Collecton集合下最后解析的一个了.Stack比较简单,它直接继承自Vector. 学习内容分为下面几个部分:  Stack简介 数据结构分析 源码解析(基于JDK1.8)">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2016-09-04_Stack%E4%B8%8ECollection%E7%9A%84%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/04/Java集合系列-6-Stack分析与源码解析/"/>
+
+
+
+
+
+  <title>Java集合系列[6]-Stack分析与源码解析 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/04/Java集合系列-6-Stack分析与源码解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java集合系列[6]-Stack分析与源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-04T22:50:50+08:00">
+                2016-09-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>上次学习了<a href="http://archerda.github.io/2016/09/03/Java%E9%9B%86%E5%90%88%E7%B3%BB%E5%88%975-Vector%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">Vector</a>,今天学习Stack,这也是Collecton集合下最后解析的一个了.Stack比较简单,它直接继承自Vector. 学习内容分为下面几个部分:</p>
+<ol>
+<li>Stack简介</li>
+<li>数据结构分析</li>
+<li>源码解析(基于JDK1.8)</li>
+</ol>
+<a id="more"></a>
+<h2 id="Stack简介"><a href="#Stack简介" class="headerlink" title="Stack简介"></a>Stack简介</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Vector</span>&lt;<span class="title">E</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>Stack是栈,直接继承自Vector,它的特点是<strong>先进后出</strong>(FILO,first in last out).</p>
+<p>java工具包的Stack是继承矢量队列的,由于Vector是通过数组实现的,这意味着<strong>Stack也是通过数组实现的,而非链表</strong>.当然我们也可以把LinkedList作为栈来使用<a href="http://archerda.github.io/2016/08/23/Java%E9%9B%86%E5%90%88%E7%B3%BB%E5%88%973-LinkedList%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/#%E6%80%BB%E7%BB%93" target="_blank" rel="external">看这里</a>!!</p>
+<h3 id="Stack的构造方法"><a href="#Stack的构造方法" class="headerlink" title="Stack的构造方法"></a>Stack的构造方法</h3><p>Stack只有一个构造方法,如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="Stack的API"><a href="#Stack的API" class="headerlink" title="Stack的API"></a>Stack的API</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">push</span><span class="params">(E item)</span></span>;<span class="comment">//把元素置到栈顶</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title">pop</span><span class="params">()</span></span>;<span class="comment">//移除栈顶的元素,并返回该元素</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title">peek</span><span class="params">()</span></span>;<span class="comment">//返回栈顶元素,不删除</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">empty</span><span class="params">()</span></span>;<span class="comment">//判断栈是否为空</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">search</span><span class="params">(Object o)</span></span>;<span class="comment">//返回对象在栈中的位置,栈底元素的位置为1,往上推</span></div></pre></td></tr></table></figure>
+<h2 id="数据结构分析"><a href="#数据结构分析" class="headerlink" title="数据结构分析"></a>数据结构分析</h2><p>在<a href="http://archerda.github.io/2016/09/03/Java%E9%9B%86%E5%90%88%E7%B3%BB%E5%88%975-Vector%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">Java集合系列[5]-Vector分析与源码解析</a>一文已经详细介绍过Vector的数据结构了,这里就不对Stack的数据结构进行说明,因为Stack的数据结构和Vector的一模一样的.</p>
+<h3 id="Stack的继承关系"><a href="#Stack的继承关系" class="headerlink" title="Stack的继承关系"></a>Stack的继承关系</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">java.lang.Object</div><div class="line">    java.util.AbstractCollection&lt;E&gt;</div><div class="line">        java.util.AbstractList&lt;E&gt;</div><div class="line">            java.util.Vector&lt;E&gt;</div><div class="line">                java.util.Stack&lt;E&gt;</div></pre></td></tr></table></figure>
+<h3 id="Stack与Collection的关系"><a href="#Stack与Collection的关系" class="headerlink" title="Stack与Collection的关系"></a>Stack与Collection的关系</h3><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2016-09-04_Stack%E4%B8%8ECollection%E7%9A%84%E5%85%B3%E7%B3%BB%E5%9B%BE.png" alt="Stack与Collection的关系"></p>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><h3 id="源码解析-1"><a href="#源码解析-1" class="headerlink" title="源码解析"></a>源码解析</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> java.util;</div><div class="line"></div><div class="line"><span class="keyword">public</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Vector</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">    <span class="comment">//构造一个空栈</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//把元素item置到栈顶</span></div><div class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">push</span><span class="params">(E item)</span> </span>&#123;</div><div class="line">        addElement(item);</div><div class="line"></div><div class="line">        <span class="comment">//返回刚添加的元素</span></div><div class="line">        <span class="keyword">return</span> item;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//删除栈顶的元素,并返回删除的元素</span></div><div class="line">    <span class="comment">//好奇这里的内部为什么不直接使用Vector的remove方法,仅仅是因为remove方法是List接口的方法吗?</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title">pop</span><span class="params">()</span> </span>&#123;</div><div class="line">        E       obj;</div><div class="line">        <span class="keyword">int</span>     len = size();</div><div class="line"></div><div class="line">        <span class="comment">//获取栈顶元素</span></div><div class="line">        obj = peek();</div><div class="line">        <span class="comment">//删除栈顶元素(队列的尾部元素)</span></div><div class="line">        removeElementAt(len - <span class="number">1</span>);</div><div class="line"></div><div class="line">        <span class="comment">//返回刚删除的元素</span></div><div class="line">        <span class="keyword">return</span> obj;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//获取栈顶元素,并且不删除它</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title">peek</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span>     len = size();</div><div class="line"></div><div class="line">        <span class="comment">//如果栈为空,则抛出异常</span></div><div class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</div><div class="line">        <span class="keyword">return</span> elementAt(len - <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//判断栈是不是为空</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">empty</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> size() == <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//查找元素o在栈中的位置,从栈底往栈顶的方向开始计算,以1为基数</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">search</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">        <span class="comment">//找出该元素在队列中的位置</span></div><div class="line">        <span class="keyword">int</span> i = lastIndexOf(o);</div><div class="line">        </div><div class="line">        <span class="comment">//计算从底部为1开始到该元素的距离</span></div><div class="line">        <span class="keyword">if</span> (i &gt;= <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> size() - i;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//版本ID,这个用于版本升级控制,这里不理会</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1224463164541339165L</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>Stack实际上也是通过数组去实现的.<ul>
+<li>执行push时,是通过将元素添加到数组为末尾;</li>
+<li>执行peek时,是返回数组末尾的元素;</li>
+<li>执行pop时,是删除并返回数组末尾的元素;</li>
+</ul>
+</li>
+<li>Stack继承Vector,意味着Vector所拥有的属性和功能,Stack都拥有.</li>
+</ol>
+<h2 id="Stack设计上存在的问题"><a href="#Stack设计上存在的问题" class="headerlink" title="Stack设计上存在的问题"></a>Stack设计上存在的问题</h2><p>根据JDK官方文档的介绍:<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">A more complete and consistent set of LIFO stack operations is provided by the Deque interface and its implementations, which should be used in preference to this class. For example:</div><div class="line"></div><div class="line">   Deque&lt;Integer&gt; stack = new ArrayDeque&lt;Integer&gt;();</div></pre></td></tr></table></figure></p>
+<p>Deque接口及其实现提供了LIFO堆栈的操作,它们提供了更完整和更一致的操作.所以应该优先使用这个接口,而不是Stack.比如ArrayDeque.</p>
+<p>其实,JDK通过Vector来实现Stack这个设计是存在问题的.理由如下:</p>
+<ol>
+<li>Stack仅仅是为了使用Vector的几个方法,而其他大部分方法都没有使用,造成很多方法冗余,要知道Stack和Vector在设计理念上毫无关系啊;</li>
+<li>鉴于1,Stack设计上的不严谨,Vector中有个方法<code>public void add(int index, E element)</code>,它可以在栈中任意位置添加元素,这于Stack的设计理念相冲突;</li>
+<li>Stack大部分是增加和删除操作,很少查找元素,这很应该用链表去实现,而不是Vector的数组(效率受影响),这里也是很多人质疑Stack的地方;</li>
+</ol>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://www.cnblogs.com/leefreeman/archive/2013/05/16/3082400.html" target="_blank" rel="external">为什么质疑Java中的Stack</a></li>
+</ul>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java集合/" rel="tag"># Java集合</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/03/Java集合系列-5-Vector分析与源码解析/" rel="next" title="Java集合系列[5]-Vector分析与源码解析">
+                <i class="fa fa-chevron-left"></i> Java集合系列[5]-Vector分析与源码解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/07/Java集合系列-7-List总结-使用场景和性能分析/" rel="prev" title="Java集合系列[7]-List总结(使用场景和性能分析)">
+                Java集合系列[7]-List总结(使用场景和性能分析) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack简介"><span class="nav-number">2.</span> <span class="nav-text">Stack简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stack的构造方法"><span class="nav-number">2.1.</span> <span class="nav-text">Stack的构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stack的API"><span class="nav-number">2.2.</span> <span class="nav-text">Stack的API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构分析"><span class="nav-number">3.</span> <span class="nav-text">数据结构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stack的继承关系"><span class="nav-number">3.1.</span> <span class="nav-text">Stack的继承关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stack与Collection的关系"><span class="nav-number">3.2.</span> <span class="nav-text">Stack与Collection的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码解析"><span class="nav-number">4.</span> <span class="nav-text">源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#源码解析-1"><span class="nav-number">4.1.</span> <span class="nav-text">源码解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack设计上存在的问题"><span class="nav-number">5.</span> <span class="nav-text">Stack设计上存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

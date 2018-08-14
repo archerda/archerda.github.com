@@ -1,0 +1,739 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言最近在学习Redis相关方面的知识，在网上搜索资料的时候，总是能看见Memcached的影子。前几天导师去面试一个来求职的同学，也问到了Redis和Memcached的区别，他拿着相同的问题问我：”Redis和Memcached有什么区别？”，我只知道Redis支持的数据类型丰富，支持持久化，然后没了，然后被鄙视了。因为平时工作中都是用Redis，Memcached几乎没怎么用过，不熟悉。所以">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis VS. Memcached">
+<meta property="og:url" content="http://yoursite.com/2017/06/05/Redis-VS-Memcached/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="前言最近在学习Redis相关方面的知识，在网上搜索资料的时候，总是能看见Memcached的影子。前几天导师去面试一个来求职的同学，也问到了Redis和Memcached的区别，他拿着相同的问题问我：”Redis和Memcached有什么区别？”，我只知道Redis支持的数据类型丰富，支持持久化，然后没了，然后被鄙视了。因为平时工作中都是用Redis，Memcached几乎没怎么用过，不熟悉。所以">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-154508.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-160357.jpg">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-160843.jpg">
+<meta property="og:updated_time" content="2017-09-29T07:17:07.124Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis VS. Memcached">
+<meta name="twitter:description" content="前言最近在学习Redis相关方面的知识，在网上搜索资料的时候，总是能看见Memcached的影子。前几天导师去面试一个来求职的同学，也问到了Redis和Memcached的区别，他拿着相同的问题问我：”Redis和Memcached有什么区别？”，我只知道Redis支持的数据类型丰富，支持持久化，然后没了，然后被鄙视了。因为平时工作中都是用Redis，Memcached几乎没怎么用过，不熟悉。所以">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-154508.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/05/Redis-VS-Memcached/"/>
+
+
+
+
+
+  <title>Redis VS. Memcached | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/05/Redis-VS-Memcached/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis VS. Memcached</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-05T22:04:48+08:00">
+                2017-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在学习Redis相关方面的知识，在网上搜索资料的时候，总是能看见Memcached的影子。前几天导师去面试一个来求职的同学，也问到了Redis和Memcached的区别，他拿着相同的问题问我：”Redis和Memcached有什么区别？”，我只知道Redis支持的数据类型丰富，支持持久化，然后没了，然后被鄙视了。因为平时工作中都是用Redis，Memcached几乎没怎么用过，不熟悉。所以特意搜寻了一些关于Memcached的知识，并着重与Redis进行差异对比，记录如下。</p>
+<a id="more"></a>
+<h2 id="网络IO模型"><a href="#网络IO模型" class="headerlink" title="网络IO模型"></a>网络IO模型</h2><p>Redis使用 <strong>单线程的IO复用模型</strong> ，自己封装了一个简单的Ae_Event事件处理框架，主要实现了epoll、kqueue、kvport和select，对于单存只有IO操作来说，单线程可以将速度优势发挥到最大，但是Redis也提供了一些简单的计算功能，比如排序、聚合等，对于这些操作，单线程模型不能发挥多核CPU的优势，会严重影响整体吞吐率，因为在CPU的计算的过程中，整个IO调度是被阻塞的，因此 <strong>Redis不适合用于计算</strong>。</p>
+<p>Memcached是 <strong>多线程、非阻塞IO复用</strong> 的网络模型，分为监听主线程和worker子线程，监听线程监听网络连接，接受请求后，将连接描述字pipe传递给worker线程进行读写IO，网络层使用libevent封装的事件库，多线程模型可以发挥CPU多核作用，但是引入了cache coherency(缓存一致性）和锁的问题，比如：Memcached最常用的stats命令，实际Memcached所有操作都要对这个全局变量加锁、进行技术工作等，带来了性能损耗。</p>
+<h2 id="内存管理机制"><a href="#内存管理机制" class="headerlink" title="内存管理机制"></a>内存管理机制</h2><p><strong>对于Redis和Memcached这种内存数据库来说，内存管理的效率高低是影响整个系统性能的关键</strong>。传统C语言中的 malloc/free 函数是最常用的内存分配和释放的方式，但是这种方法存在很大的不足：</p>
+<ol>
+<li>对于开发人员来说，不匹配的malloc和free容易造成内存泄露；</li>
+<li>频繁调用会造成大量内存碎片无法回收重新利用，降低了内存的利用率；</li>
+<li>做为系统调用，其系统开销远远大于一般的函数调用；</li>
+</ol>
+<p>为了提高内存的利用率，高效的内存管理方案都不会直接使用malloc/free调用。Redis和Memcached均使用了自己设计的内存管理机制，但是实现方法存在很大的差异，下面分别来介绍。</p>
+<h3 id="Memcached的Slab-Allocation机制"><a href="#Memcached的Slab-Allocation机制" class="headerlink" title="Memcached的Slab Allocation机制"></a>Memcached的Slab Allocation机制</h3><p>Memcached默认使用Slab Allocation机制来管理内存，它的主要思想是 <strong>按照预先规定的大小，将分配的内存分割成特定长度的块，以存储相应长度的key-value数据记录</strong>，以完全解决内存碎片的问题。Slab Allocation机制只为存储外部数据而设计，也就是说所有的key-value数据都存储在slab allocation系统里面，但是Memcached的其他内存请求则是通过普通的malloc/free来申请，因为这些请求的数量和频率决定了它们不会对整个系统的性能造成影响。</p>
+<p>slab allocation机制的原理比较简单，如下图所示，它首先从操作系统申请一大块内存，并将其分割成各种尺寸的chunk(块)，并把尺寸相同的chunk分成一组组slab class。其中，chunk就是用来存储key-value的最小单位。每个slab class的大小，可以在Memcached启动的时候通过制定growth factor来控制。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-154508.jpg" alt=""><br>当Memcached接收到客户端发过来的数据时，会根据收到数据的大小选择一个最合适的slab class，然后通过查询Memcached保存着的该slab class内空闲chunk的列表，就可以找到一个用于存储数据的chunk。当一条数据记录过期或者丢弃时，该记录所占用的chunk就可以被回收，重新添加到空闲列表中。</p>
+<p>从以上过程中可以看到，Memcached的内存管理效率高，并且不会造成内存碎片，但是它<strong>最大的不足是会造成空间浪费</strong>。因为每个chunk都分配了特定长度的内存空间，所以变长数据无法利用这些空间。如下图所示，将100字节的数据缓存到128字节的chunk中，剩余的28个字节就被浪费掉了。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-160357.jpg" alt=""></p>
+<h3 id="Redis的内存管理"><a href="#Redis的内存管理" class="headerlink" title="Redis的内存管理"></a>Redis的内存管理</h3><p>Redis的内存管理主要通过源码中的zmalloc.h和zmalloc.c两个文件来实现。Redis为了方便内存的管理，在分配了一块内存后，会将这块内存的大小存入内存块的头部。如下图所示，real_ptr是Redis调用malloc函数返回的指针，Redis将内存块的大小size存入头部（size所占据的大小是已知的，为size_t类型的长度），然后返回ret_ptr。当需要释放内存的时候，ret_ptr别传给内存管理程序，通过ret_ptr可以很容易计算出real_ptr的值，然后将real_ptr传给free释放掉。<br><img src="http://7xl3pd.com1.z0.glb.clouddn.com/2017-06-05-160843.jpg" alt=""></p>
+<p><strong>在Redis中，并不是所有的数组都一直存储在内存中的。这是和Memcached相比最大的一个区别</strong>。当物理内存用完的时候，Redis可以将一些很久没用到的value交换到磁盘(<a href="https://redis.io/topics/virtual-memory" target="_blank" rel="external">注：这里用到的是Redis的Virtual Memory技术，Redis2.4版本之后已经不提倡使用了</a>)。Redis只会缓存所有key的信息，如果Redis发现内存的使用量超过了某个阈值，将触发swap操作。swap操作根据规则计算出哪些key对应的value需要swap到磁盘，然后再将这些key对应的value持久化到磁盘中，同时在内存中清除。这种特性使得Redis可以保存超过其机器物理内存大小的数据。当然，机器本身的内存必须要能够保存所有的key，毕竟这部分数据是不会被swap到磁盘的。同时由于Redis将内存中的数据swap到磁盘的时候，提供服务的主线程和进行swap的子线程会共享这部分内存，所有如果需要更新swap的数据，Redis将阻塞这个操作，直到子线程完成swap之后才可以进行修改。当从Redis中读取数据的时候，如果读取的key的value不在内存中，那么Redis需要从swap文件中加载对应的数据，然后再返回给client，这里就存在一个I/O线程池的问题。在默认情况下，Redis会出现阻塞，即完成所有的swap文件加载后才会执行相应的操作。这种策略在client数量较小，进行批量操作的时候比较合适。但是如果Redis应用在一个大型的网站应用中，这显示是无法满足大并发的情况的。所以Redis允许我们设置I/O线程池的大小，对需要从swap文件中加载相应数据的读取请求进行并发操作，减少阻塞的时间。</p>
+<h3 id="内存管理总结"><a href="#内存管理总结" class="headerlink" title="内存管理总结"></a>内存管理总结</h3><p>Memcached使用预分配内存池的方式，使用slab和大小不同的chunk来管理内存，item根据大小选择合适的chunk存储，内存池的方式可以省去申请/释放内存的开销，并且能减少内存碎片的产生，但是这种方式也会带来一定程度上的内存浪费，并且在内存仍然有很大空间的时候，新的数据也可能会被剔除，可参考这里<a href="https://timyang.net/data/Memcached-lru-evictions/" target="_blank" rel="external">Memcached数据被踢(evictions&gt;0)现象分析</a>。</p>
+<p>Redis使用现场申请内存的方式来存储数据，并且很少使用free-list等方式来优化内存分配，会在一定程度上存在内存碎片，Redis根据存储命令参数，会把带过期时间的数据单独存放在一起，并称它们为临时数据(volatile key)，非临时数据是永远不会被剔除的，即使物理内存不够，导致swap也不会剔除任何非临时数据，但会尝试剔除部分临时数组，这点上Redis更适合作为存储而不是cache。（这其实取决于eviction policies，如果是allkeys-lru策略，长期key也是可以被剔除的）</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>Memcached使用key-value形式存储和访问数据，在内存中维护一张巨大的HashTable，使得对数据查询的时间复杂度降到了O(1)，保证了对数据的高性能访问。</p>
+<p>而Redis相比Memcached，除了简单的key-value数据类型，同时还提供了list、hash、set、zset等数据结构的存储，可参考<a href="http://archerda.github.io/2017/06/04/%E8%AF%A6%E8%A7%A3Redis%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%B3%BB%E7%BB%9F/" target="_blank" rel="external">详解Redis的对象系统</a>，<a href="http://blog.csdn.net/u013256816/article/details/51133134" target="_blank" rel="external">Redis内存使用优化与存储</a>。</p>
+<h2 id="持久化-可靠性"><a href="#持久化-可靠性" class="headerlink" title="持久化(可靠性)"></a>持久化(可靠性)</h2><p>Memcached不支持内存数据的持久化操作，所以的数据都以in-momory的形成存储。</p>
+<p>Redis支持持久化操作。Redis提供了2种不同的持久化方法来将数据存储到磁盘上，一种是snapshot，它可以将存在于某一时刻的所有数据都写入到磁盘上；而另一种方法叫AOF（append-only file），只追加文件，它会在执行写命令时，将被执行的命令复制到磁盘里。</p>
+<h2 id="数据一致性-事务支持"><a href="#数据一致性-事务支持" class="headerlink" title="数据一致性(事务支持)"></a>数据一致性(事务支持)</h2><p>Memcached提供了CAS命令，可以保证多个并发操作同一份数据的一致性问题。</p>
+<p>Redis没有提供CAS命令，并不能保证这点，不过Redis提供了事务的功能，可以保证一串命令的原子性，中间不会被任何操作打断。</p>
+<h2 id="集群管理（单点问题）"><a href="#集群管理（单点问题）" class="headerlink" title="集群管理（单点问题）"></a>集群管理（单点问题）</h2><p>Memcached是全内存的数据缓冲系统，Redis虽然支持数据的持久化，但是全内存才是其高性能的本质。作为基于内存的存储系统来说，机器物理内存的大小就是系统能够容纳的最大数据量。如果数据超过了单台机器的物理内存大小，那么就需要构建集群来扩展存储能力。</p>
+<p>Memcached本身并不支持分布式，因此只能在客户端通过像一致性哈希这样的分布式算法来实现Memcached的分布式存储。</p>
+<p>相比Memcached只能采用客户端实现分布式存储，Redis更偏向在服务端构建分布式存储。新版本的Redis已经支持分布式存储功能。Redis Cluster是一个实现了分布式并且允许单点故障的Redis高级版本，它没有中心节点，具有线性可伸缩的功能。Redis Cluster的分布式存储架构，节点与节点之间通过二进制协议进行通讯，节点与客户端之间通过ascii协议通讯。在数据的放置策略上，Redis Cluster将整个key的数值域划分成16384(2^14)个哈希槽，每个节点上可以存储一个或多个哈希槽，也就是说Redis Cluster支持的最大节点数是16384。</p>
+<p>为了保证单点故障下得数据可用性，Redis Cluster引入了Master节点和Slave节点。在Redis Cluster中，每个Master节点都会对应2个用于冗余的Slave节点。这样在整个集群中，任意2个节点的宕机都不会导致数据的不可用。当Master节点下线后，集群会自动选择一个Slave节点成为新的Master节点。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>如果数据是静态的数据，并且不需要计算的话，选择Memcached。</p>
+<p>如果数据需要做排序、去重等操作，或者需要保证数据不丢失的话，选择Redis。</p>
+<p>当然，大部分情况来说，选择Redis是一个更好的选择，因为它更强大、更受欢迎，并且比Memcached有更多的支持者。Memcached只是Redis功能中的一小部分。所以对于新项目来说，选择Redis。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://blog.csdn.net/u013256816/article/details/51146314" target="_blank" rel="external">CSDN：Redis和Memcached的区别</a></li>
+<li><a href="http://250688049.blog.51cto.com/643101/1132097" target="_blank" rel="external">51CTO：Redis和Memcached的区别</a></li>
+<li><a href="http://charlee.li/memcached-002.html" target="_blank" rel="external">memcached全面剖析–2.理解memcached的内存存储</a></li>
+<li><a href="https://timyang.net/data/Memcached-lru-evictions/" target="_blank" rel="external">Memcached数据被踢(evictions&gt;0)现象分析</a></li>
+<li><a href="http://blog.csdn.net/u013256816/article/details/51133134" target="_blank" rel="external">Redis内存使用优化与存储</a></li>
+<li><a href="https://stackoverflow.com/questions/10558465/memcached-vs-redis" target="_blank" rel="external">SO:Memcached vs. Redis?</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/04/详解Redis的对象系统/" rel="next" title="详解Redis的对象系统">
+                <i class="fa fa-chevron-left"></i> 详解Redis的对象系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/20/创建Maven项目以及一些常见问题/" rel="prev" title="创建Maven项目以及一些常见问题">
+                创建Maven项目以及一些常见问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络IO模型"><span class="nav-number">2.</span> <span class="nav-text">网络IO模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理机制"><span class="nav-number">3.</span> <span class="nav-text">内存管理机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Memcached的Slab-Allocation机制"><span class="nav-number">3.1.</span> <span class="nav-text">Memcached的Slab Allocation机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis的内存管理"><span class="nav-number">3.2.</span> <span class="nav-text">Redis的内存管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存管理总结"><span class="nav-number">3.3.</span> <span class="nav-text">内存管理总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">4.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#持久化-可靠性"><span class="nav-number">5.</span> <span class="nav-text">持久化(可靠性)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据一致性-事务支持"><span class="nav-number">6.</span> <span class="nav-text">数据一致性(事务支持)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群管理（单点问题）"><span class="nav-number">7.</span> <span class="nav-text">集群管理（单点问题）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">8.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">9.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

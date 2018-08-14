@@ -1,0 +1,905 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是工厂模式在我们日常编码中，到处都遍布着new操作。当看到new的时候，可能你就会想到这是一个”具体”了，那么new有什么不对劲吗？从设计原则我们可以知道，我们的代码应该“对扩展开放，对修改关闭(Open Close Priciple)”。当针对具体来编程时，我们的老朋友“改变”也就会经常来捣乱了，因为一旦加入新的具体类型的时候，就必须改变代码，也就是说，我们的代码，并非“对修改关闭”，想用新">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式系列四之工厂模式(Factory)">
+<meta property="og:url" content="http://yoursite.com/2017/11/08/设计模式系列四之工厂模式-Factory/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="什么是工厂模式在我们日常编码中，到处都遍布着new操作。当看到new的时候，可能你就会想到这是一个”具体”了，那么new有什么不对劲吗？从设计原则我们可以知道，我们的代码应该“对扩展开放，对修改关闭(Open Close Priciple)”。当针对具体来编程时，我们的老朋友“改变”也就会经常来捣乱了，因为一旦加入新的具体类型的时候，就必须改变代码，也就是说，我们的代码，并非“对修改关闭”，想用新">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/simple-factory3.png">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/factory-method3.png">
+<meta property="og:image" content="http://img.blog.csdn.net/20130626181440203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenVveGlhb2xvbmc4ODEw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/abstract-factory3.png">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201101/3/0_1294058833piFB.gif">
+<meta property="og:updated_time" content="2017-11-13T02:07:07.691Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式系列四之工厂模式(Factory)">
+<meta name="twitter:description" content="什么是工厂模式在我们日常编码中，到处都遍布着new操作。当看到new的时候，可能你就会想到这是一个”具体”了，那么new有什么不对劲吗？从设计原则我们可以知道，我们的代码应该“对扩展开放，对修改关闭(Open Close Priciple)”。当针对具体来编程时，我们的老朋友“改变”也就会经常来捣乱了，因为一旦加入新的具体类型的时候，就必须改变代码，也就是说，我们的代码，并非“对修改关闭”，想用新">
+<meta name="twitter:image" content="http://7xl3pd.com1.z0.glb.clouddn.com/simple-factory3.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/08/设计模式系列四之工厂模式-Factory/"/>
+
+
+
+
+
+  <title>设计模式系列四之工厂模式(Factory) | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/08/设计模式系列四之工厂模式-Factory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式系列四之工厂模式(Factory)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-08T17:53:13+08:00">
+                2017-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是工厂模式"><a href="#什么是工厂模式" class="headerlink" title="什么是工厂模式"></a>什么是工厂模式</h2><p>在我们日常编码中，到处都遍布着new操作。当看到new的时候，可能你就会想到这是一个”具体”了，那么new有什么不对劲吗？从设计原则我们可以知道，我们的代码应该“对扩展开放，对修改关闭(Open Close Priciple)”。当针对具体来编程时，我们的老朋友“改变”也就会经常来捣乱了，因为一旦加入新的具体类型的时候，就必须改变代码，也就是说，我们的代码，并非“对修改关闭”，想用新的具体类型的时候，必须重新打开它。</p>
+<p>而这，就是工厂模式可以解决的问题。将实例化具体类型的代码从应用中抽离出来，或者封装起来，使它们不会干扰应用的其他部分。</p>
+<a id="more"></a>
+<h2 id="简单工厂模式-Simple-Factory-Pattern"><a href="#简单工厂模式-Simple-Factory-Pattern" class="headerlink" title="简单工厂模式(Simple Factory Pattern)"></a>简单工厂模式(Simple Factory Pattern)</h2><p><strong>简单工厂 = 具体的工厂 + 抽象的产品 + 具体的产品</strong>。简单来说，简单工厂就是，用一个具体的工厂来生产不同的产品。因为用了具体的工厂，所以也有些人认为它不是一种设计模式，而是一种常见的编程习惯。</p>
+<h3 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h3><p>在简单工厂中， 根据参数的不同返回不同的对象。专门创建了一个类来负责创建其他类的对象，被创建的对象通常拥有共同的父类。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p>简单工厂包含如下角色：</p>
+<blockquote>
+<ul>
+<li>Factory: 工厂<ul>
+<li>负责创建所有具体产品的逻辑处理；</li>
+</ul>
+</li>
+<li>Product: 抽象产品<ul>
+<li>是工厂创建的所有对象的父类，负责描述所有对象的公共接口；</li>
+</ul>
+</li>
+<li>ConcreteProduct: 具体产品<ul>
+<li>工厂创建的目标；</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/simple-factory3.png" alt="simple-factory"></p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><strong>工厂类有必要的判断逻辑，可以决定什么时候创建哪一个具体对象。客户端免除了对创建产品对象的责任，而仅仅是消费产品。实现了对责任的分割，提供了专门的工厂类用于创建对象</strong>；</li>
+<li>可以在不修改客户端代码的情况下添加新的产品，在一定程度上提高了系统的灵活性；</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><strong>系统扩展困难，一旦添加新产品就不得不修改工厂逻辑，违背了开闭原则，在产品类型较多的时候，有可能造成工厂逻辑过于复杂，不利于系统的扩展和维护；</strong></li>
+<li>由于工厂集中了所有产品的创建逻辑，一旦不能正常工作，整个系统都会受到影响；</li>
+<li>使用了静态的工厂方法，造成工程角色无法形成基于继承的等级结构；</li>
+</ul>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>以下场景比较适合使用简单工厂模式：</p>
+<ul>
+<li>工厂类创建的产品比较少时：因为如果产品类型太多，会造成工厂方法的逻辑过于复杂；</li>
+<li>客户端对如何创建对象不关心，甚至连类名都不需要知道，只知道类型所对相应的参数；</li>
+</ul>
+<h3 id="简单工厂的使用"><a href="#简单工厂的使用" class="headerlink" title="简单工厂的使用"></a>简单工厂的使用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.simplefactory;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.CheesePizza;</div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.VeggiePizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 简单工厂</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/17.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimplePizzaFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Pizza <span class="title">createPizza</span><span class="params">(String type)</span> </span>&#123;</div><div class="line">        Pizza pizza = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (<span class="string">"cheese"</span>.equals(type)) &#123;</div><div class="line">            pizza = <span class="keyword">new</span> CheesePizza();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"veggie"</span>.equals(type)) &#123;</div><div class="line">            pizza = <span class="keyword">new</span> VeggiePizza();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> pizza;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象产品: 披萨接口</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/17.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">box</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品： 芝士披萨</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/17.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CheesePizza</span> <span class="keyword">implements</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Prepare CheesePizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Bake CheesePizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Cut CheesePizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">box</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Box CheesePizza"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品：素食披萨</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/17.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VeggiePizza</span> <span class="keyword">implements</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Prepare VeggiePizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Bake VeggiePizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Cut VeggiePizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">box</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Box VeggiePizza"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.simplefactory;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 客户端</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/17.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        SimplePizzaFactory factory = <span class="keyword">new</span> SimplePizzaFactory();</div><div class="line">        factory.createPizza(<span class="string">"cheese"</span>);</div><div class="line">        factory.createPizza(<span class="string">"veggie"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在JDK中的应用"><a href="#在JDK中的应用" class="headerlink" title="在JDK中的应用"></a>在JDK中的应用</h3><ol>
+<li><p>JDK类库中广泛使用了简单工厂模式，比如 <code>java.text.DateFormat</code>，它用于格式化一个本地日期或时间。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java.text.DateFormat#getDateInstance()</div><div class="line">java.text.DateFormat#getDateInstance(int)</div><div class="line">java.text.DateFormat#getDateInstance(int, java.util.Locale)</div></pre></td></tr></table></figure>
+</li>
+<li><p>Java加密技术<br>获取不同加密算法的密钥生成器:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">KeyGenerator keyGenerator = KeyGenerator.getInstance(<span class="string">"AES"</span>);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>创建密码器<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Cipher cipher = Cipher.getInstance(<span class="string">"DES"</span>);</div></pre></td></tr></table></figure></p>
+<h2 id="工厂方法模式-Factory-Method-Pattern"><a href="#工厂方法模式-Factory-Method-Pattern" class="headerlink" title="工厂方法模式(Factory Method Pattern)"></a>工厂方法模式(Factory Method Pattern)</h2><p><strong>工厂方法 = 抽象的工厂 + 具体的工厂 + 抽象的产品 + 具体的产品</strong>。在简单工厂中，工厂是一个具体类，而把这个工厂也抽象一层，就变为了工厂方法模式。</p>
+<h3 id="模式定义-1"><a href="#模式定义-1" class="headerlink" title="模式定义"></a>模式定义</h3><p>工厂方法模式，又称为工厂模式。在工厂方法模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做得目的是<strong>将产品类的实例化操作延迟到工厂子类中完成</strong>，即通过工厂子类来确定究竟应该实例化哪个具体产品类。</p>
+<h3 id="模式结构-1"><a href="#模式结构-1" class="headerlink" title="模式结构"></a>模式结构</h3><p>工厂方法模式包含如下角色：</p>
+<blockquote>
+<ul>
+<li>Pruduct：抽象产品</li>
+<li>ConcreteProduct：具体产品</li>
+<li>Factory：抽象工厂</li>
+<li>ConcreteFactory：具体工厂，每个具体工厂只对应一种具体产品</li>
+</ul>
+</blockquote>
+<h3 id="类图-1"><a href="#类图-1" class="headerlink" title="类图"></a>类图</h3><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/factory-method3.png" alt="factory-method"></p>
+<h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>在工厂方法模式中，工厂方法用来创建客户所需要的产品，同事还向客户隐藏了哪种具体产品类将被实例化这个细节，客户只需要关心所需产品对应的工厂，无需关心细节；</li>
+<li>基于工厂角色和产品角色的多态性设计师工厂方法模式的关键，它能够使工厂可以自主确定创建何种产品对象，而如何创建这个对象的细节完全被封装到具体工厂内部。工厂方法模式所以又被称为多态工厂模式，是因为具体工厂类都具有同一个抽象工厂的父类；</li>
+<li><strong>使用工厂方法模式的另一个优点是在系统中加入新的产品时，无需修改抽象工厂和抽象产品的接口，无需修改客户端，也无需修改其他具体的工厂和具体的产品，而只要添加一个具体工厂和相对应的具体产品就可以了。这样，系统的扩展性也就变得非常好，完全符合开闭原则；</strong></li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>添加新产品的时候，需要编写新的具体工厂和具体产品，系统中类的个数将成对增加，在一定程度上增加了系统的复杂性，有更多的类需要编译和运行，会给系统带来一些额外的开销；</li>
+<li>由于考虑到系统的可扩展性，需要引入抽象层，在客户端代码均使用抽象层进行定义，增加了系统的抽象性和理解难度，且在实现时可能需要用到DOM、反射等技术，增加了系统的实现难度；</li>
+</ul>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>一个类不知道它所需要的对象的类：在工厂方法模式中，客户端不需要知道具体产品类的类名，只需要知道所对应的工厂即可，具体的产品对象由具体工厂创建，客户端只需要知道具体产品的工厂类；</li>
+<li>一个类通过其子类来指定创建哪个对象：在工厂方法模式中，对于抽象工厂类只需要提供一个创建产品的接口，而由其子类来确定具体要创建的对象，利用面向对象的多态性和里式替换原则，在程序运行的时候，子类对象将覆盖父类对象，从而使系统更容易扩展；</li>
+<li>将创建对象的任务委托给多个工厂子类中的一个，客户端在使用时可以无需关心哪个工厂子类创建产品子类，需要时再动态指定，可以将具体工厂的名字存储在配置文件或者DB中；</li>
+</ul>
+<h3 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h3><ul>
+<li>使用多个工厂方法：在抽象工厂角色中可以定义多个工厂方法，从而使具体工厂角色实现这些不同的工厂方法，这些方法可以包含不同的业务逻辑，以满足不同产品对象的需求；</li>
+<li>产品对象的重复使用：工厂对象将已经创建过的产品保存到一个集合中，然后根据客户端对产品的请求，对集合进行查询，如果有满足条件的产品对象，就直接将这个产品对象返回给客户端；如果没有，就创建一个新的产品对象，并把它放入到集合中，再返回给客户端；</li>
+<li>多态性的丧失和模式的退化：如果工厂仅仅返回一个具体产品对象，就违背了工厂方法的用意。发生退化，此时就不再是工厂方法模式了。一般来说，工厂对象应当有一个抽象的父类型，如果工厂等级结构中只有一个具体工厂的话的，抽象工厂就可以省略了，也就发生了退化。当只有一个具体工厂时，在具体工厂中可以创建所有的产品对象，并且工厂方法设计为静态方法时，工厂方法模式就退化成简单工厂模式了。</li>
+</ul>
+<h3 id="工厂方法模式的使用"><a href="#工厂方法模式的使用" class="headerlink" title="工厂方法模式的使用"></a>工厂方法模式的使用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象产品：披萨</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/17.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">box</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品：芝加哥风味的芝士披萨</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChicagoStyleCheesePizza</span> <span class="keyword">implements</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Prepare Chicago style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Bake Chicago style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Cut Chicago style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">box</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Box Chicago style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品：芝加哥风味的素食披萨</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChicagoStyleVeggiePizza</span> <span class="keyword">implements</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Prepare Chicago style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Bake Chicago style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Cut Chicago style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">box</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Box Chicago style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品： 纽约风味的芝士披萨</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NYStyleCheesePizza</span> <span class="keyword">implements</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Prepare NY style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Bake NY style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Cut NY style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">box</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Box NY style cheese pizza"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品：纽约风味的素食披萨</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NYStyleVeggiePizza</span> <span class="keyword">implements</span> <span class="title">Pizza</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Prepare NY style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bake</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Bake NY style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cut</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Cut NY style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">box</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Box NY style veggie pizza"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象工厂：披萨店</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">PizzaStore</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// 工厂方法；</span></div><div class="line">    <span class="comment">// abstract Product factoryMethod(String type);</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> Pizza <span class="title">createPizza</span><span class="params">(String type)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Pizza <span class="title">orderPizza</span><span class="params">(String type)</span> </span>&#123;</div><div class="line">        Pizza pizza = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        pizza = createPizza(type);</div><div class="line"></div><div class="line">        pizza.prepare();</div><div class="line">        pizza.bake();</div><div class="line">        pizza.cut();</div><div class="line">        pizza.box();</div><div class="line"></div><div class="line">        <span class="keyword">return</span> pizza;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体工厂：纽约披萨店</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NYStylePizzaStore</span> <span class="keyword">extends</span> <span class="title">PizzaStore</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Pizza <span class="title">createPizza</span><span class="params">(String type)</span> </span>&#123;</div><div class="line">        Pizza pizza = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (<span class="string">"cheese"</span>.equals(type)) &#123;</div><div class="line">            pizza = <span class="keyword">new</span> NYStyleCheesePizza();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"veggie"</span>.equals(type)) &#123;</div><div class="line">            pizza = <span class="keyword">new</span> NYStyleVeggiePizza();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> pizza;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体工厂：芝加哥披萨店</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/18.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChicagoPizzaStore</span> <span class="keyword">extends</span> <span class="title">PizzaStore</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Pizza <span class="title">createPizza</span><span class="params">(String type)</span> </span>&#123;</div><div class="line">        Pizza pizza = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (<span class="string">"cheese"</span>.equals(type)) &#123;</div><div class="line">            pizza = <span class="keyword">new</span> ChicagoStyleCheesePizza();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"veggie"</span>.equals(type)) &#123;</div><div class="line">            pizza = <span class="keyword">new</span> ChicagoStyleVeggiePizza();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> pizza;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.Pizza;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 客户端</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/10/31.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">// 创建一个纽约披萨店；</span></div><div class="line">        PizzaStore nyStylePizzaStore = <span class="keyword">new</span> NYStylePizzaStore();</div><div class="line">        Pizza nyStylePizza = nyStylePizzaStore.orderPizza(<span class="string">"cheese"</span>);</div><div class="line">        System.out.println(nyStylePizza);</div><div class="line"></div><div class="line">        <span class="comment">// 创建一个芝加哥披萨店；</span></div><div class="line">        PizzaStore chicagoPizzaStore = <span class="keyword">new</span> ChicagoPizzaStore();</div><div class="line">        Pizza chicagoPizza = chicagoPizzaStore.orderPizza(<span class="string">"cheese"</span>);</div><div class="line">        System.out.println(chicagoPizza);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在JDK中的应用-1"><a href="#在JDK中的应用-1" class="headerlink" title="在JDK中的应用"></a>在JDK中的应用</h3><h4 id="Collection中的iterator"><a href="#Collection中的iterator" class="headerlink" title="Collection中的iterator"></a>Collection中的iterator</h4><p><code>java.util.Collection</code>中的<code>Iterator&lt;E&gt; iterator()</code>方法就是一个工厂方法，对于iterator()来说，java.util.Collection就是一个抽象工厂，再往下还有<code>java.util.List</code>等作为二级抽象工厂，继续往下就是<code>java.util.ArrayList</code>等具体工厂了。</p>
+<p><code>java.util.Iterator</code>接口是抽象产品，下面还有<code>java.util.ListIterator</code>二级抽象产品，往下有<code>java.util.ArrayList.ListItr</code>等具体产品。</p>
+<h4 id="JDBC的Connection"><a href="#JDBC的Connection" class="headerlink" title="JDBC的Connection"></a>JDBC的Connection</h4><p>JDBC是JDK提供的标准化数据接口，各大数据厂商都实现了JDBC API，JDBC是使用工厂方法模式，我们关注1个类和3个接口：</p>
+<ul>
+<li><code>java.sql.Driver</code>：每个数据库厂商都要实现这个接口，用来注册驱动，打开数据库连接；</li>
+<li><code>java.sql.Connection</code>：每个数据库厂商都是实现这个接口，用来执行数据操作；</li>
+<li><code>java.sql.DriverManager</code>：JDK提供的用来管理Driver的类；</li>
+</ul>
+<p>我们来看一个网上的图：<br><img src="http://img.blog.csdn.net/20130626181440203?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenVveGlhb2xvbmc4ODEw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<ul>
+<li><strong>Driver</strong>接口就是模式中的抽象工厂，里面的<code>Connection connect(String url, java.util.Properties info)</code>就是工厂方法。下面的<strong>MysqlDriver</strong>和<strong>OracleDriver</strong>类就是具体工厂。而<strong>Connection</strong>接口就是抽象产品类，下面的<strong>MysqlConnectionImpl</strong>和<strong>OracleConnectionImpl</strong>就是具体产品。(备注，mysql和oracle中，实际的类名可能不是这样)</li>
+<li>客户端调用不依赖于具体工厂和产品（即究竟是mysql驱动还是oracle驱动，客户端不用关心，客户端只使用抽象的Driver和Connection），而是依赖抽象工厂和抽象产品进行工作；</li>
+</ul>
+<h3 id="在Spring中的应用"><a href="#在Spring中的应用" class="headerlink" title="在Spring中的应用"></a>在Spring中的应用</h3><p>在Spring中，我们通常会利用XML或者annotation的方式来配置bean。在利用XML配置的时候，有以下3中方式：</p>
+<ul>
+<li>反射方式</li>
+<li>工厂方式(静态工厂+工厂方法)</li>
+<li>Factory Bean方式</li>
+</ul>
+<h4 id="反射方式"><a href="#反射方式" class="headerlink" title="反射方式"></a>反射方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod.spring;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Create by archerda on 2017/11/09.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Car</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Car&#123;"</span> +</div><div class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</div><div class="line">                <span class="string">'&#125;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- No.1: 反射技术 --&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"reflectionCar"</span> <span class="attr">class</span>=<span class="string">"com.github.archerda.designpattern.factory.factorymethod.spring.Car"</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">value</span>=<span class="string">"Honda"</span>/&gt;</span></div><div class="line">   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>反射模式是最常见的，配置bean的时候需要声明class属性为类路径，Spring会利用Java的反射技术来创建这个bean。</p>
+<h4 id="静态工厂模式-简单工厂"><a href="#静态工厂模式-简单工厂" class="headerlink" title="静态工厂模式(简单工厂)"></a>静态工厂模式(简单工厂)</h4><p>在简单工厂模式中，Spring不会直接利用反射技术来创建bean，而是会利用反射技术先找到工厂类，然后利用工厂类来创建bean。所谓静态工厂模式，就是指工厂类不需要实例化，这个工厂类提供了一个静态的方法来创建bean。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod.spring;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.HashMap;</div><div class="line"><span class="keyword">import</span> java.util.Map;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 静态工厂，用于创建bean</div><div class="line"> * Create by archerda on 2017/11/09.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarStaticFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Car&gt; CAR_MAP = <span class="keyword">new</span> HashMap&lt;String, Car&gt;();</div><div class="line"></div><div class="line">    <span class="keyword">static</span> &#123;</div><div class="line">        CAR_MAP.put(<span class="string">"Honda"</span>, <span class="keyword">new</span> Car(<span class="string">"Honda"</span>));</div><div class="line">        CAR_MAP.put(<span class="string">"BMW"</span>, <span class="keyword">new</span> Car(<span class="string">"BMW"</span>));</div><div class="line">        CAR_MAP.put(<span class="string">"AUDI"</span>, <span class="keyword">new</span> Car(<span class="string">"AUDI"</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 静态工厂方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">getCar</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> CAR_MAP.get(name);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">&lt;!-- No.2: 静态工厂方法 --&gt;</span></div><div class="line"><span class="comment">&lt;!--</span></div><div class="line">    Static Factory method：</div><div class="line">    class: the class of Factory</div><div class="line">    factory-method: method of get Bean Object</div><div class="line">    constructor-arg: parameters of factory-method</div><div class="line"> --&gt;</div><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"simpleFactoryCar"</span> <span class="attr">class</span>=<span class="string">"com.github.archerda.designpattern.factory.factorymethod.spring.CarStaticFactory"</span></span></div><div class="line">      <span class="attr">factory-method</span>=<span class="string">"getCar"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">value</span>=<span class="string">"BMW"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>可以看出，利用静态工厂方法定义的bean，class属性不是bean的类路径，而是静态工厂的类路径，而且还需要指定工厂里面getBean的静态方法和参数。</p>
+<h4 id="实例工厂方式-工厂方法模式"><a href="#实例工厂方式-工厂方法模式" class="headerlink" title="实例工厂方式(工厂方法模式)"></a>实例工厂方式(工厂方法模式)</h4><p>实例工厂方式与上面静态工厂方式的区别是，getBean不是静态的，也就是说要先实例一个工厂对象，才能依靠这个工厂对象创建bean。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod.spring;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.Map;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 实例工厂，用于创建bean</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/09.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarDynamicFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Map&lt;String, Car&gt; carMap;</div><div class="line"></div><div class="line">    <span class="comment">// 工厂方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Car <span class="title">getCar</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> carMap.get(name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Car&gt; <span class="title">getCarMap</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> carMap;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCarMap</span><span class="params">(Map&lt;String, Car&gt; carMap)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.carMap = carMap;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- No.3： 实例工厂方法 --&gt;</span></div><div class="line"><span class="comment">&lt;!-- Instance Factory Method:</span></div><div class="line">        1.must create a bean for the Instance Factroy First --&gt;</div><div class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"carDynamicFactory"</span></span></div><div class="line">         <span class="attr">class</span>=<span class="string">"com.github.archerda.designpattern.factory.factorymethod.spring.CarDynamicFactory"</span>&gt;</div><div class="line">       <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"carMap"</span>&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">map</span>&gt;</span></div><div class="line">               <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"Honda"</span>&gt;</span></div><div class="line">                   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.github.archerda.designpattern.factory.factorymethod.spring.Car"</span>&gt;</span></div><div class="line">                       <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"Honda"</span>/&gt;</span></div><div class="line">                   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line">               <span class="tag">&lt;/<span class="name">entry</span>&gt;</span></div><div class="line">               <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"BMW"</span>&gt;</span></div><div class="line">                   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.github.archerda.designpattern.factory.factorymethod.spring.Car"</span>&gt;</span></div><div class="line">                       <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"AUDI"</span>/&gt;</span></div><div class="line">                   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line">               <span class="tag">&lt;/<span class="name">entry</span>&gt;</span></div><div class="line">           <span class="tag">&lt;/<span class="name">map</span>&gt;</span></div><div class="line">       <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="comment">&lt;!-- 2.use Factory bean to get bean object</span></div><div class="line">       factory-bean : the bean define above</div><div class="line">       factory-method: method of get Bean Object</div><div class="line">       constructor-arg: parameters of factory-method</div><div class="line">    --&gt;</div><div class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dynamicFactoryCar"</span> <span class="attr">factory-bean</span>=<span class="string">"carDynamicFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getCar"</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">value</span>=<span class="string">"AUDI"</span>/&gt;</span></div><div class="line">   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>静态工厂是把数据写死在class里面，以后要增加类型就只能修改代码，不符合开闭原则。而利用实例工厂，可以通过修改配置文件的方式来修改工厂里面的数据，符合开闭原则。</p>
+<h3 id="Factory-Bean方式"><a href="#Factory-Bean方式" class="headerlink" title="Factory Bean方式"></a>Factory Bean方式</h3><p>Factory Bean方式与工厂方法有点类似，我们同样需要一个工厂类，只不过Spring提供了一个FactoryBean接口，我们的工厂类必须实现这个接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.factorymethod.spring;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.springframework.beans.factory.FactoryBean;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Create by archerda on 2017/11/09.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarFactoryBean</span> <span class="keyword">implements</span> <span class="title">FactoryBean</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String carName;</div><div class="line"></div><div class="line">    <span class="comment">// 这个就是你想利用工厂类生产的bean对象，通常在里面new一个对象就ok</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Car(carName);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 必须指明为上面getObject返回对象的class</span></div><div class="line">    <span class="keyword">public</span> Class&lt;?&gt; getObjectType() &#123;</div><div class="line">        <span class="keyword">return</span> Car.class;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 这个方法决定了这个bean是否单例</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCarName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> carName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCarName</span><span class="params">(String carName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.carName = carName;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- No.4： Factory Bean方式--&gt;</span></div><div class="line"><span class="comment">&lt;!--</span></div><div class="line"> FactroyBean:</div><div class="line">   * We should specify the full class name of Factory to the property "class="</div><div class="line">   * Actually this bean will return the object from the method "getObject" of the Factory class.</div><div class="line">--&gt;</div><div class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"factoryBeanCar"</span></span></div><div class="line">         <span class="attr">class</span>=<span class="string">"com.github.archerda.designpattern.factory.factorymethod.spring.CarFactoryBean"</span>&gt;</div><div class="line">       <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"carName"</span> <span class="attr">value</span>=<span class="string">"Honda"</span>/&gt;</span></div><div class="line">   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>可以看出，bean的配置和反射机制非常类似，但是利用反射配置的bean，class的值就是bean的类路径，而利用FactoryBean方式，class属性的值是工厂类的类路径。一旦这个工厂类实现了FactoryBean接口，那么这个bean返回的就是它里面getObject方法返回的对象。</p>
+<h2 id="抽象工厂模式-Abstract-Factory-Pattern"><a href="#抽象工厂模式-Abstract-Factory-Pattern" class="headerlink" title="抽象工厂模式(Abstract Factory Pattern)"></a>抽象工厂模式(Abstract Factory Pattern)</h2><p><strong>抽象工厂 = 抽象的工厂 + 具体的工厂 + 抽象的产品 + 具体的产品 + 产品关系</strong>。抽象工厂和工厂方法最大的区别，我的理解就是抽象工厂下的具体工厂可以生产一批不同类的产品，规范点来说就是生产整个产品家族。而工厂方法只是生产一批同类的产品。</p>
+<h3 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h3><ul>
+<li>在工厂方式模式中具体工厂负责生产具体的产品，每个具体工厂对应生产一种具体产品，工厂方法也具有唯一性，一般情况下，一个具体工厂中只有一个工厂方法或者一组重载的工厂方法。但是有时候我们需要一个工厂可以提供多个产品对象，而不是单一的产品对象。<ul>
+<li>为了更清晰理解抽象工厂模式，需要先引入两个概念：<ul>
+<li><strong>产品等级结构</strong>：产品等级结构即产品的继承结构，如一个抽象类是电视机，其子类有海尔电视机、TCL电视机、SONY电视机等，则抽象电视机与具体品牌的电视机之间就构成了一个产品等级结构，抽象电视机是父类，具体品牌电视机是子类；</li>
+<li><strong>产品族</strong>：在抽象工厂模式中，产品族是指由一个工厂生产的，位于不同产品等级结构中的一组产品，如海尔电器工厂生产的海尔电视机、海尔洗衣机、海尔电冰箱等，海尔电视机位于电视机产品等级结构中，海尔电冰箱则位于电冰箱产品等级结构中。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当系统所提供的工厂所需生成的具体产品并不是一个简单的对象，而是位于多个不同产品等级结构中不同类型的具体产品时，就需要用到抽象工厂模式；</li>
+<li>抽象工厂模式是所有形式的工厂模式中最为抽象和最具有一般性的一种形态；</li>
+<li><strong>抽象工厂模式与工厂方法模式最大的区别在于，工厂方法模式针对的是一个产品等级结构，而抽象工厂模式则需要创建多个产品结构</strong>。当一个工厂等级结构可以创建出分属于不同产品等级结构的一个产品族的所有对象时，抽象工厂模式比工厂方法模式更为简单、高效；</li>
+</ul>
+<h3 id="模式定义-2"><a href="#模式定义-2" class="headerlink" title="模式定义"></a>模式定义</h3><p>抽象工厂模式：提供一个创建一系列相关或者相互依赖对象的结构，而无需指定它们具体的类。又称为Kit模式。</p>
+<h3 id="模式结构-2"><a href="#模式结构-2" class="headerlink" title="模式结构"></a>模式结构</h3><p>抽象工厂模式包含如下角色：</p>
+<blockquote>
+<ul>
+<li>Factory：抽象工厂</li>
+<li>ConcreteFactory：具体工厂</li>
+<li>AbstractProduct：抽象产品</li>
+<li>ConcreteProduct：具体产品</li>
+</ul>
+</blockquote>
+<h3 id="类图-2"><a href="#类图-2" class="headerlink" title="类图"></a>类图</h3><p><img src="http://7xl3pd.com1.z0.glb.clouddn.com/abstract-factory3.png" alt="abstract-factory"></p>
+<h3 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>抽象工厂模式隔离了具体类的生成，使得客户端并不需要知道什么被创建。由于这种隔离，更换一个具体工厂就变得相对容易。所有的具体工厂都实现了抽象工厂中定义的那些公共接口，因此只要改变具体工厂的实例，就可以在某种程度上改变整个软件系统的行为。另外，应用抽象工厂模式可以实现<strong>高内聚低耦合</strong>的设计目的，因此抽象工厂模式得到广泛的应用；</li>
+<li>当一个产品族中的多个对象被设计成一起工作时，它能够保证客户端始终只使用一个产品族中的对象。这对一些需要根据当前环境来决定其行为的软件系统来说，是一种非常使用的设计模式；</li>
+<li>增加新的工具工厂和产品族很方便，无需修改已有系统，符合<strong>开闭原则</strong>；</li>
+</ul>
+<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在添加新的产品对象时，难以扩展抽象工厂来生产新种类的产品，因为在抽象工厂角色中规定了所有可能被创建的产品集合，要支持新种类的产品意味着要对抽象工厂接口进行修改，而这将设计到抽象工厂以及其所有子类的修改，显然会带来很大的不便；</li>
+<li>开闭原则的倾斜性（<strong>增加新的工厂和新的产品族很容易，增加新的产品等级结构很麻烦</strong>）；</li>
+</ul>
+<h3 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>一个系统不应当依赖于产品类实例如何被创建、组合和表达的细节，这对于所有类型的工厂模式都是重要的；</li>
+<li>系统中有多个产品族，而每次只使用其中一个产品族；</li>
+<li><strong>属于同一个产品族的产品将在一起使用，这一约束必须在系统设计中提现出来</strong>；</li>
+<li>系统提供一个产品类的库，所有的产品都已同样的接口出现，从而使客户端不依赖具体实现；</li>
+</ul>
+<h3 id="模式扩展-1"><a href="#模式扩展-1" class="headerlink" title="模式扩展"></a>模式扩展</h3><h4 id="“开闭原则”的倾斜性"><a href="#“开闭原则”的倾斜性" class="headerlink" title="“开闭原则”的倾斜性"></a>“开闭原则”的倾斜性</h4><ul>
+<li><p><strong>“开闭原则”要求系统对扩展开放、对修改关闭，通过扩展达到增强其功能的目的。对于涉及到多个产品族和多个产品等级结构的系统，其功能增强主要包括2方面：</strong></p>
+<ul>
+<li>增加产品族：对于增加产品族，抽象方法模式很好的支持了“开闭原则”，对于要增加新的产品族，只需要对应增加一个新的具体工厂集合，对已有代码无需做任何修改。</li>
+<li>增加新的产品等级机构：对于增加新的产品等级结构，需要修改所有的工厂角色，包括抽象工厂，在所有的工厂类中都需要增加生产新产品的方法，不能很好地支持“开闭原则”；</li>
+</ul>
+</li>
+<li><p>抽象工厂模式的这种性质称为“开闭原则”的倾斜性，已一种倾斜的方式支持增加新的产品族，它为增加新的产品族提供了方便，但不能为新的产品等级结构的增加提供这样的便利。</p>
+</li>
+</ul>
+<h4 id="抽象工厂模式的退化"><a href="#抽象工厂模式的退化" class="headerlink" title="抽象工厂模式的退化"></a>抽象工厂模式的退化</h4><p>当抽象工厂模式每个具体工厂类都只生产一个产品对象，也就是指存在一个产品等级结构时，抽象工厂模式退化为工厂方法模式；当工厂方法模式中抽象工厂与具体工厂合并，提供一个统一的工厂来创建对象，并将创建对象的方法设计为静态方法的时候，工厂方法模式退化成简单工厂模式。</p>
+<h3 id="抽象工厂方法的使用"><a href="#抽象工厂方法的使用" class="headerlink" title="抽象工厂方法的使用"></a>抽象工厂方法的使用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient.Clams;</div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient.Dough;</div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient.Sauce;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象工厂：原料工厂</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PizzaIngredientFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function">Dough <span class="title">createDough</span><span class="params">()</span></span>;</div><div class="line">    <span class="function">Sauce <span class="title">createSauce</span><span class="params">()</span></span>;</div><div class="line">    <span class="function">Clams <span class="title">createClams</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体工厂：芝加哥原料工厂</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChicagoPizzaIngredientFactory</span> <span class="keyword">implements</span> <span class="title">PizzaIngredientFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Dough <span class="title">createDough</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ThickCrustDough();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Sauce <span class="title">createSauce</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PlumTomatoSauce();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Clams <span class="title">createClams</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FrozenClams();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体工厂：纽约原料工厂</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NYPizzaIngredientFactory</span> <span class="keyword">implements</span> <span class="title">PizzaIngredientFactory</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Dough <span class="title">createDough</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ThinCrustDough();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Sauce <span class="title">createSauce</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MarinaraSauce();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Clams <span class="title">createClams</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FreshClams();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Clams</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Dough</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 抽象产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Sauce</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FreshClams</span> <span class="keyword">implements</span> <span class="title">Clams</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrozenClams</span> <span class="keyword">implements</span> <span class="title">Clams</span></span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MarinaraSauce</span> <span class="keyword">implements</span> <span class="title">Sauce</span> </span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlumTomatoSauce</span> <span class="keyword">implements</span> <span class="title">Sauce</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThickCrustDough</span> <span class="keyword">implements</span> <span class="title">Dough</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.github.archerda.designpattern.factory.abstractfactory.ingredient;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 具体产品</div><div class="line"> *</div><div class="line"> * Create by archerda on 2017/11/05.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThinCrustDough</span> <span class="keyword">implements</span> <span class="title">Dough</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在JDK中的应用-2"><a href="#在JDK中的应用-2" class="headerlink" title="在JDK中的应用"></a>在JDK中的应用</h3><p>在java.sql包中，有个典型的抽象工厂模式的应用。我们看一副来自网上的类图：<br><img src="http://hi.csdn.net/attachment/201101/3/0_1294058833piFB.gif" alt=""></p>
+<ul>
+<li><code>java.sql.Connection</code>：抽象工厂类，createStatement、prepareStatement、prepareCall这三个方法分别生产Statement、PreparedStatement、CallableStatement，就是说明产品族是3个；</li>
+<li><code>java.sql.Statement</code>/<code>java.sql.PreparedStatement</code>/<code>java.sql.CallableStatement</code>：抽象产品；</li>
+<li><code>MysqlCollectionImpl,实际是com.mysql.jdbc.ConnectionImpl</code>:具体工厂；</li>
+<li><code>StatementImpl</code>/<code>PreparedStatementImpl(实际是com.mysql.jdbc.PreparedStatement)</code>/<code>CallableStatementImpl(实际是com.mysql.jdbc.CallableStatement)</code>：具体产品；</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/simple_factory.html" target="_blank" rel="external">Graphic Design Patterns：简单工厂模式</a></li>
+<li><a href="http://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/factory_method.html" target="_blank" rel="external">Graphic Design Patterns：工厂方法模式</a></li>
+<li><a href="http://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/abstract_factory.html" target="_blank" rel="external">Graphic Design Patterns：抽象方法模式</a></li>
+<li><a href="http://bijian1013.iteye.com/blog/2274150" target="_blank" rel="external">ITeye：Spring中的设计模式</a></li>
+<li><a href="https://www.zybuluo.com/pastqing/note/129365" target="_blank" rel="external">作业部落：java设计模式——工厂方法模式</a></li>
+<li><a href="http://blog.csdn.net/nvd11/article/details/51542360" target="_blank" rel="external">CSDN：Spring 通过工厂方法(Factory Method)来配置bean</a></li>
+<li><a href="http://blog.csdn.net/nvd11/article/details/51584032" target="_blank" rel="external">CSDN：Spring 利用FactoryBean来配置Bean</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/13/设计模式系列三之装饰者模式-Decorator/" rel="next" title="设计模式系列三之装饰者模式(Decorator)">
+                <i class="fa fa-chevron-left"></i> 设计模式系列三之装饰者模式(Decorator)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/13/设计模式系列之单例模式的破坏/" rel="prev" title="单例模式的破坏">
+                单例模式的破坏 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是工厂模式"><span class="nav-number">1.</span> <span class="nav-text">什么是工厂模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂模式-Simple-Factory-Pattern"><span class="nav-number">2.</span> <span class="nav-text">简单工厂模式(Simple Factory Pattern)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模式定义"><span class="nav-number">2.1.</span> <span class="nav-text">模式定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.2.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类图"><span class="nav-number">2.3.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">2.4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">2.5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景"><span class="nav-number">2.6.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单工厂的使用"><span class="nav-number">2.7.</span> <span class="nav-text">简单工厂的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在JDK中的应用"><span class="nav-number">2.8.</span> <span class="nav-text">在JDK中的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工厂方法模式-Factory-Method-Pattern"><span class="nav-number">3.</span> <span class="nav-text">工厂方法模式(Factory Method Pattern)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模式定义-1"><span class="nav-number">3.1.</span> <span class="nav-text">模式定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构-1"><span class="nav-number">3.2.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类图-1"><span class="nav-number">3.3.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点-1"><span class="nav-number">3.4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-1"><span class="nav-number">3.5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">3.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式扩展"><span class="nav-number">3.7.</span> <span class="nav-text">模式扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂方法模式的使用"><span class="nav-number">3.8.</span> <span class="nav-text">工厂方法模式的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在JDK中的应用-1"><span class="nav-number">3.9.</span> <span class="nav-text">在JDK中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Collection中的iterator"><span class="nav-number">3.9.1.</span> <span class="nav-text">Collection中的iterator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC的Connection"><span class="nav-number">3.9.2.</span> <span class="nav-text">JDBC的Connection</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在Spring中的应用"><span class="nav-number">3.10.</span> <span class="nav-text">在Spring中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#反射方式"><span class="nav-number">3.10.1.</span> <span class="nav-text">反射方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态工厂模式-简单工厂"><span class="nav-number">3.10.2.</span> <span class="nav-text">静态工厂模式(简单工厂)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例工厂方式-工厂方法模式"><span class="nav-number">3.10.3.</span> <span class="nav-text">实例工厂方式(工厂方法模式)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Factory-Bean方式"><span class="nav-number">3.11.</span> <span class="nav-text">Factory Bean方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂模式-Abstract-Factory-Pattern"><span class="nav-number">4.</span> <span class="nav-text">抽象工厂模式(Abstract Factory Pattern)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模式动机"><span class="nav-number">4.1.</span> <span class="nav-text">模式动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式定义-2"><span class="nav-number">4.2.</span> <span class="nav-text">模式定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构-2"><span class="nav-number">4.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类图-2"><span class="nav-number">4.4.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点-2"><span class="nav-number">4.5.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-2"><span class="nav-number">4.6.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景-1"><span class="nav-number">4.7.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式扩展-1"><span class="nav-number">4.8.</span> <span class="nav-text">模式扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#“开闭原则”的倾斜性"><span class="nav-number">4.8.1.</span> <span class="nav-text">“开闭原则”的倾斜性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式的退化"><span class="nav-number">4.8.2.</span> <span class="nav-text">抽象工厂模式的退化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象工厂方法的使用"><span class="nav-number">4.9.</span> <span class="nav-text">抽象工厂方法的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在JDK中的应用-2"><span class="nav-number">4.10.</span> <span class="nav-text">在JDK中的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
