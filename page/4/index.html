@@ -251,6 +251,119 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/02/Vim命令图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/03/02/Vim命令图/" itemprop="url">Vim命令图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-02T22:50:20+08:00">
+                2016-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://c2.staticflickr.com/2/1524/25323931442_6bed1f3402_h.jpg" alt="Vim命令图"></p>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/02/28/多线程带来的风险/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1722,167 +1835,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/22/什么是事务/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="archerda">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Archerda's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/22/什么是事务/" itemprop="url">什么是事务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-22T11:04:30+08:00">
-                2015-09-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>事务是DBMS中业务操作的执行单位，事务的ACID性质是数据库一致性的基本保证</strong>。保障并发执行时事务满足ACID的技术就是数据库的并发控制，保障在数据库发生故障时依然满足ACID的技术就是数据库的故障恢复。<strong>并发控制和故障恢复</strong>是数据库系统管理的基本内容，所以事务概念和事务ACID性质也就成为了数据库管理的重要基础。</p>
-<h2 id="事务概念与性质"><a href="#事务概念与性质" class="headerlink" title="事务概念与性质"></a>事务概念与性质</h2><p>我们先来看一个例子：由账户A转账金额X到账户B。这是一个非常经典的例子。这个业务可以分解成2个基本的操作：</p>
-<ol>
-<li>从A中减少金额X；</li>
-<li>在B中添加金额X；</li>
-</ol>
-<p>这2个动作构成了一个不可分割的整体，要么一起执行，要么都不执行。如果只执行前一个动作而忽略了后一个动作，那么将导致数据错乱。这种<strong>“不可分割”的业务单位</strong>对于数据库业务的并发控制和故障恢复非常重要、非常必要，这就是“事务”的基本概念。</p>
-<h3 id="事务概念"><a href="#事务概念" class="headerlink" title="事务概念"></a>事务概念</h3><p>事务（transaction），是DBMS中的基本执行单位。根本特征在于集中了数据库应用方面的若干操作，这些操作构成一个操作序列，要么全做，要么全不做<strong>，整个序列是一个不可分割的“原子化”单位</strong>。</p>
-<p>在数据库系统中，一个事务是指：由一系列数据库操作组成的一个完整的逻辑过程。例如银行转帐，从原账户扣除金额，以及向目标账户添加金额，这两个数据库操作的总和，构成一个完整的逻辑过程，不可拆分。</p>
-<h3 id="事务性质"><a href="#事务性质" class="headerlink" title="事务性质"></a>事务性质</h3><p>在数据库事务处理过程中，事务的正常状态是由“ACID”性质予以保证的。</p>
-<ol>
-<li><strong>原子性</strong>（<strong>Atomicity</strong>）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。</li>
-<li><strong>一致性</strong>（<strong>Consistency</strong>）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性地完成预定的工作。</li>
-<li><strong>隔离性</strong>（<strong>Isolation</strong>）：多个事务并发执行与这些事务单独执行的结果“等效”。当两个或者多个事务并发访问（此处访问指查询和修改的操作）数据库的同一数据时所表现出的相互关系。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</li>
-<li><strong>持久性</strong>（<strong>Durability</strong>）：在事务完成以后，该事务对数据库所作的更改便持久地保存在数据库之中，并且是完全的。</li>
-</ol>
-<h2 id="事务操作与状态"><a href="#事务操作与状态" class="headerlink" title="事务操作与状态"></a>事务操作与状态</h2><p>在数据库运行过程中，事务可以由下述的4个基本部分组成：</p>
-<ol>
-<li>开始（begin）：开始执行事务。</li>
-<li>执行（read and write）：事务对数据进行读或写操作。</li>
-<li>提交（commit）：事务完成所有操作，同时保存结果，标志着事务的成功完成。</li>
-<li>回滚（rollback）：事务未完成所有所做，重新返回到事务开始，标志着事务的撤销。</li>
-</ol>
-<p>根据事务的上述操作，可以得到事务的各种状态：</p>
-<ol>
-<li>活动状态（active）：事务处于运行当中。</li>
-<li>局部提交状态（partial committed）：表明事务的最后语句已经被执行。</li>
-<li>提交状态（committed）：事务执行成功，执行结果写入到数据库中。</li>
-<li>失败状态（failed）：事务无法正常进行。</li>
-<li>终止状态（abort）：回到事务执行前的初始状态。</li>
-</ol>
-<p>事务操作与状态之间的关系如下图：<br><img src="https://c2.staticflickr.com/6/5672/21623200401_2616631b8d_z.jpg" alt="事务操作与状态之间的关系"></p>
-<p>可以得出以下结论：</p>
-<ul>
-<li>事务一般由“事务开始”启动，到“事务提交”或“事务回滚”结束。</li>
-<li>在事务开始后，它不断做READ或WRITE操作，但此时WRITE操作仅将数据写入磁盘缓冲区，并不是真正写入到数据库中。</li>
-<li>在事务执行过程中会产生2种情况：一是顺利执行，此时事务继续执行其后的操作；二是产生故障等原因而终止。</li>
-</ul>
-<h2 id="SQL事务机制"><a href="#SQL事务机制" class="headerlink" title="SQL事务机制"></a>SQL事务机制</h2><h3 id="事务处理语句"><a href="#事务处理语句" class="headerlink" title="事务处理语句"></a>事务处理语句</h3><ol>
-<li>事务开始语句：<code>BEGIN TRANSACTION</code>.</li>
-<li>事务提交语句：<code>COMMIT TRANSACTION</code>.</li>
-<li>事务回滚语句：<code>ROLLBACK TRANSACTION</code>.</li>
-<li>事务存储点语句：<code>SAVE TRANSACTION</code>, <code>RELEASE TRANSACTION</code>.</li>
-</ol>
-<hr>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><a href="">数据库系统教程 叶小平著 清华大学出版社</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/ACID" target="_blank" rel="external">维基百科：ACID</a></li>
-</ul>
-<hr>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1932,7 +1884,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-count">70</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -1,0 +1,801 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="软件," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概览IoC初始化主要包括:  Resource定位,载入DOM解析和注册到IoC中; org.springframework.context.support.AbstractApplicationContext#obtainFreshBeanFactory  调用所有注册的 BeanFactoryPostProcessor;  注册所有的 BeanPostProcessor;  单例Bean的初始">
+<meta name="keywords" content="软件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring源码解析(1)-IoC初始化">
+<meta property="og:url" content="http://yoursite.com/2018/09/20/Spring源码解析(1)-IoC初始化/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="概览IoC初始化主要包括:  Resource定位,载入DOM解析和注册到IoC中; org.springframework.context.support.AbstractApplicationContext#obtainFreshBeanFactory  调用所有注册的 BeanFactoryPostProcessor;  注册所有的 BeanPostProcessor;  单例Bean的初始">
+<meta property="og:updated_time" content="2018-09-26T02:37:06.094Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring源码解析(1)-IoC初始化">
+<meta name="twitter:description" content="概览IoC初始化主要包括:  Resource定位,载入DOM解析和注册到IoC中; org.springframework.context.support.AbstractApplicationContext#obtainFreshBeanFactory  调用所有注册的 BeanFactoryPostProcessor;  注册所有的 BeanPostProcessor;  单例Bean的初始">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/20/Spring源码解析(1)-IoC初始化/"/>
+
+
+
+
+
+  <title>Spring源码解析(1)-IoC初始化 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/20/Spring源码解析(1)-IoC初始化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring源码解析(1)-IoC初始化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-20T16:15:01+08:00">
+                2018-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>IoC初始化主要包括:</p>
+<ul>
+<li><p>Resource定位,载入DOM解析和注册到IoC中;</p>
+<p>org.springframework.context.support.AbstractApplicationContext#obtainFreshBeanFactory</p>
+</li>
+<li><p>调用所有注册的 BeanFactoryPostProcessor;</p>
+</li>
+<li><p>注册所有的 BeanPostProcessor;</p>
+</li>
+<li><p>单例Bean的初始化; org.springframework.context.support.AbstractApplicationContext#finishBeanFactoryInitialization</p>
+</li>
+</ul>
+<h2 id="关键类"><a href="#关键类" class="headerlink" title="关键类"></a>关键类</h2><ul>
+<li>BeanDefinition<br>XML中bean配置的Java映射, 也就是说XML配置了一个Bean, 就会有一个BeanDefinition对象与之对应, 它保存了Bean的各种信息, 包括scope/lazy-init等.</li>
+<li>BeanFactory<br>Bean工厂, 保存了所有的Bean并管理它们的生命周期和依赖关系.</li>
+<li>ApplicationContext<br>更高级的Bean工厂, 除了BeanFactory提供的能力之外, 还支持包括国际化/事件消息等.</li>
+</ul>
+<h2 id="Resource定位-载入和注册"><a href="#Resource定位-载入和注册" class="headerlink" title="Resource定位,载入和注册"></a>Resource定位,载入和注册</h2><ul>
+<li>入口</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>classpath*:spring/applicationContext.xml<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">listener</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">listener</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>ContextLoaderListener 实现了 javax.servlet.ServletContextListener, 这个是JavaEE中Servlet的一个类, 在初始化Servlet上下文之后的时候, 会执行它的 <code>contextInitialized</code>方法. 这里是Spring初始化的入口.</p>
+<ul>
+<li>创建WebApplicationContext</li>
+</ul>
+<p>默认是 XmlWebApplicationContext.</p>
+<ul>
+<li>refresh [重点]</li>
+</ul>
+<p><strong>org.springframework.context.support.AbstractApplicationContext#refresh</strong><br>不论是BeanFactory还是ApplicationContext, 都会执行 <code>org.springframework.context.support.AbstractApplicationContext#refresh</code> 进行真正的初始化工作.</p>
+<p>其中 <code>obtainFreshBeanFactory</code>是进行 <strong>Resource定位,载入和注册</strong>, 执行整个方法之后, XML中所有Bean的配置都被转化成BeanDefinition, 并保存在 DefaultListableBeanFactory 的 beanDefinitionNames 和 beanDefinitionMap 中;</p>
+<ul>
+<li><p>Resource定位</p>
+<p><strong>org.springframework.context.support.AbstractXmlApplicationContext#loadBeanDefinitions(org.springframework.beans.factory.xml.XmlBeanDefinitionReader)</strong><br>这个过程就是Spring找到XML文件, 这个文件可能在文件系统/类路径/网络路径中.</p>
+<p><strong>ResourceLoader</strong>, 如果我们使用的是 FileSystemXmlApplicationContext, 那么 ResourceLoader 就是 FileSystemXmlApplicationContext, 它本身就是一个DefaultResourceLoader. 如果我们使用的是XmlWebApplicationContext, 那就是使用 XmlWebApplicationContext了.</p>
+</li>
+<li><p>载入(Bean解析)</p>
+<p><strong>org.springframework.beans.factory.support.AbstractBeanDefinitionReader#loadBeanDefinitions(org.springframework.core.io.Resource…)</strong><br>这个过程就是把找到的XML中的Bean定义转化为BeanDefinition.</p>
+<p>真正的解析工作在 <strong>org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#doRegisterBeanDefinitions</strong>, 这里有个比较重要的点: XML的命名空间.<br>如果是Spring默认的命名空间 <strong><a href="http://www.springframework.org/schema/beans" target="_blank" rel="external">http://www.springframework.org/schema/beans</a></strong>, 这个Bean的定义的命名空间, 明显Spring是知道怎么去解析的. 但是有一些自定义的命名空间, 比如Dubbo的配置文件, 这种的话, Spring是不知道要怎么去解析的. 所有Spring扩展了解析器, 自定义的命名空间就交给自定义的解析器去解析成BeanDefinition. 那么Spring是怎么找到这个自定义命名空间的解析器的呢? <code>META-INF/spring.handlers</code>中 <code>http\://code.alibabatech.com/schema/dubbo=com.alibaba.dubbo.config.spring.schema.DubboNamespaceHandler</code>. 这里有个约定的规范, 比如spring的context命名空间, 那么它的解析器类名是 ContextNamespaceHandler, aop命名空间的是AopNamespaceHandler, dubbo的是DubboNamespaceHandler.</p>
+<ul>
+<li>解析Bean<br><strong>org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#parseDefaultElement</strong></li>
+</ul>
+</li>
+<li><p>注册</p>
+</li>
+</ul>
+<p><strong>org.springframework.beans.factory.support.BeanDefinitionReaderUtils#registerBeanDefinition</strong><br>把BeanName和BeanDefinition注册到 DefaultListableBeanFactory.</p>
+<h2 id="单例类的初始化"><a href="#单例类的初始化" class="headerlink" title="单例类的初始化"></a>单例类的初始化</h2><p><strong>org.springframework.context.support.AbstractApplicationContext#finishBeanFactoryInitialization</strong></p>
+<ul>
+<li>遍历容器中所有的beanDefinitionNames, 逐个初始化.</li>
+</ul>
+<h3 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h3><p>入口:org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#doCreateBean</p>
+<ol>
+<li>Constructor</li>
+<li>InstantiationAwareBeanPostProcessor#postProcessPropertyValues (org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#populateBean)<ul>
+<li>触发@Autowired/@Value/@Inject 依赖注入</li>
+<li>触发@Resouce的依赖注入</li>
+</ul>
+</li>
+<li>BeanNameAware#setBeanName (<strong>org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#initializeBean(java.lang.String, java.lang.Object, org.springframework.beans.factory.support.RootBeanDefinition)</strong>)</li>
+<li>BeanFactoryAware#setBeanFactory</li>
+<li>ApplicationContextAware#setApplicationContext</li>
+<li>BeanPostProcessor#postProcessBeforeInitialization</li>
+<li>@PostConstruct</li>
+<li>InitializingBean#afterPropertiesSet</li>
+<li>init-method</li>
+<li>BeanPostProcessor#postProcessAfterInitialization</li>
+</ol>
+<p>Bean is Ok<br>…<br>Container shutdown</p>
+<ol>
+<li>@PreDestroy</li>
+<li>DisposableBean#destroy</li>
+<li>destory-method</li>
+</ol>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="Spring如何解决循环依赖的问题"><a href="#Spring如何解决循环依赖的问题" class="headerlink" title="Spring如何解决循环依赖的问题"></a>Spring如何解决循环依赖的问题</h3><ul>
+<li>三级缓存: org.springframework.beans.factory.support.DefaultSingletonBeanRegistry</li>
+<li>Setter依赖 [可以解决]<br>通过提前暴露一个单例工厂方法(ObjectFactory)，从而使其他bean能引用到该bean；</li>
+<li>构造器依赖 [无法解决]<br>此循环依赖无法解决，只能抛出 BeanCurrentlyInCreationException 表示循环依赖；</li>
+<li>prototype范围的依赖 [无法解决]<br>无法解决，因为Spring容器不进行缓存“prototype”作用域的bean，因此无法提前暴露一个创建中的bean；对于“singleton”作用域的bean，可以通过设置“setAllowCircularReferences(false)”来禁用循环依赖；</li>
+</ul>
+<h3 id="Autowired与Resource注入的区别；"><a href="#Autowired与Resource注入的区别；" class="headerlink" title="Autowired与Resource注入的区别；"></a>Autowired与Resource注入的区别；</h3><ul>
+<li>@Autowired（或@Inject）和@Resource都同样适用。 但是意义上存在概念差异或差异</li>
+<li>@Resource意味着按名称注入一个已知的资源。 该名称是从带注解的setter或字段的名称中提取的，或者是从name参数中获取的。</li>
+<li>@Inject或@Autowired尝试按类型注入适当的其他组件。</li>
+<li>所以，基本上这些是两个截然不同的概念。 不幸的是，@Resource的Spring实现有一个内置的fallback，当按名称解析失败时会启动。 在这种情况下，它会回退到@Autowired类型的解决方式。 虽然这种回退方法很方便，但它引起了很多混淆，因为人们不了解概念上的差异，并倾向于使用@Resource进行基于类型的自动装配。</li>
+<li>@Autowired 和 @Inject<ol>
+<li>Matches by Type</li>
+<li>Restricts by Qualifiers</li>
+<li>Matches by Name</li>
+</ol>
+</li>
+<li>@Resource<ol>
+<li>Matches by Name</li>
+<li>Matches by Type</li>
+<li>Restricts by Qualifiers (ignored if match is found by name)</li>
+</ol>
+</li>
+<li>最佳实践<ul>
+<li>用@Component(“beanName”)显式声明你的bean；</li>
+<li>使用@Resource并带上name属性，@Resource(name=”beanName”)</li>
+<li>除非您想创建一个类似的bean列表，否则请避免使用@Qualifier注解。 例如，您可能想要使用特定的@Qualifier注释来标记一组规则。 这种方法使得将一组规则类插入可用于处理数据的列表变得简单。</li>
+<li>使用扫描组件的特定包<contextcomponent-scan base-package="com.sourceallies.person">。 虽然这会导致更多的组件扫描配置，但它会减少您向Spring上下文添加不必要组件的可能性。</contextcomponent-scan></li>
+</ul>
+</li>
+</ul>
+<h3 id="BeanPostProcessor-与-BeanFactoryPostProcessor"><a href="#BeanPostProcessor-与-BeanFactoryPostProcessor" class="headerlink" title="BeanPostProcessor 与 BeanFactoryPostProcessor"></a>BeanPostProcessor 与 BeanFactoryPostProcessor</h3><h3 id="BeanFacotry-与-FactoryBean"><a href="#BeanFacotry-与-FactoryBean" class="headerlink" title="BeanFacotry 与 FactoryBean"></a>BeanFacotry 与 FactoryBean</h3><h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://github.com/archerda/spring-framework" target="_blank" rel="external">archerda: spring-framework</a></li>
+<li><a href="http://www.importnew.com/27469.html" target="_blank" rel="external">Spring IoC容器分析</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/软件/" rel="tag"># 软件</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/27/性能优化指南/" rel="next" title="性能优化指南">
+                <i class="fa fa-chevron-left"></i> 性能优化指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键类"><span class="nav-number">2.</span> <span class="nav-text">关键类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Resource定位-载入和注册"><span class="nav-number">3.</span> <span class="nav-text">Resource定位,载入和注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例类的初始化"><span class="nav-number">4.</span> <span class="nav-text">单例类的初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的生命周期"><span class="nav-number">4.1.</span> <span class="nav-text">Bean的生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">5.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring如何解决循环依赖的问题"><span class="nav-number">5.1.</span> <span class="nav-text">Spring如何解决循环依赖的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Autowired与Resource注入的区别；"><span class="nav-number">5.2.</span> <span class="nav-text">Autowired与Resource注入的区别；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanPostProcessor-与-BeanFactoryPostProcessor"><span class="nav-number">5.3.</span> <span class="nav-text">BeanPostProcessor 与 BeanFactoryPostProcessor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanFacotry-与-FactoryBean"><span class="nav-number">5.4.</span> <span class="nav-text">BeanFacotry 与 FactoryBean</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
