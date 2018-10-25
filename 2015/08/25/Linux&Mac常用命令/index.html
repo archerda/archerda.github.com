@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/25/Linux&Mac常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
-<meta property="og:updated_time" content="2018-10-15T03:11:50.763Z">
+<meta property="og:updated_time" content="2018-10-25T02:01:27.128Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linxu&amp;Mac 常用命令">
 <meta name="twitter:description" content="文件/文件夹/磁盘管理 由第一行开始显示档案内容(n为显示行号)：cat [-n] &amp;lt;file-name&amp;gt; 从最后一行开始显示(Mac无)：tac &amp;lt;file-name&amp;gt; 查看头几行：head [-lineNumber] &amp;lt;file-name&amp;gt; 查看尾几行：tail [-lineNumber] &amp;lt;file-name&amp;gt; 以二进制的方式读取档案内容：od">
@@ -334,7 +334,7 @@
 <li>查看文件的inode号码: <code>ls -i &lt;file&gt;</code></li>
 <li>查看当前文件夹磁盘占用情况：<code>du -shc *</code></li>
 <li>查看磁盘使用情况：<code>df -lh</code></li>
-<li>查看文件或文件夹挂载在哪个分区: <code>df &lt;file-or-directory&gt;</code></li>
+<li>查看文件或文件夹挂载在哪个分区: <code>df &lt;file-or-directory&gt; -kh</code></li>
 <li>查看inode使用情况： <code>df -hi</code></li>
 <li>找某个文件并打印内容：<code>find . -name &quot;&lt;file-name&gt;&quot; -exec cat {} \;</code></li>
 <li>在当前目录下查找某个字符串并打印行号：<code>find ./* | xargs grep -n &#39;&lt;string-you-find&gt;&#39;</code></li>
@@ -455,6 +455,12 @@
 <li>每隔一秒高亮显示网络链接数: <code>watch -n 1 -d &quot;netstat -ant&quot;</code></li>
 <li>查看一下当前的网络连接情况: <code>netstat -nt | awk &#39;/^tcp/ {++state[$NF]} END {for(key in state) print key,&quot;t&quot;,state[key]}&#39;</code></li>
 <li>telnet: <code>telnet &lt;ip&gt; &lt;port&gt;</code></li>
+<li>查看iptables防火墙状态: <code>service iptables status</code></li>
+<li>立即开启iptables防火墙: <code>service iptables start</code></li>
+<li>重启后开启iptables防火墙: <code>chkconfig iptables on</code></li>
+<li>立即关闭iptables防火墙: <code>service iptables stop</code></li>
+<li>重启后关闭iptables防火墙: <code>chkconfig iptables off</code></li>
+<li>立即重启iptables防火墙: <code>service iptables restart</code></li>
 </ul>
 <hr>
 <h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><ul>
