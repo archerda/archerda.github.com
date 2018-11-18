@@ -1735,6 +1735,8 @@
 <li>跳过Test：<code>-DskipTests(编译但是不运行)</code> <code>-Dmaven.test.skip=true(不编译不运行)</code></li>
 <li>build一个失败后，继续执行其他：<code>-fn</code></li>
 <li>已解析的插件树: <code>mvn dependency:resolve-plugins</code></li>
+<li>下载Sources文件: <code>mven dependency:sources</code></li>
+<li>FS常用: <code>mvn -am -U clean package -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -pl &lt;artifactId&gt;</code></li>
 </ul>
 <h2 id="archetype插件"><a href="#archetype插件" class="headerlink" title="archetype插件"></a>archetype插件</h2><ul>
 <li>创建mvn项目：<code>mvn archetype:generate</code> <code>mvn archetype:generate -DgroupId=&lt;your-groupId&gt; -DartifactId=&lt;your-artifactId&gt; -Dversion=&lt;version&gt; -Dpackage=&lt;package-name&gt;</code></li>
