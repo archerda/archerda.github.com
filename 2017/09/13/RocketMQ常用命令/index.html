@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/09/13/RocketMQ常用命令/index.html">
 <meta property="og:site_name" content="Archerda&#39;s Blog">
 <meta property="og:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
-<meta property="og:updated_time" content="2017-09-18T10:00:13.000Z">
+<meta property="og:updated_time" content="2018-11-20T17:19:17.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ常用命令">
 <meta name="twitter:description" content="常用命令 获取所有可用命令：mqadmin 查看帮助：mqadmin &amp;lt;command&amp;gt; -h 查询Producer的网络连接情况：sh mqadmin producerConnection -n localhost:9876 -g &amp;lt;producer-group&amp;gt; -t &amp;lt;producer-topic&amp;gt; 查询Consumer的网络连接情况：sh mqadmin">
@@ -339,7 +339,10 @@
 <li><code>mqadmin consumerProgress -g &lt;ConsumerGroup&gt; -n &lt;NameServerAddr&gt;</code></li>
 </ul>
 <h2 id="查询TOPIC被哪些Consumer-Group订阅了"><a href="#查询TOPIC被哪些Consumer-Group订阅了" class="headerlink" title="查询TOPIC被哪些Consumer Group订阅了"></a>查询TOPIC被哪些Consumer Group订阅了</h2><ul>
-<li>没有查询特定TOPIC订阅情况，只能查询所有后再过滤：<code>mqadmin statsAll -n &lt;NameServerAddr&gt; | grep &lt;TOPIC&gt;</code> 返回结果：#Topic #Consumer Group #InTPS #OutTPS #InMsg24Hour #OutMsg24Hour</li>
+<li><p>没有查询特定TOPIC订阅情况，只能查询所有后再过滤：<code>mqadmin statsAll -n &lt;NameServerAddr&gt; | grep &lt;TOPIC&gt;</code> 返回结果：#Topic #Consumer Group #InTPS #OutTPS #InMsg24Hour #OutMsg24Hour</p>
+</li>
+<li><p>删除topic：mqadmin deleteTopic -c <clustername> -n <nameserveraddr> -t <topicname></topicname></nameserveraddr></clustername></p>
+</li>
 </ul>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
 <li><a href="https://rocketmq.incubator.apache.org/docs/cli-admin-tool/" target="_blank" rel="external">CLI Admin Tool</a></li>
@@ -470,7 +473,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

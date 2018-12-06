@@ -1,0 +1,805 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Microsoft YaHei:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="深入理解动态代理代理模式在某些情况下，一个客户不想或者不能直接引用一个对象，此时可以通过一个称之为”代理”的第三者来实现间接引用。代理对象可以在客户端和目标对象之间起到中介的作用，并且可以通过代理对象去掉客户不看到的内容和服务或者添加客户需要的额外服务。 通过引入一个新的对象（如小图片和远程代理对象）来实现对真实对象的操作或者将新的对象作为真实对象的一个替身，这种实现机制即为代理模式，通过引入代理">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解动态代理">
+<meta property="og:url" content="http://yoursite.com/2018/12/06/深入理解动态代理/index.html">
+<meta property="og:site_name" content="Archerda&#39;s Blog">
+<meta property="og:description" content="深入理解动态代理代理模式在某些情况下，一个客户不想或者不能直接引用一个对象，此时可以通过一个称之为”代理”的第三者来实现间接引用。代理对象可以在客户端和目标对象之间起到中介的作用，并且可以通过代理对象去掉客户不看到的内容和服务或者添加客户需要的额外服务。 通过引入一个新的对象（如小图片和远程代理对象）来实现对真实对象的操作或者将新的对象作为真实对象的一个替身，这种实现机制即为代理模式，通过引入代理">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fxwzsi18sbj30ir0f3q42.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fxwxytw2u6j30j00dnwfy.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fxwy05udwlj30pn0e7abx.jpg">
+<meta property="og:updated_time" content="2018-12-06T12:51:29.410Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解动态代理">
+<meta name="twitter:description" content="深入理解动态代理代理模式在某些情况下，一个客户不想或者不能直接引用一个对象，此时可以通过一个称之为”代理”的第三者来实现间接引用。代理对象可以在客户端和目标对象之间起到中介的作用，并且可以通过代理对象去掉客户不看到的内容和服务或者添加客户需要的额外服务。 通过引入一个新的对象（如小图片和远程代理对象）来实现对真实对象的操作或者将新的对象作为真实对象的一个替身，这种实现机制即为代理模式，通过引入代理">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fxwzsi18sbj30ir0f3q42.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/06/深入理解动态代理/"/>
+
+
+
+
+
+  <title>深入理解动态代理 | Archerda's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Archerda's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Programmer. Meditating.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/06/深入理解动态代理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="archerda">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archerda's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解动态代理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-06T20:43:32+08:00">
+                2018-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="深入理解动态代理"><a href="#深入理解动态代理" class="headerlink" title="深入理解动态代理"></a>深入理解动态代理</h1><h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>在某些情况下，一个客户不想或者不能直接引用一个对象，此时可以通过一个称之为”代理”的第三者来实现间接引用。代理对象可以在客户端和目标对象之间起到中介的作用，并且可以通过代理对象去掉客户不看到的内容和服务或者添加客户需要的额外服务。</p>
+<p>通过引入一个新的对象（如小图片和远程代理对象）来实现对真实对象的操作或者将新的对象作为真实对象的一个替身，这种实现机制即为代理模式，通过引入代理对象来间接访问一个对象，这就是代理模式的模式动机。</p>
+<p>代理模式(Proxy Pattern) ：给某一个对象提供一个代理，并由代理对象控制对原对象的引用。代理模式的英文叫做Proxy或Surrogate，它是一种对象结构型模式。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fxwzsi18sbj30ir0f3q42.jpg" alt=""></p>
+<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><ul>
+<li>程序运行前就已经存在代理类的字节码文件,代理类和委托类的关系在运行前就已经确定了;</li>
+<li>优点<ul>
+<li>业务类只需要关注业务逻辑本身，保证了业务类的重用性;</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>代理对象的一个接口只服务于一种类型的对象，如果要代理的方法很多，势必要为每一种方法都进行代理，静态代理在程序规模稍大时就无法胜任了;</li>
+<li>如果接口增加一个方法，除了所有实现类需要实现这个方法外，所有代理类也需要实现此方法。增加了代码维护的复杂度;</li>
+</ul>
+</li>
+</ul>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定;</p>
+<h2 id="Java动态代理"><a href="#Java动态代理" class="headerlink" title="Java动态代理"></a>Java动态代理</h2><h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fxwxytw2u6j30j00dnwfy.jpg" alt=""></p>
+<h3 id="动态代理加载机制"><a href="#动态代理加载机制" class="headerlink" title="动态代理加载机制"></a>动态代理加载机制</h3><p><img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fxwy05udwlj30pn0e7abx.jpg" alt=""></p>
+<h3 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h3><p>关键代码</p>
+<ul>
+<li>[<strong>创建调用处理类</strong>] 实现 java.lang.reflect.InvocationHandler接口,实现它的 <strong>java.lang.reflect.InvocationHandler#invoke(Object proxy,Method method, Object[] args) throws Throwable</strong>接口;</li>
+<li>[<strong>创建动态代理类实例</strong>] 调用<br><strong>java.lang.reflect.Proxy#newProxyInstance(ClassLoaderloader,Class&lt;?&gt;[] interfaces,InvocationHandler h) throws IllegalArgumentException</strong> 方法,传递上面创建的InvocationHandler实例, 创建动态代理实例;</li>
+<li>jdk动态代理类: <strong>public final class $Proxy0 extends Proxy implements TargetInterface</strong></li>
+</ul>
+<p>jdk动态代理的机制特点</p>
+<ul>
+<li>包：如果所代理的接口都是 public的，那么它将被定义在顶层包（即包路径为空），如果所代理的接口中有非public 的接口（因为接口不能被定义为 protect 或 private，所以除 public 之外就是默认的 package 访问级别），那么它将被定义在该接口所在包（假设代理了com.ibm.developerworks 包中的某非 public 接口A，那么新生成的代理类所在的包就是com.ibm.developerworks），这样设计的目的是为了最大程度的保证动态代理类不会因为包管理的问题而无法被成功定义并访问；</li>
+<li>类修饰符：该代理类具有 final 和 public修饰符，意味着它可以被所有的类访问，但是不能被再度继承；</li>
+<li>类名：格式是”\$ProxyN”，其中 N 是一个逐一递增的阿拉伯数字，代表Proxy 类第 N 次生成的动态代理类，值得注意的一点是，并不是每次调用Proxy 的静态方法创建动态代理类都会使得 N值增加，原因是如果对同一组接口（包括接口排列的顺序相同）试图重复创建动态代理类，它会很聪明地返回先前已经创建好的代理类的类对象，而不会再尝试去创建一个全新的代理类，这样可以节省不必要的代码重复生成，提高了代理类的创建效率;</li>
+</ul>
+<p>代理类实例的特点</p>
+<ul>
+<li>每个实例都会关联一个调用处理器对象，可以通过 Proxy 提供的静态方法getInvocationHandler 去获得代理类实例的调用处理器对象;</li>
+<li>在代理类实例上调用其代理的接口中所声明的方法时，这些方法最终都会由调用处理器的invoke 方法执行，此外，值得注意的是，委托类的根类 java.lang.Object中有三个方法也同样会被分派到调用处理器的 invoke 方法执行，它们是hashCode，equals 和 toString，可能的原因有：一是因为这些方法为public 且非 final类型，能够被代理类覆盖；二是因为这些方法往往呈现出一个类的某种特征属性，具有一定的区分度，所以为了保证代理类与委托类对外的一致性，这三个方法也应该被分派到委托类执行;</li>
+<li>当代理的一组接口有重复声明的方法且该方法被调用时，代理类总是从排在最前面的接口中获取方法对象并分派给调用处理器，而无论代理类实例是否正在以该接口（或继承于该接口的某子接口）的形式被外部引用，因为在代理类内部无法区分其当前的被引用类型;</li>
+</ul>
+<p>被代理的一组接口的特点</p>
+<ul>
+<li>首先，要注意不能有重复的接口，以避免动态代理类代码生成时的编译错误;</li>
+<li>其次，这些接口对于类装载器必须可见，否则类装载器将无法链接它们，将会导致类定义失败;</li>
+<li>再次，需被代理的所有非 public 的接口必须在同一个包中，否则代理类生成也会失败;</li>
+<li>最后，接口的数目不能超过 65535，这是 JVM 设定的限制;</li>
+</ul>
+<p>异常处理方面的特点</p>
+<ul>
+<li>从调用处理器接口声明的方法中可以看到理论上它能够抛出任何类型的异常，因为所有的异常都继承于Throwable接口，但事实是否如此呢？答案是否定的，原因是我们必须遵守一个继承原则：即子类覆盖父类或实现父接口的方法时，抛出的异常必须在原方法支持的异常列表之内。所以虽然调用处理器理论上讲能够，但实际上往往受限制，除非父接口中的方法支持抛Throwable 异常。那么如果在 invoke方法中的确产生了接口方法声明中不支持的异常，那将如何呢？放心，Java动态代理类已经为我们设计好了解决方法：它将会抛出UndeclaredThrowableException 异常。这个异常是一个 RuntimeException类型，所以不会引起编译错误。通过该异常的 getCause方法，还可以获得原来那个不受支持的异常对象，以便于错误诊断。</li>
+</ul>
+<p>动态代理的优点</p>
+<ul>
+<li>动态代理与静态代理相比较，最大的好处是接口中声明的所有方法都被转移到调用处理器一个集中的方法中处理（InvocationHandler.invoke）。这样，在接口方法数量比较多的时候，我们可以进行灵活处理，而不需要像静态代理那样每一个方法进行中转;</li>
+</ul>
+<p>动态代理的不足</p>
+<ul>
+<li>诚然，Proxy已经设计得非常优美，但是还是有一点点小小的遗憾之处，那就是它始终无法摆脱仅支持interface代理的桎梏，因为它的设计注定了这个遗憾。回想一下那些动态生成的代理类的继承关系图，它们已经注定有一个共同的父类叫Proxy。Java 的继承机制注定了这些动态代理类们无法实现对 class的动态代理，原因是多继承在 Java 中本质上就行不通。</li>
+</ul>
+<h3 id="Cglib"><a href="#Cglib" class="headerlink" title="Cglib"></a>Cglib</h3><p>cglib是针对类来实现代理的，基于ASM的包装，他的原理是对指定的目标类生成一个子类，并覆盖其中方法实现增强，但因为采用的是继承，所以不能对final修饰的类进行代理。</p>
+<p>cglib 创建某个类A的动态代理类的模式是：</p>
+<ol>
+<li><p>查找A上的所有非final 的public类型的方法定义；</p>
+</li>
+<li><p>将这些方法的定义转换成字节码；</p>
+</li>
+<li><p>将组成的字节码转换成相应的代理的class对象；</p>
+</li>
+<li><p>实现 MethodInterceptor接口，用来处理<br>对代理类上所有方法的请求（这个接口和JDK动态代理InvocationHandler的功能和角色是一样的）</p>
+</li>
+</ol>
+<p>差异</p>
+<ul>
+<li>JDK动态代理<ul>
+<li>其代理的对象必须是某个接口的实现，它是通过在运行期间创建一个接口的实现类来完成对目标对象的代理。</li>
+<li>通过反射来实现对目标方法的调用，效率低一些；</li>
+</ul>
+</li>
+<li>CGLIG动态代理<ul>
+<li>无法通知（advice）final方法，因为它不能被覆写；</li>
+<li>真实对象的引用，可以直接调用，效率更高；</li>
+</ul>
+</li>
+</ul>
+<h3 id="Javassist"><a href="#Javassist" class="headerlink" title="Javassist"></a>Javassist</h3><p>javassist是<a href="http://baike.baidu.com/view/309533.htm" target="_blank" rel="external">jboss</a>的一个子项目，其主要的优点，在于简单，而且快速。直接使用java编码的形式，而不需要了解<a href="http://baike.baidu.com/view/1132.htm" target="_blank" rel="external">虚拟机</a>指令，就能动态改变类的结构，或者动态生成类。</p>
+<p>使用Javassist有两种方式来实现动态代理，一种是使用代理工厂创建,和普通的JDK动态代理和CGLIB类似,另一种则可以使用字节码技术创建。</p>
+<h3 id="ASM"><a href="#ASM" class="headerlink" title="ASM"></a>ASM</h3><p>ASM 是一个 Java字节码操控框架。它能够以二进制形式修改已有类或者动态生成类。ASM可以直接产生二进制 class 文件，也可以在类被加载入 Java虚拟机之前动态改变类行为。ASM从类文件中读入信息后，能够改变类行为，分析类信息，甚至能够根据用户要求生成新类。</p>
+<p><strong>不过ASM在创建class字节码的过程中，操纵的级别是底层JVM的汇编指令级别，这要求ASM使用者要对class组织结构和JVM汇编指令有一定的了解。</strong></p>
+<h3 id="性能比较"><a href="#性能比较" class="headerlink" title="性能比较"></a>性能比较</h3><p>ASM > Javassist Bytecode > Cglib > JDK > Javassist ProxyFactory</p>
+<ul>
+<li>差异原因<ul>
+<li>各方案生成的字节码不一样， 像JDK和CGLIB都考虑了很多因素，以及继承或包装了自己的一些类，所以生成的字节码非常大，而我们很多时候用不上这些， 而手工生成的字节码非常小，所以速度快。</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/proxy.html" target="_blank" rel="external">图解设计模式：代理模式</a></li>
+<li><a href="http://javatar.iteye.com/blog/814426" target="_blank" rel="external">动态代理方案性能对比</a></li>
+<li><a href="https://blog.csdn.net/luanlouis/article/details/24589193" target="_blank" rel="external">Java动态代理机制详解（JDK<br>和CGLIB，Javassist，ASM）</a></li>
+</ul>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="公用类"><a href="#公用类" class="headerlink" title="公用类"></a>公用类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @author archerda</div><div class="line"> * @date 2018/7/9</div><div class="line"> */</div><div class="line">public interface TargetInterface &#123;</div><div class="line">    void sayHi();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @author archerda</div><div class="line"> * @date 2018/04/24</div><div class="line"> */</div><div class="line">public class TargetClass &#123;</div><div class="line"></div><div class="line">    public void sayHi() &#123;</div><div class="line">        System.out.println(&quot;Hi&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="静态代理-demo"><a href="#静态代理-demo" class="headerlink" title="静态代理 demo"></a>静态代理 demo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @author archerda</div><div class="line"> */</div><div class="line">public class StaticMain &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        TargetInterface targetInterface = new TargetInterfaceImpl();</div><div class="line"></div><div class="line">        TargetInterface target = new ProxyClass(targetInterface);</div><div class="line"></div><div class="line">        // Client</div><div class="line">        target.sayHi();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static class TargetInterfaceImpl implements TargetInterface &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void sayHi() &#123;</div><div class="line">            System.out.println(&quot;Hi&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static class ProxyClass implements TargetInterface &#123;</div><div class="line"></div><div class="line">        // 存储真实对象</div><div class="line">        private TargetInterface targetInterface;</div><div class="line"></div><div class="line">        public ProxyClass(TargetInterface targetInterface) &#123;</div><div class="line">            this.targetInterface = targetInterface;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void sayHi() &#123;</div><div class="line">            System.out.println(&quot;Invoke start.&quot;);</div><div class="line">            targetInterface.sayHi();</div><div class="line">            System.out.println(&quot;Invoke end.&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="JDK-demo"><a href="#JDK-demo" class="headerlink" title="JDK demo"></a>JDK demo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">import java.lang.reflect.InvocationHandler;</div><div class="line">import java.lang.reflect.Method;</div><div class="line">import java.lang.reflect.Proxy;</div><div class="line"></div><div class="line">/**</div><div class="line"> * JDK动态代理Demo；</div><div class="line"> *</div><div class="line"> * @author archerda</div><div class="line"> * @date 2018/01/08</div><div class="line"> */</div><div class="line">public class JdkMain &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">        /*</div><div class="line">        生成$Proxy0的class文件</div><div class="line">         */</div><div class="line">        System.getProperties().put(&quot;sun.misc.ProxyGenerator.saveGeneratedFiles&quot;, &quot;true&quot;);</div><div class="line"></div><div class="line">        TargetInterface targetInterface = new TargetInterfaceImpl();</div><div class="line"></div><div class="line">        /*</div><div class="line">        生成一个代理类，这个代理类签名如下：public final class $Proxy0 extends Proxy implements TargetInterface</div><div class="line">        它继承了 Proxy 类（这也是JDK代理不能代理类的原因），并实现了 TargetInterface 接口；</div><div class="line">        并且这个类是 final 的，不能被继承；</div><div class="line"></div><div class="line">        类名：$Proxy0；（$Proxy + 自增数字）</div><div class="line">        */</div><div class="line">        TargetInterface proxy = (TargetInterface) Proxy.newProxyInstance(targetInterface.getClass().getClassLoader(),</div><div class="line">                targetInterface.getClass().getInterfaces(), new Handler(targetInterface));</div><div class="line"></div><div class="line">        /*</div><div class="line">        调用ProxyHolder的sayHi方法，JVM会把这个方法转交给 InvocationHandler 的 invoke 方法；</div><div class="line">        实际的调用方法如下：</div><div class="line">        public final void sayHi() throws  &#123;</div><div class="line">            try &#123;</div><div class="line">                super.h.invoke(this, m3, (Object[])null);</div><div class="line">            &#125; catch (RuntimeException | Error var2) &#123;</div><div class="line">                throw var2;</div><div class="line">            &#125; catch (Throwable var3) &#123;</div><div class="line">                throw new UndeclaredThrowableException(var3);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">         */</div><div class="line">        proxy.sayHi();</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static class TargetInterfaceImpl implements TargetInterface &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void sayHi() &#123;</div><div class="line">            System.out.println(&quot;Hi&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static class Handler implements InvocationHandler &#123;</div><div class="line"></div><div class="line">        /**</div><div class="line">         * JDK的代理，Handler要持有一个实例的引用；</div><div class="line">         */</div><div class="line">        private TargetInterface targetInterface;</div><div class="line"></div><div class="line">        public Handler(TargetInterface targetInterface) &#123;</div><div class="line">            this.targetInterface = targetInterface;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        /**</div><div class="line">         * @param proxy 代理对象实例，比如&quot;@Proxy0&quot;</div><div class="line">         * @param method 原始方法（被拦截的方法），比如&quot;public abstract void com.github.archerda.designpattern.proxy.TargetInterface.sayHi()&quot;</div><div class="line">         * @param args 参数集（被拦截方法的参数）；</div><div class="line">         * @return Object</div><div class="line">         * @throws Throwable 异常；</div><div class="line">         */</div><div class="line">        @Override</div><div class="line">        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</div><div class="line"></div><div class="line">            System.out.println(&quot;Invoke start.&quot;);</div><div class="line"></div><div class="line">            // 调用 ProxyInstance 的方法；</div><div class="line">            // 注意，这里 invoke 方法的 第一个参数，必须是ProxyInstance，如果是ProxyHolder，将会出现死循环；</div><div class="line">            // method.invoke(proxy, args); 死循环，因为JVM会一直委托给该方法；</div><div class="line">            method.invoke(targetInterface, args);</div><div class="line"></div><div class="line">            System.out.println(&quot;Invoke end.&quot;);</div><div class="line"></div><div class="line">            return null;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="JDK动态代理字节码源码"><a href="#JDK动态代理字节码源码" class="headerlink" title="JDK动态代理字节码源码"></a>JDK动态代理字节码源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">// Source code recreated from a .class file by IntelliJ IDEA</div><div class="line">// (powered by Fernflower decompiler)</div><div class="line">//</div><div class="line"></div><div class="line">package com.sun.proxy;</div><div class="line"></div><div class="line">import com.github.archerda.designpattern.proxy.TargetInterface;</div><div class="line">import java.lang.reflect.InvocationHandler;</div><div class="line">import java.lang.reflect.Method;</div><div class="line">import java.lang.reflect.Proxy;</div><div class="line">import java.lang.reflect.UndeclaredThrowableException;</div><div class="line"></div><div class="line">public final class $Proxy0 extends Proxy implements TargetInterface &#123;</div><div class="line">    private static Method m1;</div><div class="line">    private static Method m3;</div><div class="line">    private static Method m2;</div><div class="line">    private static Method m0;</div><div class="line"></div><div class="line">    public $Proxy0(InvocationHandler var1) throws  &#123;</div><div class="line">        super(var1);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final boolean equals(Object var1) throws  &#123;</div><div class="line">        try &#123;</div><div class="line">            return (Boolean)super.h.invoke(this, m1, new Object[]&#123;var1&#125;);</div><div class="line">        &#125; catch (RuntimeException | Error var3) &#123;</div><div class="line">            throw var3;</div><div class="line">        &#125; catch (Throwable var4) &#123;</div><div class="line">            throw new UndeclaredThrowableException(var4);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final void sayHi() throws  &#123;</div><div class="line">        try &#123;</div><div class="line">            super.h.invoke(this, m3, (Object[])null);</div><div class="line">        &#125; catch (RuntimeException | Error var2) &#123;</div><div class="line">            throw var2;</div><div class="line">        &#125; catch (Throwable var3) &#123;</div><div class="line">            throw new UndeclaredThrowableException(var3);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final String toString() throws  &#123;</div><div class="line">        try &#123;</div><div class="line">            return (String)super.h.invoke(this, m2, (Object[])null);</div><div class="line">        &#125; catch (RuntimeException | Error var2) &#123;</div><div class="line">            throw var2;</div><div class="line">        &#125; catch (Throwable var3) &#123;</div><div class="line">            throw new UndeclaredThrowableException(var3);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final int hashCode() throws  &#123;</div><div class="line">        try &#123;</div><div class="line">            return (Integer)super.h.invoke(this, m0, (Object[])null);</div><div class="line">        &#125; catch (RuntimeException | Error var2) &#123;</div><div class="line">            throw var2;</div><div class="line">        &#125; catch (Throwable var3) &#123;</div><div class="line">            throw new UndeclaredThrowableException(var3);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    static &#123;</div><div class="line">        try &#123;</div><div class="line">            m1 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;equals&quot;, Class.forName(&quot;java.lang.Object&quot;));</div><div class="line">            m3 = Class.forName(&quot;com.github.archerda.designpattern.proxy.TargetInterface&quot;).getMethod(&quot;sayHi&quot;);</div><div class="line">            m2 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;toString&quot;);</div><div class="line">            m0 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;hashCode&quot;);</div><div class="line">        &#125; catch (NoSuchMethodException var2) &#123;</div><div class="line">            throw new NoSuchMethodError(var2.getMessage());</div><div class="line">        &#125; catch (ClassNotFoundException var3) &#123;</div><div class="line">            throw new NoClassDefFoundError(var3.getMessage());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Cglib-demo"><a href="#Cglib-demo" class="headerlink" title="Cglib demo"></a>Cglib demo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line"></div><div class="line">import net.sf.cglib.core.DebuggingClassWriter;</div><div class="line">import net.sf.cglib.proxy.Enhancer;</div><div class="line">import net.sf.cglib.proxy.MethodInterceptor;</div><div class="line">import net.sf.cglib.proxy.MethodProxy;</div><div class="line"></div><div class="line">import java.lang.reflect.Method;</div><div class="line"></div><div class="line">/**</div><div class="line"> * CGLIB动态代理Demo；</div><div class="line"> *</div><div class="line"> * @author archerda</div><div class="line"> * @date 2018/04/24</div><div class="line"> */</div><div class="line">public class CglibMain &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">        /*</div><div class="line">        生成代理类的class文件；</div><div class="line">         */</div><div class="line">        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, &quot;/Users/Archerda/Desktop/java-example/com/sun/proxy&quot;);</div><div class="line"></div><div class="line">        /*</div><div class="line">        生成Cglib的增强器；</div><div class="line">         */</div><div class="line">        Enhancer enhancer = new Enhancer();</div><div class="line"></div><div class="line">        /*</div><div class="line">        给增强器设置父类；</div><div class="line">         */</div><div class="line">        enhancer.setSuperclass(TargetClass.class);</div><div class="line"></div><div class="line">        /*</div><div class="line">        给增强器设置会拦截器；</div><div class="line">         */</div><div class="line">        enhancer.setCallback(new Interceptor());</div><div class="line"></div><div class="line">        /*</div><div class="line">        使用增强器创建代理类；</div><div class="line">         */</div><div class="line">        TargetClass target = (TargetClass) enhancer.create();</div><div class="line"></div><div class="line">        /*</div><div class="line">        调用代理类方法；</div><div class="line">         */</div><div class="line">        target.sayHi();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static class Interceptor implements MethodInterceptor &#123;</div><div class="line"></div><div class="line">        /**</div><div class="line">         *</div><div class="line">         * @param o 代理对象，比如：TargetClass$EnhancerByCGLIB$72cfe419</div><div class="line">         * @param method 原始方法（要被拦截的方法）；比如：public void com.github.archerda.designpattern.proxy.TargetClass.sayHi()</div><div class="line">         * @param objects 参数集；</div><div class="line">         * @param methodProxy 代理方法（要触发父类的方法对象）；</div><div class="line">         * @return Object</div><div class="line">         * @throws Throwable 异常</div><div class="line">         */</div><div class="line">        @Override</div><div class="line">        public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable &#123;</div><div class="line">            System.out.println(&quot;Invoke start&quot;);</div><div class="line"></div><div class="line">            /*</div><div class="line">            这里不能使用 method#invoke 或者 methodProxy#invoke，否则可能会导致死循环；</div><div class="line">             */</div><div class="line">            methodProxy.invokeSuper(o, objects);</div><div class="line">            System.out.println(&quot;Invoke end.&quot;);</div><div class="line">            return null;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Cglib动态代理字节码源码"><a href="#Cglib动态代理字节码源码" class="headerlink" title="Cglib动态代理字节码源码"></a>Cglib动态代理字节码源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">// Source code recreated from a .class file by IntelliJ IDEA</div><div class="line">// (powered by Fernflower decompiler)</div><div class="line">//</div><div class="line"></div><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">import java.lang.reflect.Method;</div><div class="line">import net.sf.cglib.core.ReflectUtils;</div><div class="line">import net.sf.cglib.core.Signature;</div><div class="line">import net.sf.cglib.proxy.Callback;</div><div class="line">import net.sf.cglib.proxy.Factory;</div><div class="line">import net.sf.cglib.proxy.MethodInterceptor;</div><div class="line">import net.sf.cglib.proxy.MethodProxy;</div><div class="line"></div><div class="line">public class TargetClass$$EnhancerByCGLIB$$92457a4a extends TargetClass implements Factory &#123;</div><div class="line">    private boolean CGLIB$BOUND;</div><div class="line">    private static final ThreadLocal CGLIB$THREAD_CALLBACKS;</div><div class="line">    private static final Callback[] CGLIB$STATIC_CALLBACKS;</div><div class="line">    private MethodInterceptor CGLIB$CALLBACK_0;</div><div class="line">    private static final Method CGLIB$sayHi$0$Method;</div><div class="line">    private static final MethodProxy CGLIB$sayHi$0$Proxy;</div><div class="line">    private static final Object[] CGLIB$emptyArgs;</div><div class="line">    private static final Method CGLIB$finalize$1$Method;</div><div class="line">    private static final MethodProxy CGLIB$finalize$1$Proxy;</div><div class="line">    private static final Method CGLIB$equals$2$Method;</div><div class="line">    private static final MethodProxy CGLIB$equals$2$Proxy;</div><div class="line">    private static final Method CGLIB$toString$3$Method;</div><div class="line">    private static final MethodProxy CGLIB$toString$3$Proxy;</div><div class="line">    private static final Method CGLIB$hashCode$4$Method;</div><div class="line">    private static final MethodProxy CGLIB$hashCode$4$Proxy;</div><div class="line">    private static final Method CGLIB$clone$5$Method;</div><div class="line">    private static final MethodProxy CGLIB$clone$5$Proxy;</div><div class="line"></div><div class="line">    static void CGLIB$STATICHOOK1() &#123;</div><div class="line">        CGLIB$THREAD_CALLBACKS = new ThreadLocal();</div><div class="line">        CGLIB$emptyArgs = new Object[0];</div><div class="line">        Class var0 = Class.forName(&quot;com.github.archerda.designpattern.proxy.TargetClass$$EnhancerByCGLIB$$92457a4a&quot;);</div><div class="line">        Class var1;</div><div class="line">        Method[] var10000 = ReflectUtils.findMethods(new String[]&#123;&quot;finalize&quot;, &quot;()V&quot;, &quot;equals&quot;, &quot;(Ljava/lang/Object;)Z&quot;, &quot;toString&quot;, &quot;()Ljava/lang/String;&quot;, &quot;hashCode&quot;, &quot;()I&quot;, &quot;clone&quot;, &quot;()Ljava/lang/Object;&quot;&#125;, (var1 = Class.forName(&quot;java.lang.Object&quot;)).getDeclaredMethods());</div><div class="line">        CGLIB$finalize$1$Method = var10000[0];</div><div class="line">        CGLIB$finalize$1$Proxy = MethodProxy.create(var1, var0, &quot;()V&quot;, &quot;finalize&quot;, &quot;CGLIB$finalize$1&quot;);</div><div class="line">        CGLIB$equals$2$Method = var10000[1];</div><div class="line">        CGLIB$equals$2$Proxy = MethodProxy.create(var1, var0, &quot;(Ljava/lang/Object;)Z&quot;, &quot;equals&quot;, &quot;CGLIB$equals$2&quot;);</div><div class="line">        CGLIB$toString$3$Method = var10000[2];</div><div class="line">        CGLIB$toString$3$Proxy = MethodProxy.create(var1, var0, &quot;()Ljava/lang/String;&quot;, &quot;toString&quot;, &quot;CGLIB$toString$3&quot;);</div><div class="line">        CGLIB$hashCode$4$Method = var10000[3];</div><div class="line">        CGLIB$hashCode$4$Proxy = MethodProxy.create(var1, var0, &quot;()I&quot;, &quot;hashCode&quot;, &quot;CGLIB$hashCode$4&quot;);</div><div class="line">        CGLIB$clone$5$Method = var10000[4];</div><div class="line">        CGLIB$clone$5$Proxy = MethodProxy.create(var1, var0, &quot;()Ljava/lang/Object;&quot;, &quot;clone&quot;, &quot;CGLIB$clone$5&quot;);</div><div class="line">        CGLIB$sayHi$0$Method = ReflectUtils.findMethods(new String[]&#123;&quot;sayHi&quot;, &quot;()V&quot;&#125;, (var1 = Class.forName(&quot;com.github.archerda.designpattern.proxy.TargetClass&quot;)).getDeclaredMethods())[0];</div><div class="line">        CGLIB$sayHi$0$Proxy = MethodProxy.create(var1, var0, &quot;()V&quot;, &quot;sayHi&quot;, &quot;CGLIB$sayHi$0&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    final void CGLIB$sayHi$0() &#123;</div><div class="line">        super.sayHi();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final void sayHi() &#123;</div><div class="line">        MethodInterceptor var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        if (var10000 == null) &#123;</div><div class="line">            CGLIB$BIND_CALLBACKS(this);</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (var10000 != null) &#123;</div><div class="line">            var10000.intercept(this, CGLIB$sayHi$0$Method, CGLIB$emptyArgs, CGLIB$sayHi$0$Proxy);</div><div class="line">        &#125; else &#123;</div><div class="line">            super.sayHi();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    final void CGLIB$finalize$1() throws Throwable &#123;</div><div class="line">        super.finalize();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected final void finalize() throws Throwable &#123;</div><div class="line">        MethodInterceptor var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        if (var10000 == null) &#123;</div><div class="line">            CGLIB$BIND_CALLBACKS(this);</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (var10000 != null) &#123;</div><div class="line">            var10000.intercept(this, CGLIB$finalize$1$Method, CGLIB$emptyArgs, CGLIB$finalize$1$Proxy);</div><div class="line">        &#125; else &#123;</div><div class="line">            super.finalize();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    final boolean CGLIB$equals$2(Object var1) &#123;</div><div class="line">        return super.equals(var1);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final boolean equals(Object var1) &#123;</div><div class="line">        MethodInterceptor var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        if (var10000 == null) &#123;</div><div class="line">            CGLIB$BIND_CALLBACKS(this);</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (var10000 != null) &#123;</div><div class="line">            Object var2 = var10000.intercept(this, CGLIB$equals$2$Method, new Object[]&#123;var1&#125;, CGLIB$equals$2$Proxy);</div><div class="line">            return var2 == null ? false : (Boolean)var2;</div><div class="line">        &#125; else &#123;</div><div class="line">            return super.equals(var1);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    final String CGLIB$toString$3() &#123;</div><div class="line">        return super.toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final String toString() &#123;</div><div class="line">        MethodInterceptor var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        if (var10000 == null) &#123;</div><div class="line">            CGLIB$BIND_CALLBACKS(this);</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return var10000 != null ? (String)var10000.intercept(this, CGLIB$toString$3$Method, CGLIB$emptyArgs, CGLIB$toString$3$Proxy) : super.toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    final int CGLIB$hashCode$4() &#123;</div><div class="line">        return super.hashCode();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public final int hashCode() &#123;</div><div class="line">        MethodInterceptor var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        if (var10000 == null) &#123;</div><div class="line">            CGLIB$BIND_CALLBACKS(this);</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (var10000 != null) &#123;</div><div class="line">            Object var1 = var10000.intercept(this, CGLIB$hashCode$4$Method, CGLIB$emptyArgs, CGLIB$hashCode$4$Proxy);</div><div class="line">            return var1 == null ? 0 : ((Number)var1).intValue();</div><div class="line">        &#125; else &#123;</div><div class="line">            return super.hashCode();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    final Object CGLIB$clone$5() throws CloneNotSupportedException &#123;</div><div class="line">        return super.clone();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected final Object clone() throws CloneNotSupportedException &#123;</div><div class="line">        MethodInterceptor var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        if (var10000 == null) &#123;</div><div class="line">            CGLIB$BIND_CALLBACKS(this);</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return var10000 != null ? var10000.intercept(this, CGLIB$clone$5$Method, CGLIB$emptyArgs, CGLIB$clone$5$Proxy) : super.clone();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static MethodProxy CGLIB$findMethodProxy(Signature var0) &#123;</div><div class="line">        String var10000 = var0.toString();</div><div class="line">        switch(var10000.hashCode()) &#123;</div><div class="line">        case -2012941911:</div><div class="line">            if (var10000.equals(&quot;sayHi()V&quot;)) &#123;</div><div class="line">                return CGLIB$sayHi$0$Proxy;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1574182249:</div><div class="line">            if (var10000.equals(&quot;finalize()V&quot;)) &#123;</div><div class="line">                return CGLIB$finalize$1$Proxy;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -508378822:</div><div class="line">            if (var10000.equals(&quot;clone()Ljava/lang/Object;&quot;)) &#123;</div><div class="line">                return CGLIB$clone$5$Proxy;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1826985398:</div><div class="line">            if (var10000.equals(&quot;equals(Ljava/lang/Object;)Z&quot;)) &#123;</div><div class="line">                return CGLIB$equals$2$Proxy;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1913648695:</div><div class="line">            if (var10000.equals(&quot;toString()Ljava/lang/String;&quot;)) &#123;</div><div class="line">                return CGLIB$toString$3$Proxy;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1984935277:</div><div class="line">            if (var10000.equals(&quot;hashCode()I&quot;)) &#123;</div><div class="line">                return CGLIB$hashCode$4$Proxy;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public TargetClass$$EnhancerByCGLIB$$92457a4a() &#123;</div><div class="line">        CGLIB$BIND_CALLBACKS(this);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void CGLIB$SET_THREAD_CALLBACKS(Callback[] var0) &#123;</div><div class="line">        CGLIB$THREAD_CALLBACKS.set(var0);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void CGLIB$SET_STATIC_CALLBACKS(Callback[] var0) &#123;</div><div class="line">        CGLIB$STATIC_CALLBACKS = var0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static final void CGLIB$BIND_CALLBACKS(Object var0) &#123;</div><div class="line">        TargetClass$$EnhancerByCGLIB$$92457a4a var1 = (TargetClass$$EnhancerByCGLIB$$92457a4a)var0;</div><div class="line">        if (!var1.CGLIB$BOUND) &#123;</div><div class="line">            var1.CGLIB$BOUND = true;</div><div class="line">            Object var10000 = CGLIB$THREAD_CALLBACKS.get();</div><div class="line">            if (var10000 == null) &#123;</div><div class="line">                var10000 = CGLIB$STATIC_CALLBACKS;</div><div class="line">                if (var10000 == null) &#123;</div><div class="line">                    return;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            var1.CGLIB$CALLBACK_0 = (MethodInterceptor)((Callback[])var10000)[0];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object newInstance(Callback[] var1) &#123;</div><div class="line">        CGLIB$SET_THREAD_CALLBACKS(var1);</div><div class="line">        TargetClass$$EnhancerByCGLIB$$92457a4a var10000 = new TargetClass$$EnhancerByCGLIB$$92457a4a();</div><div class="line">        CGLIB$SET_THREAD_CALLBACKS((Callback[])null);</div><div class="line">        return var10000;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object newInstance(Callback var1) &#123;</div><div class="line">        CGLIB$SET_THREAD_CALLBACKS(new Callback[]&#123;var1&#125;);</div><div class="line">        TargetClass$$EnhancerByCGLIB$$92457a4a var10000 = new TargetClass$$EnhancerByCGLIB$$92457a4a();</div><div class="line">        CGLIB$SET_THREAD_CALLBACKS((Callback[])null);</div><div class="line">        return var10000;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object newInstance(Class[] var1, Object[] var2, Callback[] var3) &#123;</div><div class="line">        CGLIB$SET_THREAD_CALLBACKS(var3);</div><div class="line">        TargetClass$$EnhancerByCGLIB$$92457a4a var10000 = new TargetClass$$EnhancerByCGLIB$$92457a4a;</div><div class="line">        switch(var1.length) &#123;</div><div class="line">        case 0:</div><div class="line">            var10000.&lt;init&gt;();</div><div class="line">            CGLIB$SET_THREAD_CALLBACKS((Callback[])null);</div><div class="line">            return var10000;</div><div class="line">        default:</div><div class="line">            throw new IllegalArgumentException(&quot;Constructor not found&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Callback getCallback(int var1) &#123;</div><div class="line">        CGLIB$BIND_CALLBACKS(this);</div><div class="line">        MethodInterceptor var10000;</div><div class="line">        switch(var1) &#123;</div><div class="line">        case 0:</div><div class="line">            var10000 = this.CGLIB$CALLBACK_0;</div><div class="line">            break;</div><div class="line">        default:</div><div class="line">            var10000 = null;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return var10000;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setCallback(int var1, Callback var2) &#123;</div><div class="line">        switch(var1) &#123;</div><div class="line">        case 0:</div><div class="line">            this.CGLIB$CALLBACK_0 = (MethodInterceptor)var2;</div><div class="line">        default:</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Callback[] getCallbacks() &#123;</div><div class="line">        CGLIB$BIND_CALLBACKS(this);</div><div class="line">        return new Callback[]&#123;this.CGLIB$CALLBACK_0&#125;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setCallbacks(Callback[] var1) &#123;</div><div class="line">        this.CGLIB$CALLBACK_0 = (MethodInterceptor)var1[0];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    static &#123;</div><div class="line">        CGLIB$STATICHOOK1();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div><div class="line">416</div><div class="line">417</div><div class="line">418</div><div class="line">419</div><div class="line">420</div><div class="line">421</div><div class="line">422</div><div class="line">423</div><div class="line">424</div><div class="line">425</div><div class="line">426</div><div class="line">427</div><div class="line">428</div><div class="line">429</div><div class="line">430</div><div class="line">431</div><div class="line">432</div><div class="line">433</div><div class="line">434</div><div class="line">435</div><div class="line">436</div><div class="line">437</div><div class="line">438</div><div class="line">439</div><div class="line">440</div><div class="line">441</div><div class="line">442</div><div class="line">443</div><div class="line">444</div><div class="line">445</div><div class="line">446</div><div class="line">447</div><div class="line">448</div><div class="line">449</div><div class="line">450</div><div class="line">451</div><div class="line">452</div><div class="line">453</div><div class="line">454</div><div class="line">455</div><div class="line">456</div><div class="line">457</div><div class="line">458</div><div class="line">459</div><div class="line">460</div><div class="line">461</div><div class="line">462</div><div class="line">463</div><div class="line">464</div><div class="line">465</div><div class="line">466</div><div class="line">467</div><div class="line">468</div><div class="line">469</div><div class="line">470</div><div class="line">471</div><div class="line">472</div><div class="line">473</div><div class="line">474</div><div class="line">475</div><div class="line">476</div><div class="line">477</div><div class="line">478</div><div class="line">479</div><div class="line">480</div><div class="line">481</div><div class="line">482</div><div class="line">483</div><div class="line">484</div><div class="line">485</div><div class="line">486</div><div class="line">487</div><div class="line">488</div><div class="line">489</div><div class="line">490</div><div class="line">491</div><div class="line">492</div><div class="line">493</div><div class="line">494</div><div class="line">495</div><div class="line">496</div><div class="line">497</div><div class="line">498</div><div class="line">499</div><div class="line">500</div><div class="line">501</div><div class="line">502</div><div class="line">503</div><div class="line">504</div><div class="line">505</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">// Source code recreated from a .class file by IntelliJ IDEA</div><div class="line">// (powered by Fernflower decompiler)</div><div class="line">//</div><div class="line"></div><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">import com.github.archerda.designpattern.proxy.TargetClass..EnhancerByCGLIB..92457a4a;</div><div class="line">import java.lang.reflect.InvocationTargetException;</div><div class="line">import net.sf.cglib.core.Signature;</div><div class="line">import net.sf.cglib.proxy.Callback;</div><div class="line">import net.sf.cglib.reflect.FastClass;</div><div class="line"></div><div class="line">public class TargetClass$$EnhancerByCGLIB$$92457a4a$$FastClassByCGLIB$$b8e5bdfc extends FastClass &#123;</div><div class="line">    public TargetClass$$EnhancerByCGLIB$$92457a4a$$FastClassByCGLIB$$b8e5bdfc(Class var1) &#123;</div><div class="line">        super(var1);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getIndex(Signature var1) &#123;</div><div class="line">        String var10000 = var1.toString();</div><div class="line">        switch(var10000.hashCode()) &#123;</div><div class="line">        case -2055565910:</div><div class="line">            if (var10000.equals(&quot;CGLIB$SET_THREAD_CALLBACKS([Lnet/sf/cglib/proxy/Callback;)V&quot;)) &#123;</div><div class="line">                return 10;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -2012941911:</div><div class="line">            if (var10000.equals(&quot;sayHi()V&quot;)) &#123;</div><div class="line">                return 6;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1937024608:</div><div class="line">            if (var10000.equals(&quot;CGLIB$sayHi$0()V&quot;)) &#123;</div><div class="line">                return 14;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1725733088:</div><div class="line">            if (var10000.equals(&quot;getClass()Ljava/lang/Class;&quot;)) &#123;</div><div class="line">                return 24;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1457535688:</div><div class="line">            if (var10000.equals(&quot;CGLIB$STATICHOOK1()V&quot;)) &#123;</div><div class="line">                return 19;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1411812934:</div><div class="line">            if (var10000.equals(&quot;CGLIB$hashCode$4()I&quot;)) &#123;</div><div class="line">                return 18;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1026001249:</div><div class="line">            if (var10000.equals(&quot;wait(JI)V&quot;)) &#123;</div><div class="line">                return 21;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -894172689:</div><div class="line">            if (var10000.equals(&quot;newInstance(Lnet/sf/cglib/proxy/Callback;)Ljava/lang/Object;&quot;)) &#123;</div><div class="line">                return 4;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -623122092:</div><div class="line">            if (var10000.equals(&quot;CGLIB$findMethodProxy(Lnet/sf/cglib/core/Signature;)Lnet/sf/cglib/proxy/MethodProxy;&quot;)) &#123;</div><div class="line">                return 13;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -419626537:</div><div class="line">            if (var10000.equals(&quot;setCallbacks([Lnet/sf/cglib/proxy/Callback;)V&quot;)) &#123;</div><div class="line">                return 8;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 243996900:</div><div class="line">            if (var10000.equals(&quot;wait(J)V&quot;)) &#123;</div><div class="line">                return 22;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 374345669:</div><div class="line">            if (var10000.equals(&quot;CGLIB$equals$2(Ljava/lang/Object;)Z&quot;)) &#123;</div><div class="line">                return 16;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 560567118:</div><div class="line">            if (var10000.equals(&quot;setCallback(ILnet/sf/cglib/proxy/Callback;)V&quot;)) &#123;</div><div class="line">                return 7;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 811063227:</div><div class="line">            if (var10000.equals(&quot;newInstance([Ljava/lang/Class;[Ljava/lang/Object;[Lnet/sf/cglib/proxy/Callback;)Ljava/lang/Object;&quot;)) &#123;</div><div class="line">                return 3;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 946854621:</div><div class="line">            if (var10000.equals(&quot;notifyAll()V&quot;)) &#123;</div><div class="line">                return 26;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 973717575:</div><div class="line">            if (var10000.equals(&quot;getCallbacks()[Lnet/sf/cglib/proxy/Callback;&quot;)) &#123;</div><div class="line">                return 12;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1116248544:</div><div class="line">            if (var10000.equals(&quot;wait()V&quot;)) &#123;</div><div class="line">                return 23;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1221173700:</div><div class="line">            if (var10000.equals(&quot;newInstance([Lnet/sf/cglib/proxy/Callback;)Ljava/lang/Object;&quot;)) &#123;</div><div class="line">                return 5;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1230699260:</div><div class="line">            if (var10000.equals(&quot;getCallback(I)Lnet/sf/cglib/proxy/Callback;&quot;)) &#123;</div><div class="line">                return 11;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1365077639:</div><div class="line">            if (var10000.equals(&quot;CGLIB$finalize$1()V&quot;)) &#123;</div><div class="line">                return 15;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1517819849:</div><div class="line">            if (var10000.equals(&quot;CGLIB$toString$3()Ljava/lang/String;&quot;)) &#123;</div><div class="line">                return 17;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1584330438:</div><div class="line">            if (var10000.equals(&quot;CGLIB$SET_STATIC_CALLBACKS([Lnet/sf/cglib/proxy/Callback;)V&quot;)) &#123;</div><div class="line">                return 9;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1826985398:</div><div class="line">            if (var10000.equals(&quot;equals(Ljava/lang/Object;)Z&quot;)) &#123;</div><div class="line">                return 0;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1902039948:</div><div class="line">            if (var10000.equals(&quot;notify()V&quot;)) &#123;</div><div class="line">                return 25;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1913648695:</div><div class="line">            if (var10000.equals(&quot;toString()Ljava/lang/String;&quot;)) &#123;</div><div class="line">                return 1;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1984935277:</div><div class="line">            if (var10000.equals(&quot;hashCode()I&quot;)) &#123;</div><div class="line">                return 2;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 2011844968:</div><div class="line">            if (var10000.equals(&quot;CGLIB$clone$5()Ljava/lang/Object;&quot;)) &#123;</div><div class="line">                return 20;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return -1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getIndex(String var1, Class[] var2) &#123;</div><div class="line">        switch(var1.hashCode()) &#123;</div><div class="line">        case -2083498450:</div><div class="line">            if (var1.equals(&quot;CGLIB$finalize$1&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 15;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1776922004:</div><div class="line">            if (var1.equals(&quot;toString&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 1;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1334646347:</div><div class="line">            if (var1.equals(&quot;CGLIB$sayHi$0&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 14;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1295482945:</div><div class="line">            if (var1.equals(&quot;equals&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;java.lang.Object&quot;)) &#123;</div><div class="line">                        return 0;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1053468136:</div><div class="line">            if (var1.equals(&quot;getCallbacks&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 12;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1039689911:</div><div class="line">            if (var1.equals(&quot;notify&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 25;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -124978608:</div><div class="line">            if (var1.equals(&quot;CGLIB$equals$2&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;java.lang.Object&quot;)) &#123;</div><div class="line">                        return 16;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -60403779:</div><div class="line">            if (var1.equals(&quot;CGLIB$SET_STATIC_CALLBACKS&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;[Lnet.sf.cglib.proxy.Callback;&quot;)) &#123;</div><div class="line">                        return 9;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -29025554:</div><div class="line">            if (var1.equals(&quot;CGLIB$hashCode$4&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 18;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 3641717:</div><div class="line">            if (var1.equals(&quot;wait&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 23;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;long&quot;)) &#123;</div><div class="line">                        return 22;</div><div class="line">                    &#125;</div><div class="line">                    break;</div><div class="line">                case 2:</div><div class="line">                    if (var2[0].getName().equals(&quot;long&quot;) &amp;&amp; var2[1].getName().equals(&quot;int&quot;)) &#123;</div><div class="line">                        return 21;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 85179481:</div><div class="line">            if (var1.equals(&quot;CGLIB$SET_THREAD_CALLBACKS&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;[Lnet.sf.cglib.proxy.Callback;&quot;)) &#123;</div><div class="line">                        return 10;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 109213260:</div><div class="line">            if (var1.equals(&quot;sayHi&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 6;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 147696667:</div><div class="line">            if (var1.equals(&quot;hashCode&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 2;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 161998109:</div><div class="line">            if (var1.equals(&quot;CGLIB$STATICHOOK1&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 19;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 495524492:</div><div class="line">            if (var1.equals(&quot;setCallbacks&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;[Lnet.sf.cglib.proxy.Callback;&quot;)) &#123;</div><div class="line">                        return 8;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1154623345:</div><div class="line">            if (var1.equals(&quot;CGLIB$findMethodProxy&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;net.sf.cglib.core.Signature&quot;)) &#123;</div><div class="line">                        return 13;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1543336190:</div><div class="line">            if (var1.equals(&quot;CGLIB$toString$3&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 17;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1811874389:</div><div class="line">            if (var1.equals(&quot;newInstance&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    String var10001 = var2[0].getName();</div><div class="line">                    switch(var10001.hashCode()) &#123;</div><div class="line">                    case -845341380:</div><div class="line">                        if (var10001.equals(&quot;net.sf.cglib.proxy.Callback&quot;)) &#123;</div><div class="line">                            return 4;</div><div class="line">                        &#125;</div><div class="line">                        break;</div><div class="line">                    case 1730110032:</div><div class="line">                        if (var10001.equals(&quot;[Lnet.sf.cglib.proxy.Callback;&quot;)) &#123;</div><div class="line">                            return 5;</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                case 2:</div><div class="line">                default:</div><div class="line">                    break;</div><div class="line">                case 3:</div><div class="line">                    if (var2[0].getName().equals(&quot;[Ljava.lang.Class;&quot;) &amp;&amp; var2[1].getName().equals(&quot;[Ljava.lang.Object;&quot;) &amp;&amp; var2[2].getName().equals(&quot;[Lnet.sf.cglib.proxy.Callback;&quot;)) &#123;</div><div class="line">                        return 3;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1817099975:</div><div class="line">            if (var1.equals(&quot;setCallback&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 2:</div><div class="line">                    if (var2[0].getName().equals(&quot;int&quot;) &amp;&amp; var2[1].getName().equals(&quot;net.sf.cglib.proxy.Callback&quot;)) &#123;</div><div class="line">                        return 7;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1902066072:</div><div class="line">            if (var1.equals(&quot;notifyAll&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 26;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1905679803:</div><div class="line">            if (var1.equals(&quot;getCallback&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;int&quot;)) &#123;</div><div class="line">                        return 11;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1950568386:</div><div class="line">            if (var1.equals(&quot;getClass&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 24;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1951977611:</div><div class="line">            if (var1.equals(&quot;CGLIB$clone$5&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 20;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return -1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getIndex(Class[] var1) &#123;</div><div class="line">        switch(var1.length) &#123;</div><div class="line">        case 0:</div><div class="line">            return 0;</div><div class="line">        default:</div><div class="line">            return -1;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object invoke(int var1, Object var2, Object[] var3) throws InvocationTargetException &#123;</div><div class="line">        92457a4a var10000 = (92457a4a)var2;</div><div class="line">        int var10001 = var1;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            switch(var10001) &#123;</div><div class="line">            case 0:</div><div class="line">                return new Boolean(var10000.equals(var3[0]));</div><div class="line">            case 1:</div><div class="line">                return var10000.toString();</div><div class="line">            case 2:</div><div class="line">                return new Integer(var10000.hashCode());</div><div class="line">            case 3:</div><div class="line">                return var10000.newInstance((Class[])var3[0], (Object[])var3[1], (Callback[])var3[2]);</div><div class="line">            case 4:</div><div class="line">                return var10000.newInstance((Callback)var3[0]);</div><div class="line">            case 5:</div><div class="line">                return var10000.newInstance((Callback[])var3[0]);</div><div class="line">            case 6:</div><div class="line">                var10000.sayHi();</div><div class="line">                return null;</div><div class="line">            case 7:</div><div class="line">                var10000.setCallback(((Number)var3[0]).intValue(), (Callback)var3[1]);</div><div class="line">                return null;</div><div class="line">            case 8:</div><div class="line">                var10000.setCallbacks((Callback[])var3[0]);</div><div class="line">                return null;</div><div class="line">            case 9:</div><div class="line">                92457a4a.CGLIB$SET_STATIC_CALLBACKS((Callback[])var3[0]);</div><div class="line">                return null;</div><div class="line">            case 10:</div><div class="line">                92457a4a.CGLIB$SET_THREAD_CALLBACKS((Callback[])var3[0]);</div><div class="line">                return null;</div><div class="line">            case 11:</div><div class="line">                return var10000.getCallback(((Number)var3[0]).intValue());</div><div class="line">            case 12:</div><div class="line">                return var10000.getCallbacks();</div><div class="line">            case 13:</div><div class="line">                return 92457a4a.CGLIB$findMethodProxy((Signature)var3[0]);</div><div class="line">            case 14:</div><div class="line">                var10000.CGLIB$sayHi$0();</div><div class="line">                return null;</div><div class="line">            case 15:</div><div class="line">                var10000.CGLIB$finalize$1();</div><div class="line">                return null;</div><div class="line">            case 16:</div><div class="line">                return new Boolean(var10000.CGLIB$equals$2(var3[0]));</div><div class="line">            case 17:</div><div class="line">                return var10000.CGLIB$toString$3();</div><div class="line">            case 18:</div><div class="line">                return new Integer(var10000.CGLIB$hashCode$4());</div><div class="line">            case 19:</div><div class="line">                92457a4a.CGLIB$STATICHOOK1();</div><div class="line">                return null;</div><div class="line">            case 20:</div><div class="line">                return var10000.CGLIB$clone$5();</div><div class="line">            case 21:</div><div class="line">                var10000.wait(((Number)var3[0]).longValue(), ((Number)var3[1]).intValue());</div><div class="line">                return null;</div><div class="line">            case 22:</div><div class="line">                var10000.wait(((Number)var3[0]).longValue());</div><div class="line">                return null;</div><div class="line">            case 23:</div><div class="line">                var10000.wait();</div><div class="line">                return null;</div><div class="line">            case 24:</div><div class="line">                return var10000.getClass();</div><div class="line">            case 25:</div><div class="line">                var10000.notify();</div><div class="line">                return null;</div><div class="line">            case 26:</div><div class="line">                var10000.notifyAll();</div><div class="line">                return null;</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Throwable var4) &#123;</div><div class="line">            throw new InvocationTargetException(var4);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        throw new IllegalArgumentException(&quot;Cannot find matching method/constructor&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object newInstance(int var1, Object[] var2) throws InvocationTargetException &#123;</div><div class="line">        92457a4a var10000 = new 92457a4a;</div><div class="line">        92457a4a var10001 = var10000;</div><div class="line">        int var10002 = var1;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            switch(var10002) &#123;</div><div class="line">            case 0:</div><div class="line">                var10001.&lt;init&gt;();</div><div class="line">                return var10000;</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Throwable var3) &#123;</div><div class="line">            throw new InvocationTargetException(var3);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        throw new IllegalArgumentException(&quot;Cannot find matching method/constructor&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getMaxIndex() &#123;</div><div class="line">        return 26;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">// Source code recreated from a .class file by IntelliJ IDEA</div><div class="line">// (powered by Fernflower decompiler)</div><div class="line">//</div><div class="line"></div><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">import java.lang.reflect.InvocationTargetException;</div><div class="line">import net.sf.cglib.core.Signature;</div><div class="line">import net.sf.cglib.reflect.FastClass;</div><div class="line"></div><div class="line">public class TargetClass$$FastClassByCGLIB$$4e2d847b extends FastClass &#123;</div><div class="line">    public TargetClass$$FastClassByCGLIB$$4e2d847b(Class var1) &#123;</div><div class="line">        super(var1);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getIndex(Signature var1) &#123;</div><div class="line">        String var10000 = var1.toString();</div><div class="line">        switch(var10000.hashCode()) &#123;</div><div class="line">        case -2012941911:</div><div class="line">            if (var10000.equals(&quot;sayHi()V&quot;)) &#123;</div><div class="line">                return 0;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1725733088:</div><div class="line">            if (var10000.equals(&quot;getClass()Ljava/lang/Class;&quot;)) &#123;</div><div class="line">                return 7;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1026001249:</div><div class="line">            if (var10000.equals(&quot;wait(JI)V&quot;)) &#123;</div><div class="line">                return 1;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 243996900:</div><div class="line">            if (var10000.equals(&quot;wait(J)V&quot;)) &#123;</div><div class="line">                return 2;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 946854621:</div><div class="line">            if (var10000.equals(&quot;notifyAll()V&quot;)) &#123;</div><div class="line">                return 9;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1116248544:</div><div class="line">            if (var10000.equals(&quot;wait()V&quot;)) &#123;</div><div class="line">                return 3;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1826985398:</div><div class="line">            if (var10000.equals(&quot;equals(Ljava/lang/Object;)Z&quot;)) &#123;</div><div class="line">                return 4;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1902039948:</div><div class="line">            if (var10000.equals(&quot;notify()V&quot;)) &#123;</div><div class="line">                return 8;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1913648695:</div><div class="line">            if (var10000.equals(&quot;toString()Ljava/lang/String;&quot;)) &#123;</div><div class="line">                return 5;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1984935277:</div><div class="line">            if (var10000.equals(&quot;hashCode()I&quot;)) &#123;</div><div class="line">                return 6;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return -1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getIndex(String var1, Class[] var2) &#123;</div><div class="line">        switch(var1.hashCode()) &#123;</div><div class="line">        case -1776922004:</div><div class="line">            if (var1.equals(&quot;toString&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 5;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1295482945:</div><div class="line">            if (var1.equals(&quot;equals&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;java.lang.Object&quot;)) &#123;</div><div class="line">                        return 4;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case -1039689911:</div><div class="line">            if (var1.equals(&quot;notify&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 8;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 3641717:</div><div class="line">            if (var1.equals(&quot;wait&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 3;</div><div class="line">                case 1:</div><div class="line">                    if (var2[0].getName().equals(&quot;long&quot;)) &#123;</div><div class="line">                        return 2;</div><div class="line">                    &#125;</div><div class="line">                    break;</div><div class="line">                case 2:</div><div class="line">                    if (var2[0].getName().equals(&quot;long&quot;) &amp;&amp; var2[1].getName().equals(&quot;int&quot;)) &#123;</div><div class="line">                        return 1;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 109213260:</div><div class="line">            if (var1.equals(&quot;sayHi&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 0;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 147696667:</div><div class="line">            if (var1.equals(&quot;hashCode&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 6;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1902066072:</div><div class="line">            if (var1.equals(&quot;notifyAll&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 9;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case 1950568386:</div><div class="line">            if (var1.equals(&quot;getClass&quot;)) &#123;</div><div class="line">                switch(var2.length) &#123;</div><div class="line">                case 0:</div><div class="line">                    return 7;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return -1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getIndex(Class[] var1) &#123;</div><div class="line">        switch(var1.length) &#123;</div><div class="line">        case 0:</div><div class="line">            return 0;</div><div class="line">        default:</div><div class="line">            return -1;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object invoke(int var1, Object var2, Object[] var3) throws InvocationTargetException &#123;</div><div class="line">        TargetClass var10000 = (TargetClass)var2;</div><div class="line">        int var10001 = var1;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            switch(var10001) &#123;</div><div class="line">            case 0:</div><div class="line">                var10000.sayHi();</div><div class="line">                return null;</div><div class="line">            case 1:</div><div class="line">                var10000.wait(((Number)var3[0]).longValue(), ((Number)var3[1]).intValue());</div><div class="line">                return null;</div><div class="line">            case 2:</div><div class="line">                var10000.wait(((Number)var3[0]).longValue());</div><div class="line">                return null;</div><div class="line">            case 3:</div><div class="line">                var10000.wait();</div><div class="line">                return null;</div><div class="line">            case 4:</div><div class="line">                return new Boolean(var10000.equals(var3[0]));</div><div class="line">            case 5:</div><div class="line">                return var10000.toString();</div><div class="line">            case 6:</div><div class="line">                return new Integer(var10000.hashCode());</div><div class="line">            case 7:</div><div class="line">                return var10000.getClass();</div><div class="line">            case 8:</div><div class="line">                var10000.notify();</div><div class="line">                return null;</div><div class="line">            case 9:</div><div class="line">                var10000.notifyAll();</div><div class="line">                return null;</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Throwable var4) &#123;</div><div class="line">            throw new InvocationTargetException(var4);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        throw new IllegalArgumentException(&quot;Cannot find matching method/constructor&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object newInstance(int var1, Object[] var2) throws InvocationTargetException &#123;</div><div class="line">        TargetClass var10000 = new TargetClass;</div><div class="line">        TargetClass var10001 = var10000;</div><div class="line">        int var10002 = var1;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            switch(var10002) &#123;</div><div class="line">            case 0:</div><div class="line">                var10001.&lt;init&gt;();</div><div class="line">                return var10000;</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Throwable var3) &#123;</div><div class="line">            throw new InvocationTargetException(var3);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        throw new IllegalArgumentException(&quot;Cannot find matching method/constructor&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getMaxIndex() &#123;</div><div class="line">        return 9;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Javassist-demo"><a href="#Javassist-demo" class="headerlink" title="Javassist demo"></a>Javassist demo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">import javassist.*;</div><div class="line"></div><div class="line">import java.io.File;</div><div class="line">import java.io.FileOutputStream;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Javassist动态代理: 采用 字节码 技术创建;</div><div class="line"> *</div><div class="line"> * @author archerda</div><div class="line"> */</div><div class="line">public class JavassistByteCodeMain &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws Exception &#123;</div><div class="line"></div><div class="line">        /*</div><div class="line">        创建类池</div><div class="line">         */</div><div class="line">        ClassPool classPool = ClassPool.getDefault();</div><div class="line"></div><div class="line">        String className = TargetClass.class.getName();</div><div class="line">        CtClass ctClass = classPool.makeClass(className + &quot;JavassitProxy&quot;);</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加接口,可选</div><div class="line">         */</div><div class="line">        ctClass.addInterface(classPool.get(TargetInterface.class.getName()));</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加超类</div><div class="line">         */</div><div class="line">        // ctClass.setSuperclass(classPool.get(TargetClass.class.getName()));</div><div class="line"></div><div class="line">        /*</div><div class="line">         添加默认构造函数</div><div class="line">         */</div><div class="line">        // ctClass.addConstructor(new CtConstructor(new CtClass[]&#123;&#125;, ctClass));</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加屬性</div><div class="line">         */</div><div class="line">        CtField enameField = new CtField(classPool.getCtClass(className), &quot;targetClass&quot;, ctClass);</div><div class="line">        enameField.setModifiers(Modifier.PRIVATE);</div><div class="line">        ctClass.addField(enameField);</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加构造函数</div><div class="line">         */</div><div class="line">        CtConstructor ctConstructor = new CtConstructor(new CtClass[]&#123;&#125;, ctClass);</div><div class="line">        /*</div><div class="line">        为构造函数设置函数体</div><div class="line">         */</div><div class="line">        ctConstructor.setBody(&quot;&#123;\n&quot; + &quot;targetClass = new &quot; + className + &quot;();&quot; + &quot;\n&#125;&quot;);</div><div class="line">        /*</div><div class="line">        把构造函数添加到新的类中</div><div class="line">         */</div><div class="line">        ctClass.addConstructor(ctConstructor);</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加方法,里面进行动态代理logic</div><div class="line">         */</div><div class="line">        CtMethod ctMethod = new CtMethod(CtClass.voidType, &quot;sayHi&quot;, new CtClass[]&#123;&#125;, ctClass);</div><div class="line">        /*</div><div class="line">        为自定义方法设置修饰符</div><div class="line">         */</div><div class="line">        ctMethod.setModifiers(Modifier.PUBLIC);</div><div class="line">        /*</div><div class="line">        为自定义方法设置函数体</div><div class="line">         */</div><div class="line">        String buffer2 = &quot;&#123;\n&quot; +</div><div class="line">                &quot;targetClass.sayHi();&quot; +</div><div class="line">                &quot;\n&#125;&quot;;</div><div class="line">        ctMethod.setBody(buffer2);</div><div class="line">        ctClass.addMethod(ctMethod);</div><div class="line"></div><div class="line">        /*</div><div class="line">        把生成的class文件写入文件</div><div class="line">         */</div><div class="line">        byte[] byteArr = ctClass.toBytecode();</div><div class="line">        FileOutputStream fos = new FileOutputStream(new File(&quot;/Users/Archerda/Desktop/java-example/com/sun/proxy/JavassitProxy.class&quot;));</div><div class="line">        fos.write(byteArr);</div><div class="line">        fos.close();</div><div class="line"></div><div class="line">        /*</div><div class="line">        生成代理类对象实例</div><div class="line">         */</div><div class="line">        TargetInterface targetClass = (TargetInterface)ctClass.toClass().newInstance();</div><div class="line"></div><div class="line">        /*</div><div class="line">        代理类方法调用</div><div class="line">         */</div><div class="line">        targetClass.sayHi();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div></pre></td><td class="code"><pre><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">import javassist.*;</div><div class="line"></div><div class="line">import java.io.File;</div><div class="line">import java.io.FileOutputStream;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Javassist动态代理: 采用 字节码 技术创建;</div><div class="line"> *</div><div class="line"> * @author archerda</div><div class="line"> */</div><div class="line">public class JavassistByteCodeMain &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws Exception &#123;</div><div class="line"></div><div class="line">        /*</div><div class="line">        创建类池</div><div class="line">         */</div><div class="line">        ClassPool classPool = ClassPool.getDefault();</div><div class="line"></div><div class="line">        String className = TargetClass.class.getName();</div><div class="line">        CtClass ctClass = classPool.makeClass(className + &quot;JavassitProxy&quot;);</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加接口,可选</div><div class="line">         */</div><div class="line">        ctClass.addInterface(classPool.get(TargetInterface.class.getName()));</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加超类</div><div class="line">         */</div><div class="line">        // ctClass.setSuperclass(classPool.get(TargetClass.class.getName()));</div><div class="line"></div><div class="line">        /*</div><div class="line">         添加默认构造函数</div><div class="line">         */</div><div class="line">        // ctClass.addConstructor(new CtConstructor(new CtClass[]&#123;&#125;, ctClass));</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加屬性</div><div class="line">         */</div><div class="line">        CtField enameField = new CtField(classPool.getCtClass(className), &quot;targetClass&quot;, ctClass);</div><div class="line">        enameField.setModifiers(Modifier.PRIVATE);</div><div class="line">        ctClass.addField(enameField);</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加构造函数</div><div class="line">         */</div><div class="line">        CtConstructor ctConstructor = new CtConstructor(new CtClass[]&#123;&#125;, ctClass);</div><div class="line">        /*</div><div class="line">        为构造函数设置函数体</div><div class="line">         */</div><div class="line">        ctConstructor.setBody(&quot;&#123;\n&quot; + &quot;targetClass = new &quot; + className + &quot;();&quot; + &quot;\n&#125;&quot;);</div><div class="line">        /*</div><div class="line">        把构造函数添加到新的类中</div><div class="line">         */</div><div class="line">        ctClass.addConstructor(ctConstructor);</div><div class="line"></div><div class="line">        /*</div><div class="line">        添加方法,里面进行动态代理logic</div><div class="line">         */</div><div class="line">        CtMethod ctMethod = new CtMethod(CtClass.voidType, &quot;sayHi&quot;, new CtClass[]&#123;&#125;, ctClass);</div><div class="line">        /*</div><div class="line">        为自定义方法设置修饰符</div><div class="line">         */</div><div class="line">        ctMethod.setModifiers(Modifier.PUBLIC);</div><div class="line">        /*</div><div class="line">        为自定义方法设置函数体</div><div class="line">         */</div><div class="line">        String buffer2 = &quot;&#123;\n&quot; +</div><div class="line">                &quot;targetClass.sayHi();&quot; +</div><div class="line">                &quot;\n&#125;&quot;;</div><div class="line">        ctMethod.setBody(buffer2);</div><div class="line">        ctClass.addMethod(ctMethod);</div><div class="line"></div><div class="line">        /*</div><div class="line">        把生成的class文件写入文件</div><div class="line">         */</div><div class="line">        byte[] byteArr = ctClass.toBytecode();</div><div class="line">        FileOutputStream fos = new FileOutputStream(new File(&quot;/Users/Archerda/Desktop/java-example/com/sun/proxy/JavassitProxy.class&quot;));</div><div class="line">        fos.write(byteArr);</div><div class="line">        fos.close();</div><div class="line"></div><div class="line">        /*</div><div class="line">        生成代理类对象实例</div><div class="line">         */</div><div class="line">        TargetInterface targetClass = (TargetInterface)ctClass.toClass().newInstance();</div><div class="line"></div><div class="line">        /*</div><div class="line">        代理类方法调用</div><div class="line">         */</div><div class="line">        targetClass.sayHi();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Javassist动态代理字节码源码"><a href="#Javassist动态代理字节码源码" class="headerlink" title="Javassist动态代理字节码源码"></a>Javassist动态代理字节码源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">// Source code recreated from a .class file by IntelliJ IDEA</div><div class="line">// (powered by Fernflower decompiler)</div><div class="line">//</div><div class="line"></div><div class="line">package com.github.archerda.designpattern.proxy;</div><div class="line"></div><div class="line">public class TargetClassJavassitProxy implements TargetInterface &#123;</div><div class="line">    private TargetClass targetClass = new TargetClass();</div><div class="line"></div><div class="line">    public TargetClassJavassitProxy() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void sayHi() &#123;</div><div class="line">        this.targetClass.sayHi();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/20/Spring源码解析(1)-IoC初始化/" rel="next" title="Spring源码解析(1)-IoC初始化">
+                <i class="fa fa-chevron-left"></i> Spring源码解析(1)-IoC初始化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xl3pd.com1.z0.glb.clouddn.com/archerda2.png"
+               alt="archerda" />
+          <p class="site-author-name" itemprop="name">archerda</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archerda" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:luo.archer@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解动态代理"><span class="nav-number">1.</span> <span class="nav-text">深入理解动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式"><span class="nav-number">1.1.</span> <span class="nav-text">代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理"><span class="nav-number">1.1.1.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理"><span class="nav-number">1.1.2.</span> <span class="nav-text">动态代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java动态代理"><span class="nav-number">1.2.</span> <span class="nav-text">Java动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载机制"><span class="nav-number">1.2.1.</span> <span class="nav-text">类加载机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理加载机制"><span class="nav-number">1.2.2.</span> <span class="nav-text">动态代理加载机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK"><span class="nav-number">1.2.3.</span> <span class="nav-text">JDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cglib"><span class="nav-number">1.2.4.</span> <span class="nav-text">Cglib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Javassist"><span class="nav-number">1.2.5.</span> <span class="nav-text">Javassist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ASM"><span class="nav-number">1.2.6.</span> <span class="nav-text">ASM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能比较"><span class="nav-number">1.2.7.</span> <span class="nav-text">性能比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">1.3.</span> <span class="nav-text">参考文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">1.4.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#公用类"><span class="nav-number">1.4.1.</span> <span class="nav-text">公用类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理-demo"><span class="nav-number">1.4.2.</span> <span class="nav-text">静态代理 demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK-demo"><span class="nav-number">1.4.3.</span> <span class="nav-text">JDK demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK动态代理字节码源码"><span class="nav-number">1.4.4.</span> <span class="nav-text">JDK动态代理字节码源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cglib-demo"><span class="nav-number">1.4.5.</span> <span class="nav-text">Cglib demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cglib动态代理字节码源码"><span class="nav-number">1.4.6.</span> <span class="nav-text">Cglib动态代理字节码源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Javassist-demo"><span class="nav-number">1.4.7.</span> <span class="nav-text">Javassist demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Javassist动态代理字节码源码"><span class="nav-number">1.4.8.</span> <span class="nav-text">Javassist动态代理字节码源码</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">archerda</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
